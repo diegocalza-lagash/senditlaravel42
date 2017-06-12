@@ -13,6 +13,7 @@
 	<link rel="stylesheet" href="{{ URL::asset('assets/css/bootstrap.min.css') }}">
 	<link rel="stylesheet" href="{{ URL::asset('assets/css/bootstrap.css') }}">
 	<link rel="stylesheet" href="{{ URL::asset('assets/css/css-table.css') }}">
+
 	<link rel="stylesheet" href="{{ URL::asset('assets/css/reset.css') }}">
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
 	<!--{{ HTML::script('assets/js/bootstrap.min.js') }}-->

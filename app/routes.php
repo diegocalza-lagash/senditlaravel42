@@ -16,8 +16,10 @@ error_reporting(E_ALL);
     });*/
 
 Route::resource('data','DataSendController');
-Route::resource('report-tech','ReportTechController');
-Route::controller('dataform','DataSendController');
+Route::controller('dataform','DataSendController');//para el Getindex
+
+
+
 
 Route::get('report/show', 'DataSendController@report');
 
@@ -46,3 +48,9 @@ Route::get('/', array('as' => 'home', function(){
 Route::get('/download','HomeController@getDownload');
 //AJAX
 Route::get('/getEquipments', 'DataSendController@getEquipments');
+
+//**RUTAS REPORT TECHNIQUE para agregar una nueva ruta a la Resource se debe declarar antes del Respurce**//
+Route::get('/report_tech/pdf/{tipo}/{id}', 'ReportTechController@toPDF');
+Route::resource('report_tech','ReportTechController');
+Route::controller('report_tech','ReportTechController');
+Route::get('/report_tech', 'ReportTechController@getIndex');

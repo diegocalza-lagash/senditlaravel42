@@ -13,14 +13,14 @@ return array(
 	|
 	*/
 
-	//'debug' => true,
-	'debug' => false,
+	'debug' => true,
+	//'debug' => false,
 	/*
 	|--------------------------------------------------------------------------
 	| Application URL
 	|--------------------------------------------------------------------------
 	|
-	| This URL is used by the console to properly generate URLs when using
+	| This URL is used by the console to tproperly generate URLs when using
 	| the Artisan command line tool. You should set this to the root of
 	| your application so that it is used when running Artisan tasks.
 	|
@@ -121,6 +121,7 @@ return array(
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
+		'Barryvdh\DomPDF\ServiceProvider',
 
 	),
 
@@ -189,6 +190,7 @@ return array(
 		'URL'             => 'Illuminate\Support\Facades\URL',
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
+		'PDF' 			  => 'Barryvdh\DomPDF\Facade',
 
 	),
 

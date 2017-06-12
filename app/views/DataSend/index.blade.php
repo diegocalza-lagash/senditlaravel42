@@ -70,111 +70,111 @@ Form::macro('myField', function()
 <div class="dataTable_wrapper" style ="/*margin-left: 12%; margin-top: 3%;width: 87%;border: 1px solid #d9d9d9; padding: 5px;*/">
 
 
-<script type="text/javascript">
-	$(document).ready(function(){
-		//Asignar valores a los inputs del form
-		//asgina el valor por defecto del dropdrownlist
-		if ($("#equi_select").val() != null && $("#loc_select").val() !=null && $("#iden_select") != null ) {
+	<script type="text/javascript">
+		$(document).ready(function(){
+			//Asignar valores a los inputs del form
+			//asgina el valor por defecto del dropdrownlist
+			if ($("#equi_select").val() != null && $("#loc_select").val() !=null && $("#iden_select") != null ) {
 
-			$("#equi_input").attr("value", $("#equi_select").val());
-			$("#loc_input").attr("value", $("#loc_select").val());
-			$("#iden_input").attr("value",$("#iden_select").val());
-			console.log("ok1");
-			console.log("ok1");
-		}
-		//asigna el valor cuando cambien la lista desplegable
-		$("#equi_select").change(function(){
-			var equi = $(this).val();
-			$("#equi_input").attr("value", equi);
-			console.log("ok");
-		})
-		$("#loc_select").change(function(){
-			$("#loc_input").attr("value", $(this).val());
-		})
-		$("#iden_select").change(function(){
-			$("#iden_input").attr("value", $(this).val());
-		})
+				$("#equi_input").attr("value", $("#equi_select").val());
+				$("#loc_input").attr("value", $("#loc_select").val());
+				$("#iden_input").attr("value",$("#iden_select").val());
+				console.log("ok1");
+				console.log("ok1");
+			}
+			//asigna el valor cuando cambien la lista desplegable
+			$("#equi_select").change(function(){
+				var equi = $(this).val();
+				$("#equi_input").attr("value", equi);
+				console.log("ok");
+			})
+			$("#loc_select").change(function(){
+				$("#loc_input").attr("value", $(this).val());
+			})
+			$("#iden_select").change(function(){
+				$("#iden_input").attr("value", $(this).val());
+			})
 
-		//validar formato de las fechas antes del envio
-		$("form").submit(function(e){
-			var fip = $("#date_fip").val();
-			var ftp = $("#date_ftp").val();
-			//console.log(fip,ftp);
-				if(validarFormatoFecha(fip,ftp)){
-					if (existeFecha(fip) && existeFecha(ftp)) {
-						if(ftpMayorFip(fip,ftp)){
-							//alert("fecha correcta");
-							//e.preventDefault();
-					    }else{
-				            alert("FTP no puede ser menor a FIP");
-				            e.preventDefault();
-					    }
+			//validar formato de las fechas antes del envio
+			$("form").submit(function(e){
+				var fip = $("#date_fip").val();
+				var ftp = $("#date_ftp").val();
+				//console.log(fip,ftp);
+					if(validarFormatoFecha(fip,ftp)){
+						if (existeFecha(fip) && existeFecha(ftp)) {
+							if(ftpMayorFip(fip,ftp)){
+								//alert("fecha correcta");
+								//e.preventDefault();
+						    }else{
+					            alert("FTP no puede ser menor a FIP");
+					            e.preventDefault();
+						    }
+						}else{
+							alert("la fecha no es del calendario");
+							e.preventDefault();
+						}
+
+					      //alert("fecha correcta")
 					}else{
-						alert("la fecha no es del calendario");
-						e.preventDefault();
+					      alert("El formato de la fecha es incorrecto.");
+					      e.preventDefault();
 					}
 
-				      //alert("fecha correcta")
+			})//form
+
+		})//document
+		//VALIDO FORMATO DE LA FECHAS
+			function validarFormatoFecha(fip,ftp) {
+				//formato dd-mm-yyyy
+			      var RegExPattern = /^\d{2,4}\-\d{1,2}\-\d{1,2}$/;///^\d{1,2}\/\d{1,2}\/\d{2,4}$/; -> formato dd/mm/yyyy
+			      if ((fip.match(RegExPattern)) && (fip!='' && ftp.match(RegExPattern) && ftp!='')) {
+			            return true;
+			      } else {
+			            return false;
+			      }
+			}
+			//VALIDO QUE FTP MAYOR QUE FIP
+			function ftpMayorFip(fip,ftp){
+				var fip = fip.split("-");
+				var ftp = ftp.split("-");
+				//console.log(fip,ftp);
+				var fip = new Date(fip[0],fip[1]-1,fip[2]);
+				var ftp = new Date(ftp[0],ftp[1]-1,ftp[2])
+				//console.log(fip,ftp);
+				if (fip <= ftp) {
+					return true;
 				}else{
-				      alert("El formato de la fecha es incorrecto.");
-				      e.preventDefault();
+					return false;
+				}
+			}
+			//VALIDO QUE LA FECHA SEA DEL CALENDARIO
+			function existeFecha (fecha) {
+		        var fechaf = fecha.split("-");
+		        var d = fechaf[2];
+		        var m = fechaf[1];
+		        var y = fechaf[0];
+		        return m > 0 && m < 13 && y > 0 && y < 32768 && d > 0 && d <= (new Date(y, m, 0)).getDate();
+			}
+		/*$(document).ready(function(){
+			$("#equipo").click(function(){
+
+				$equipment = $("#equipo").val();
+				if ($equipment != "") {
+						$.ajax({
+						type 		:"get",
+						url 		:"DataSend/getEquipments.php",
+						data 		:{equipment: $(this).val()},
+						dataType 	:"json",
+						success 	:function(data){
+							$(".hint ul ").append("<li>data.nombre</li>");
+							console.log(data.nombre);
+						}
+					});
 				}
 
-		})//form
-
-	})//document
-	//VALIDO FORMATO DE LA FECHAS
-		function validarFormatoFecha(fip,ftp) {
-			//formato dd-mm-yyyy
-		      var RegExPattern = /^\d{2,4}\-\d{1,2}\-\d{1,2}$/;///^\d{1,2}\/\d{1,2}\/\d{2,4}$/; -> formato dd/mm/yyyy
-		      if ((fip.match(RegExPattern)) && (fip!='' && ftp.match(RegExPattern) && ftp!='')) {
-		            return true;
-		      } else {
-		            return false;
-		      }
-		}
-		//VALIDO QUE FTP MAYOR QUE FIP
-		function ftpMayorFip(fip,ftp){
-			var fip = fip.split("-");
-			var ftp = ftp.split("-");
-			//console.log(fip,ftp);
-			var fip = new Date(fip[0],fip[1]-1,fip[2]);
-			var ftp = new Date(ftp[0],ftp[1]-1,ftp[2])
-			//console.log(fip,ftp);
-			if (fip <= ftp) {
-				return true;
-			}else{
-				return false;
-			}
-		}
-		//VALIDO QUE LA FECHA SEA DEL CALENDARIO
-		function existeFecha (fecha) {
-	        var fechaf = fecha.split("-");
-	        var d = fechaf[2];
-	        var m = fechaf[1];
-	        var y = fechaf[0];
-	        return m > 0 && m < 13 && y > 0 && y < 32768 && d > 0 && d <= (new Date(y, m, 0)).getDate();
-		}
-	/*$(document).ready(function(){
-		$("#equipo").click(function(){
-
-			$equipment = $("#equipo").val();
-			if ($equipment != "") {
-					$.ajax({
-					type 		:"get",
-					url 		:"DataSend/getEquipments.php",
-					data 		:{equipment: $(this).val()},
-					dataType 	:"json",
-					success 	:function(data){
-						$(".hint ul ").append("<li>data.nombre</li>");
-						console.log(data.nombre);
-					}
-				});
-			}
-
-		})
-	})*/
-</script>
+			})
+		})*/
+	</script>
 
 	<div class="data_table" style="/*position: relative;overflow: auto;width: 100%;*/">
 		<table id= "lista-crud" class="table table-striped table-hover table-bordered table-condensed listar-act">

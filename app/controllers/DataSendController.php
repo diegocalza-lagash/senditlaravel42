@@ -50,7 +50,20 @@ class DataSendController extends \BaseController {
 		$this->layout->content = View::make('DataSend.index');
 		//return View::make('DataSend.report',array("docRepor" => $docRepor));
 	}
+	public function crearPDF($seg,$vistaurl){
 
+			$view =  \View::make($vistaurl, compact('seg'))->render();
+	       $pdf = \App::make('dompdf');
+	       //$pdf = PDF::loadView($view);
+	        $pdf->loadHTML($view);
+
+				//return $pdf->stream();
+				//return View::make('RT.rtech', array("rt" => $rt));
+			 return $pdf->download('reporte.pdf');
+
+
+
+		}
 	public function report(){
 		//echo "hola";
 		if (isset($_GET["equi"]) /*&& isset($_POST['loc']) && isset($_POST['iden']) && isset($_POST['dsp']) && isset($_POST['dep'])*/){
@@ -101,7 +114,13 @@ class DataSendController extends \BaseController {
 				if ($collwf->count()>0) {
 					$collwf->drop();
 				}
-				//Creo un array con los datos que me interesan
+				$seg = iterator_to_array($docRepor,false);
+				echo count($seg);
+				if(count($seg) == 3 ){
+					return $this->crearPDF($seg, 'DataSend.seguimiento');
+				}
+				//return View::make('DataSend.seguimiento', array("docRepor" => $docRepor));
+				//Creo un array con los datos para agrupar los trabajos que me interesan
 				foreach ($docRepor as  $v) {
 
 					//$photo = $v['EQUIPMENT']['WORK']['PHOTOS']['PHOTO1'];
@@ -127,17 +146,19 @@ class DataSendController extends \BaseController {
 				//imprimo los datos fijos del reporte
 				//guardo los que me interesan
 				//$objDrawing = new PHPExcel_Worksheet_Drawing();
+
+//primera foto
 				$objPHPExcel = new PHPExcel();
 				$objReader = PHPExcel_IOFactory::createReader('Excel2007');
 				$objPHPExcel = $objReader->load("/var/www/senditlaravel42/public/reporteRudel.xlsx");
-				//$objWorksheet= $objPHPExcel->setActiveSheetIndex(0);
+				$objWorksheet= $objPHPExcel->setActiveSheetIndex(0);
 				//$sheet = $objPHPExcel->getSheet(0);
-				$pixels = 250;
+				/*$pixels = 250;
 				$points = PHPExcel_Shared_Drawing::pixelsToPoints($pixels);
 				$wpixels = 500;
 				$wpoints = PHPExcel_Shared_Drawing::pixelsToPoints($wpixels);
 				$celdas = array('B','P');
-				//echo $celdas[0];
+				//echo $celdas[0];*/
 				$i=0;
 				foreach ($docRepor as $v) {
 
@@ -156,7 +177,7 @@ class DataSendController extends \BaseController {
 					//copio la imagen que esta en la nube y la guardo en m icarpeta local
 					copy($v['EQUIPMENT']['WORK']['PHOTOS']['PHOTO1'], '/var/www/senditlaravel42/public/photos/'.$name_photo);
 
-					$objDrawing = new PHPExcel_Worksheet_Drawing();
+					/*$objDrawing = new PHPExcel_Worksheet_Drawing();
 					$sheet = $objPHPExcel->getSheet(0);
 					$objDrawing->setName($name_photo);
 					$objDrawing->setDescription('PHOTO'.$name_photo);
@@ -164,12 +185,12 @@ class DataSendController extends \BaseController {
 					$objDrawing->setHeight(250);
 					//$objDrawing->setWidth(250);
 					//$objDrawing->setWidthAndHeight($wpoints,$points);
-					$objDrawing->setCoordinates($celdas[$i].'50');//An individual drawing object can only have one coordinate
+					$objDrawing->setCoordinates('B50');//An individual drawing object can only have one coordinate
 					$i++;
-					echo $name_photo;
+					echo $name_photo;*/
 
 				}//endforeach
-				$objDrawing->setWorksheet($sheet);
+				//$objDrawing->setWorksheet($sheet);
 
 
 				$objPHPExcel->getActiveSheet()->SetCellValue('H9', $loc);
@@ -181,12 +202,149 @@ class DataSendController extends \BaseController {
 				$objPHPExcel->getActiveSheet()->SetCellValue('AD10', $stn);
 				$objPHPExcel->getActiveSheet()->SetCellValue('AD11', $iptd);
 				$objPHPExcel->getActiveSheet()->SetCellValue('AD12', $iptn);
+				$gdImage = imagecreatefromjpeg('/var/www/senditlaravel42/public/photos/170417012702917577.jpg');
+				$objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
+				$sheet = $objPHPExcel->getSheet(0);
+				$objDrawing->setName('sdsd');
+				$objDrawing->setDescription('PHOTO');
+				$objDrawing->setImageResource($gdImage);
+				//$objDrawing->getPath('/var/www/senditlaravel42/public/photos/170417012702917577.jpg');
+				$objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
+				$objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
+				//$objDrawing->setWidth(426);
+				$objDrawing->setHeight(234);
 
-
-
+				//$objDrawing->setWidthAndHeight($wpoints,$points);
+				$objDrawing->setCoordinates('B50');
+				//$objDrawing->setWorksheet($sheet);
+				$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 				$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 				$objWriter->save("/var/www/senditlaravel42/public/reporteRudel2.xlsx");
-				}}}/*
+
+//segunda foto
+				$objPHPExcel = new PHPExcel();
+				$objReader = PHPExcel_IOFactory::createReader('Excel2007');
+				$objPHPExcel = $objReader->load("/var/www/senditlaravel42/public/reporteRudel2.xlsx");
+				$objWorksheet= $objPHPExcel->setActiveSheetIndex(0);
+
+				$gdImage = imagecreatefromjpeg('/var/www/senditlaravel42/public/photos/170530175859907536.jpg');
+				$objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
+				$sheet = $objPHPExcel->getSheet(0);
+				$objDrawing->setName('sdsd');
+				$objDrawing->setDescription('PHOTO');
+				$objDrawing->setImageResource($gdImage);
+				//$objDrawing->getPath('/var/www/senditlaravel42/public/photos/170417012702917577.jpg');
+				$objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
+				$objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
+				//$objDrawing->setWidth(426);
+				$objDrawing->setHeight(234);
+
+				//$objDrawing->setWidthAndHeight($wpoints,$points);
+				$objDrawing->setCoordinates('P50');
+				//$objDrawing->setWorksheet($sheet);
+				$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+				$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+				$objWriter->save("/var/www/senditlaravel42/public/reporteRudel3.xlsx");
+//tercera foto
+				$objPHPExcel = new PHPExcel();
+				$objReader = PHPExcel_IOFactory::createReader('Excel2007');
+				$objPHPExcel = $objReader->load("/var/www/senditlaravel42/public/reporteRudel3.xlsx");
+				$objWorksheet= $objPHPExcel->setActiveSheetIndex(0);
+
+				$gdImage = imagecreatefromjpeg('/var/www/senditlaravel42/public/photos/170530180914324980.jpg');
+				$objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
+				$sheet = $objPHPExcel->getSheet(0);
+				$objDrawing->setName('sdsd');
+				$objDrawing->setDescription('PHOTO');
+				$objDrawing->setImageResource($gdImage);
+				//$objDrawing->getPath('/var/www/senditlaravel42/public/photos/170417012702917577.jpg');
+				$objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
+				$objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
+				//$objDrawing->setWidth(426);
+				$objDrawing->setHeight(234);
+
+				//$objDrawing->setWidthAndHeight($wpoints,$points);
+				$objDrawing->setCoordinates('AD50');
+				//$objDrawing->setWorksheet($sheet);
+				$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+				$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+				$objWriter->save("/var/www/senditlaravel42/public/reporteRudel4.xlsx");
+
+//cuarta foto
+				$objPHPExcel = new PHPExcel();
+				$objReader = PHPExcel_IOFactory::createReader('Excel2007');
+				$objPHPExcel = $objReader->load("/var/www/senditlaravel42/public/reporteRudel4.xlsx");
+				$objWorksheet= $objPHPExcel->setActiveSheetIndex(0);
+
+				$gdImage = imagecreatefromjpeg('/var/www/senditlaravel42/public/photos/170417012702917577.jpg');
+				$objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
+				$sheet = $objPHPExcel->getSheet(0);
+				$objDrawing->setName('sdsd');
+				$objDrawing->setDescription('PHOTO');
+				$objDrawing->setImageResource($gdImage);
+				//$objDrawing->getPath('/var/www/senditlaravel42/public/photos/170417012702917577.jpg');
+				$objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
+				$objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
+				//$objDrawing->setWidth(426);
+				$objDrawing->setHeight(234);
+
+				//$objDrawing->setWidthAndHeight($wpoints,$points);
+				$objDrawing->setCoordinates('B65');
+				//$objDrawing->setWorksheet($sheet);
+				$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+				$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+				$objWriter->save("/var/www/senditlaravel42/public/reporteRudel5.xlsx");
+
+//quinta foto
+				$objPHPExcel = new PHPExcel();
+				$objReader = PHPExcel_IOFactory::createReader('Excel2007');
+				$objPHPExcel = $objReader->load("/var/www/senditlaravel42/public/reporteRudel5.xlsx");
+				$objWorksheet= $objPHPExcel->setActiveSheetIndex(0);
+
+				$gdImage = imagecreatefromjpeg('/var/www/senditlaravel42/public/photos/170530175859907536.jpg');
+				$objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
+				$sheet = $objPHPExcel->getSheet(0);
+				$objDrawing->setName('sdsd');
+				$objDrawing->setDescription('PHOTO');
+				$objDrawing->setImageResource($gdImage);
+				//$objDrawing->getPath('/var/www/senditlaravel42/public/photos/170417012702917577.jpg');
+				$objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
+				$objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
+				//$objDrawing->setWidth(426);
+				$objDrawing->setHeight(234);
+
+				//$objDrawing->setWidthAndHeight($wpoints,$points);
+				$objDrawing->setCoordinates('P65');
+				//$objDrawing->setWorksheet($sheet);
+				$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+				$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+				$objWriter->save("/var/www/senditlaravel42/public/reporteRudel6.xlsx");
+//sexta foto
+				$objPHPExcel = new PHPExcel();
+				$objReader = PHPExcel_IOFactory::createReader('Excel2007');
+				$objPHPExcel = $objReader->load("/var/www/senditlaravel42/public/reporteRudel6.xlsx");
+				$objWorksheet= $objPHPExcel->setActiveSheetIndex(0);
+
+				$gdImage = imagecreatefromjpeg('/var/www/senditlaravel42/public/photos/170530180914324980.jpg');
+				$objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
+				$sheet = $objPHPExcel->getSheet(0);
+				$objDrawing->setName('sdsd');
+				$objDrawing->setDescription('PHOTO');
+				$objDrawing->setImageResource($gdImage);
+				//$objDrawing->getPath('/var/www/senditlaravel42/public/photos/170417012702917577.jpg');
+				$objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
+				$objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
+				//$objDrawing->setWidth(426);
+				$objDrawing->setHeight(234);
+
+				//$objDrawing->setWidthAndHeight($wpoints,$points);
+				$objDrawing->setCoordinates('AD65');
+				//$objDrawing->setWorksheet($sheet);
+				$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+				$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+				$objWriter->save("/var/www/senditlaravel42/public/reporteRudel7.xlsx");
+
+
 				// AGRUPO POR WORK COLOCO LOS SUBTRABAJOS COMO ARRAY
 				$keys = array("work" => 1);
 				$initial = array("subworks" => array());
@@ -198,6 +356,134 @@ class DataSendController extends \BaseController {
 				$collwf = $db->works_filter;
 				$docwork = $collwf->insert($g);
 
+				//**IMPRIMO TRABAJOS***//
+				 //require_once 'Classes/PHPExcel.php';
+
+				$rendererName = PHPExcel_Settings::PDF_RENDERER_DOMPDF;
+				$rendererLibrary = 'dompdf.php';
+				$rendererLibraryPath = dirname(__FILE__). 'libs/classes/dompdf' . $rendererLibrary;
+				//$rendererLibraryPath = dirname(__FILE__). 'libs/classes/dompdf' . $rendererLibrary;
+				//$rendererLibraryPath = dirname(__FILE__). 'vendor/dompdf//dompdf/lib/class.pdf.php' . $rendererLibrary;
+
+				/*$objPHPExcel = new PHPExcel();
+				$objReader = PHPExcel_IOFactory::createReader('Excel2007');
+				//abro el excel con los datos fijos de arriba
+				$objPHPExcel = $objReader->load("/var/www/senditlaravel42/public/reporteRudel2.xlsx");
+				$objWorksheet= $objPHPExcel->setActiveSheetIndex(0);
+				//1w  y 6
+				if (count($g['retval']) == 1 && count($g['retval'][0]['subworks']) == 30) {
+					$work1 = $g['retval'][0]['work'];
+					$subwork11 = $g['retval'][0]['subworks'][0];
+					$dsr11 = new DateTime($g['retval'][0]['subworks'][1]);
+					$dsr11 = $dsr11->setTimezone(new DateTimeZone('America/Santiago'))->format('d-m-Y, g:i a');
+					$der11 = new DateTime($g['retval'][0]['subworks'][2]);
+					$der11= $der11->setTimezone(new DateTimeZone('America/Santiago'))->format('d-m-Y, g:i a');
+					$poop11 = $g['retval'][0]['subworks'][3];
+					$obs11 = $g['retval'][0]['subworks'][4];
+					$subwork12 = $g['retval'][0]['subworks'][5];
+					$dsr12 = new DateTime($g['retval'][0]['subworks'][6]);
+					$dsr12 = $dsr12->setTimezone(new DateTimeZone('America/Santiago'))->format('d-m-Y, g:i a');
+					$der12 = new DateTime($g['retval'][0]['subworks'][7]);
+					$der12 = $der12->setTimezone(new DateTimeZone('America/Santiago'))->format('d-m-Y, g:i a');
+					$poop12 = $g['retval'][0]['subworks'][8];
+					$obs12 = $g['retval'][0]['subworks'][9];
+					$subwork13 = $g['retval'][0]['subworks'][10];
+					$dsr13 = new DateTime($g['retval'][0]['subworks'][11]);
+					$dsr13 = $dsr13->setTimezone(new DateTimeZone('America/Santiago'))->format('d-m-Y, g:i a');
+					$der13 = new DateTime($g['retval'][0]['subworks'][12]);
+					$der13 = $der13->setTimezone(new DateTimeZone('America/Santiago'))->format('d-m-Y, g:i a');
+					$poop13 = $g['retval'][0]['subworks'][13];
+					$obs13 = $g['retval'][0]['subworks'][14];
+					$subwork14 = $g['retval'][0]['subworks'][15];
+					$dsr14 = new DateTime($g['retval'][0]['subworks'][16]);
+					$dsr14 = $dsr14->setTimezone(new DateTimeZone('America/Santiago'))->format('d-m-Y, g:i a');
+					$der14 = new DateTime($g['retval'][0]['subworks'][17]);
+					$der14 = $der14->setTimezone(new DateTimeZone('America/Santiago'))->format('d-m-Y, g:i a');
+					$poop14 = $g['retval'][0]['subworks'][18];
+					$obs14 = $g['retval'][0]['subworks'][19];
+					$subwork15 = $g['retval'][0]['subworks'][20];
+					$dsr15 = new DateTime($g['retval'][0]['subworks'][21]);
+					$dsr15 = $dsr15->setTimezone(new DateTimeZone('America/Santiago'))->format('d-m-Y, g:i a');
+					$der15 = new DateTime($g['retval'][0]['subworks'][22]);
+					$der15 = $der15->setTimezone(new DateTimeZone('America/Santiago'))->format('d-m-Y, g:i a');
+					$poop15 = $g['retval'][0]['subworks'][23];
+					$obs15 = $g['retval'][0]['subworks'][24];
+					$subwork16 = $g['retval'][0]['subworks'][25];
+					$dsr16 = new DateTime($g['retval'][0]['subworks'][26]);
+					$dsr16 = $dsr16->setTimezone(new DateTimeZone('America/Santiago'))->format('d-m-Y, g:i a');
+					$der16 = new DateTime($g['retval'][0]['subworks'][27]);
+					$der16 = $der16->setTimezone(new DateTimeZone('America/Santiago'))->format('d-m-Y, g:i a');
+					$poop16 = $g['retval'][0]['subworks'][28];
+					$obs16 = $g['retval'][0]['subworks'][29];
+					$objPHPExcel->getActiveSheet()->SetCellValue('D20', $work1);
+					$objPHPExcel->getActiveSheet()->SetCellValue('E21', $subwork11);
+					$objPHPExcel->getActiveSheet()->SetCellValue('AB21', $dsr11);
+					$objPHPExcel->getActiveSheet()->SetCellValue('AH21', $der11);
+					$objPHPExcel->getActiveSheet()->SetCellValue('AN21', $poop11."%");
+					$objPHPExcel->getActiveSheet()->SetCellValue('E22', $subwork12);
+					$objPHPExcel->getActiveSheet()->SetCellValue('AB22', $dsr12);
+					$objPHPExcel->getActiveSheet()->SetCellValue('AH22', $der12);
+					$objPHPExcel->getActiveSheet()->SetCellValue('AN22', $poop12."%");
+					$objPHPExcel->getActiveSheet()->SetCellValue('E23', $subwork13);
+					$objPHPExcel->getActiveSheet()->SetCellValue('AB23', $dsr13);
+					$objPHPExcel->getActiveSheet()->SetCellValue('AH23', $der13);
+					$objPHPExcel->getActiveSheet()->SetCellValue('AN23', $poop13."%");
+					$objPHPExcel->getActiveSheet()->SetCellValue('E24', $subwork14);
+					$objPHPExcel->getActiveSheet()->SetCellValue('AB24', $dsr14);
+					$objPHPExcel->getActiveSheet()->SetCellValue('AH24', $der14);
+					$objPHPExcel->getActiveSheet()->SetCellValue('AN24', $poop14."%");
+					$objPHPExcel->getActiveSheet()->SetCellValue('E25', $subwork15);
+					$objPHPExcel->getActiveSheet()->SetCellValue('AB25', $dsr15);
+					$objPHPExcel->getActiveSheet()->SetCellValue('AH25', $der15);
+					$objPHPExcel->getActiveSheet()->SetCellValue('AN25', $poop15."%");
+					$objPHPExcel->getActiveSheet()->SetCellValue('E26', $subwork16);
+					$objPHPExcel->getActiveSheet()->SetCellValue('AB26', $dsr16);
+					$objPHPExcel->getActiveSheet()->SetCellValue('AH26', $der16);
+					$objPHPExcel->getActiveSheet()->SetCellValue('AN26', $poop16."%");
+
+
+
+
+					$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+					$objWriter->save("ReportOut.xlsx");
+
+					/*$objPHPExcel = new PHPExcel();
+					$objReader = PHPExcel_IOFactory::createReader('Excel2007');
+					$objPHPExcel = $objReader->load("ReportOut.xlsx");
+					$objWorksheet= $objPHPExcel->setActiveSheetIndex(0);
+					$objDrawing = new PHPExcel_Worksheet_Drawing();
+					$sheet = $objPHPExcel->getSheet(0);
+					$objDrawing->setName('primera foto');
+					$objDrawing->setDescription('PHOTO'.'170417012702917577.jpg');
+					$objDrawing->getPath('/var/www/senditlaravel42/public/photos/170417012702917577.jpg');
+					$objDrawing->setHeight(250);
+					//$objDrawing->setWidth(250);
+					//$objDrawing->setWidthAndHeight($wpoints,$points);
+					$objDrawing->setCoordinates('B50');
+					$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());//guardo
+					$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+					$objWriter->save("ReportOut.xlsx");
+					/*$objPHPExcel->setActiveSheetIndex(0);
+					if (!PHPExcel_Settings::setPdfRenderer($rendererName,$rendererLibraryPath
+					 )) {
+					 die(
+					  'NOTICE: Please set the $rendererName and $rendererLibraryPath values' .
+					  '<br />' .
+					  'at the top of this script as appropriate for your directory structure'
+					 );
+					}*/
+
+					/*header("Content-Type: application/pdf");
+					header("Content-Disposition: attachment;filename='1ReportOut.pdf'");
+					header('Cache-Control: max-age=0');
+					$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'PDF');
+
+					$objWriter->save("php://output");*/
+
+					return View::make('DataSend.report', array("docRepor" => $docRepor));
+
+				//}//if
+				}}}/*
 			//**IMPRIMO TRABAJOS***
 				$objPHPExcel = new PHPExcel();
 				$objReader = PHPExcel_IOFactory::createReader('Excel2007');
@@ -4007,7 +4293,7 @@ class DataSendController extends \BaseController {
 		}
 
 		//guardo datos que vienen del app movil
-
+		$collRepor = $db->Repor;
 		if ($collRepor->count() == 0 ){
 			//genero link para la foto
 			$id = $aRequest['Entry']['Id'];
@@ -4071,7 +4357,7 @@ class DataSendController extends \BaseController {
 						)
 					)
 				);
-				$collRepor = $db->Repor;
+
 				$docRepor = $collRepor->insert($array);
 				echo "Insertado en Repor work nuevo : si";
 
