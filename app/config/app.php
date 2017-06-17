@@ -122,6 +122,7 @@ return array(
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Barryvdh\DomPDF\ServiceProvider',
+		'Anouar\Fpdf\FpdfServiceProvider',
 
 	),
 
@@ -191,6 +192,7 @@ return array(
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
 		'PDF' 			  => 'Barryvdh\DomPDF\Facade',
+		'Fpdf'			  => 'Anouar\Fpdf\Facades\Fpdf',
 
 	),
 

@@ -10,7 +10,9 @@
 		"phpexcel/phpexcel": "dev-master",
 		"mongodb/mongodb": "^1.1",
 		"jenssegers/mongodb": "2.0.4",
-		"barryvdh/laravel-dompdf": "0.4.*"
+		"barryvdh/laravel-dompdf": "0.4.*",
+		"mpdf/mpdf": "^6.1",
+		"anouar/fpdf": "1.0.1"
 
 	},
 	"autoload": {

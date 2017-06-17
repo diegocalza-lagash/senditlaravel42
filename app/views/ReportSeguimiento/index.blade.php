@@ -34,7 +34,7 @@ Form::macro('myField', function()
 <div class="dataTable_form">
 
 
-	    {{ Form::open(array('url' => 'report/show','method' => 'get','style' => '')) }}
+	    {{ Form::open(array('url' => 'trabajos/show','method' => 'get','style' => '')) }}
 	    	<label> Equipo </label>
 	    	<select id ="equi_select">
 		    @foreach($equipments as $e)

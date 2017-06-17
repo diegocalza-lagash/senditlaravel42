@@ -14,9 +14,8 @@ class ReportTechController extends \BaseController {
 	 */
 	public function getIndex()
 	{
-		$m = new MongoClient();//obsoleta desde mongo 1.0.0
-		$db = $m->SenditForm;
-		$collRTech = $db->RTech;
+
+		$collRTech = connectMongo()->RTech;
 		$docRTech = $collRTech->find();
 		return View::make('RT.index', array("docRTech" => $docRTech));
 		//$this->layout->content = View::make('ReportTech.index');
@@ -83,8 +82,8 @@ class ReportTechController extends \BaseController {
        //$pdf = PDF::loadView($view);
         $pdf->loadHTML($view);
         if ($tipo == 1) {
-			//return $pdf->stream();
-			return View::make('RT.rtech', array("rt" => $rt));
+			return $pdf->stream();
+			//return View::make('RT.rtech', array("rt" => $rt));
 		}else return $pdf->download('reporte.pdf');
 
 

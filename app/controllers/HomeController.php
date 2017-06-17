@@ -29,6 +29,19 @@ class HomeController extends BaseController {
 
     return Response::download($file, 'Rudel.xlsx', $headers);
 	}
+	public function exportarToPdf($id_request)
+	{
+		$m = new MongoClient();
+		$db = $m->SenditForm;
+		$collwf = $db->works_filter;
+		$docRepor =$collwf->find();
+		foreach ($docRepor as $k) {
+			//var_dump($k['Subwork']);
+		}
+		//var_dump($docRepor);
+		$seg = iterator_to_array($docRepor,false);
+		echo $seg[5]['Subwork'];
+	}
 
 
 }

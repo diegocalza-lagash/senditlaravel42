@@ -15,13 +15,13 @@ error_reporting(E_ALL);
         return View::make('login');
     });*/
 
-Route::resource('data','DataSendController');
-Route::controller('dataform','DataSendController');//para el Getindex
+Route::resource('data','ReportSeguimientoController');
+Route::controller('dataform','ReportSeguimientoController');//para el Getindex
 
 
 
 
-Route::get('report/show', 'DataSendController@report');
+Route::get('trabajos/show', 'ReportSeguimientoController@showTrabajos');
 
 //Route::get('list-works', 'DataSendController@showWorks');
 Route::resource('excel','ExcelController');
@@ -39,18 +39,22 @@ Route::get('logout', 'AuthController@logOut');
 
 
 Route::get('/dataform', array('before' => 'auth', function(){
-    return View::make('DataSend.index');
+    return View::make('ReportSeguimiento.index');
 }));
 Route::get('/', array('as' => 'home', function(){
-    return View::make('DataSend.index');
+    return View::make('ReportSeguimiento.index');
 }))->before('auth');
 //for download excel
 Route::get('/download','HomeController@getDownload');
-//AJAX
-Route::get('/getEquipments', 'DataSendController@getEquipments');
+
 
 //**RUTAS REPORT TECHNIQUE para agregar una nueva ruta a la Resource se debe declarar antes del Respurce**//
 Route::get('/report_tech/pdf/{tipo}/{id}', 'ReportTechController@toPDF');
 Route::resource('report_tech','ReportTechController');
 Route::controller('report_tech','ReportTechController');
 Route::get('/report_tech', 'ReportTechController@getIndex');
+
+//Download a PDF
+Route::get('/download/pdf/{id_request}','PdfController@exportarToPdf');
+//Download a Excel
+Route::get('/download/excel/{id_request}','ExcelController@exportarToExcel');

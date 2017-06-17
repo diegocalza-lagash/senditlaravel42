@@ -2,11 +2,13 @@
 @section('title','Lista De Trabajos')
 @section('sidebar')
 @parent
-<li><a href="/download">Exportar</a></li>
+
 @stop
 @section('trabajos')
 @parent
 <li><a href="/dataform">Inicio</a></li>
+<li><a href="/download/pdf/{{$requestId}}" target="_blank">Exportar a PDF</a></li>
+<li><a href="/download/excel/{{$requestId}}" target="_blank">Exportar a Excel</a></li>
 @stop
 @section('content')
 <h1 class="sub_header">Trabajos Realizados</h1>
@@ -44,6 +46,7 @@
 						<tr>
 
 							<td><?php
+
 							$startTime = new DateTime($row['Entry']['StartTime']);
 							//$startTime->setTimezone(new DateTimeZone('America/Santiago'));
 							echo $startTime->format('j F, Y, g:i a');
@@ -77,10 +80,9 @@
 							<td>
 								<?php
 								if ($row['EQUIPMENT']['WORK']['PHOTOS']['PHOTO1']!= "") {
-								$id = $row['Entry']['Id'];
-								$Id = substr($id, 0, 8).'-'.substr($id, 8, 4).'-'.substr($id, 12, 4).'-'.substr($id, 16, 4).'-'.substr($id, 20, 32);
-									echo '<a href="https://app.sendit.cl/Files/FormEntry/'.$row['ProviderId'].'-'.$Id.$row['EQUIPMENT']['WORK']['PHOTOS']['PHOTO1'].'">Ver Foto</a>';
-							}else{echo "-";}
+
+										echo '<a href="'.$row['EQUIPMENT']['WORK']['PHOTOS']['PHOTO1'].'">Ver Foto</a>';
+								}else{echo "-";}
 								?>
 							</td>
 

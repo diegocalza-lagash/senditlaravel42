@@ -1,126 +1,453 @@
 <?php
-error_reporting(E_ALL);
+//error_reporting(E_ALL);
 //require "/vendor/autoload.php";
-class Console
-{
-    /**
-     * @param string $name Nombre único para poder ejecutar esto varias veces en el mismo documento
-     * @param mixed $var Una variable cadena, objeto, matriz o lo que sea
-     * @param string $type (debug|info|warn|error)
-     * @return html
-     */
-    public static function log($name, $var, $type='debug')
-    {
-        $name = preg_replace('/[^A-Z|0-9]/i', '_', $name);
-        $types = array('debug', 'info', 'warn', 'error');
-        if ( ! in_array($type, $types) ) $type = 'debug';
-        $s = '<script>' . PHP_EOL;
-            if ( is_object($var) or is_array($var) )
-            {
-                $object = json_encode($var);
-                $object = str_replace("'", "\'", $object);
-                $s .= "var object$name = '$object';" . PHP_EOL;
-                $s .= "var val$name = eval('('+object$name+')');" . PHP_EOL;
-                $s .= "console.$type(val$name);" . PHP_EOL;
-            }
-            else
-            {
-                $var = str_replace('"', '\\"', $var);
-                $s .= "console.$type($var);" . PHP_EOL;
-            }
-        $s .= '</script>' . PHP_EOL;
-        return $s;
-    }
-}
 
+class ReportSeguimientoController extends \BaseController {
 
-class DataSendController extends \BaseController {
-
-	/*public function __construct(){
-		$this->beforeFilter('auth.user');
-	}*/
-	public function getEquipments(){
-		echo "hola";
-
-	}
 
 	public function getIndex()
 	{
 
-		$this->layout->content = View::make('DataSend.index');
+		$this->layout->content = View::make('ReportSeguimiento.index');
 		//return View::make('DataSend.report',array("docRepor" => $docRepor));
 	}
 	public function crearPDF($seg,$vistaurl){
 
-			$view =  \View::make($vistaurl, compact('seg'))->render();
-	       $pdf = \App::make('dompdf');
-	       //$pdf = PDF::loadView($view);
-	        $pdf->loadHTML($view);
+		/* // DomPDF
+		$view =  \View::make($vistaurl, compact('seg'))->render();
+       $pdf = \App::make('dompdf');
+       //$pdf = PDF::loadView($view);
+        $pdf->loadHTML($view);
 
-				//return $pdf->stream();
-				//return View::make('RT.rtech', array("rt" => $rt));
-			 return $pdf->download('reporte.pdf');
+			return $pdf->stream();
+			//return View::make('RT.rtech', array("rt" => $rt));
+		 //return $pdf->download('reporte.pdf');*/
+
+		//MPDF
+		/*$mpdf = new mPDF();
+		$stylesheet = file_get_contents('/var/www/senditlaravel42/public/assets/css/css_rtech.css');
+		$view =  \View::make($vistaurl, compact('seg'))->render();
+		$mpdf->WriteHTML($stylesheet,1);
+		$mpdf->WriteHTML($view);
+		return $mpdf->Output('seguimiento.pdf','I');*/
 
 
+	}
+	public function connectMongo(){
+		$m = new MongoClient();//obsoleta desde mongo 1.0.0
+		$db = $m->SenditForm;
 
+		return $db;
+	}
+
+	public function turn_dates($date){
+		$date = new DateTime($date);
+		$date->setTimezone(new DateTimeZone('America/Santiago'));
+		return $date->format('j F, Y, g:i a');
+	}
+
+	public function showTrabajos(){
+
+		$equi = htmlspecialchars(Input::get("equi"));
+		$loc = htmlspecialchars(Input::get("loc"));
+		$iden = htmlspecialchars(Input::get("iden"));
+		$dsp = htmlspecialchars(Input::get("dsp"));
+		$dep = htmlspecialchars(Input::get("dep"));
+		$dsp = new DateTime($dsp);
+		//$dsp->setTimezone(new DateTimeZone('America/Santiago'));
+		$dsp = $dsp->format('d/m/Y');
+		$dep = new DateTime($dep);
+		$dep = $dep->format('d/m/Y');
+		//echo $dsp." ". $dep;
+
+		$collRepor = $this->connectMongo()->Repor;
+
+		$docRepor = $collRepor->find([
+			'EQUIPMENT.EQUIPMENT_NAME' => $equi,
+			'EQUIPMENT.LOCALIZATION_EQUIPMENT.LOCALIZATION_NAME' => $loc,
+			'EQUIPMENT.IDENTIFICATION_EQUIPMENT.IDENTIFICATION_NAME' => $iden,
+			'EQUIPMENT.DATE_START_PROGRAMMED' => $dsp,
+			'EQUIPMENT.DATE_END_PROGRAMMED' => $dep
+			]);
+
+			//return View::make('DataSend.report',array("docRepor" => $docRepor));
+
+		if (!$docRepor -> count()) {
+			//Session::flash('mensaje_error', 'No Existen Trabajos')
+			return Redirect::to('/dataform')
+                ->with('mensaje_error', 'No Existen Trabajos');
 		}
-	public function report(){
-		//echo "hola";
-		if (isset($_GET["equi"]) /*&& isset($_POST['loc']) && isset($_POST['iden']) && isset($_POST['dsp']) && isset($_POST['dep'])*/){
-			$equi = htmlspecialchars(Input::get("equi"));
-			$loc = htmlspecialchars(Input::get("loc"));
-			$iden = htmlspecialchars(Input::get("iden"));
-			$dsp = htmlspecialchars(Input::get("dsp"));
-			//$dsp = $_GET['dsp'];
-			//echo $dsp;
-			$dep = htmlspecialchars(Input::get("dep"));
-			/*$equi = $_POST["equi"];
-			$loc = $_POST["loc"];echo $loc;
-			$iden = $_POST['iden'];
-			$dsp = $_POST['dsp'];
-			$dep = $_POST['dep'];*/
-				/*$loc = htmlspecialchars(Input::get("loc"));
-				$iden = htmlspecialchars(Input::get("iden"));
-				$dsp = htmlspecialchars(Input::get("dsp"));
-				$dep = htmlspecialchars(Input::get("dep"));*/
-			$dsp = new DateTime($dsp);
-			//$dsp->setTimezone(new DateTimeZone('America/Santiago'));
-			$dsp = $dsp->format('d/m/Y');
-			$dep = new DateTime($dep);
-			$dep = $dep->format('d/m/Y');
-			//echo $dsp." ". $dep;
-			$m = new MongoClient();//obsoleta desde mongo 1.0.0
-			$db = $m->SenditForm;
-			$collRepor = $db->Repor;
-			//echo $equi." ".$loc." ".$iden." ".$dsp." ". $dep;
-			$docRepor = $collRepor->find([
-				'EQUIPMENT.EQUIPMENT_NAME' => $equi,
-				'EQUIPMENT.LOCALIZATION_EQUIPMENT.LOCALIZATION_NAME' => $loc,
-				'EQUIPMENT.IDENTIFICATION_EQUIPMENT.IDENTIFICATION_NAME' => $iden,
-				'EQUIPMENT.DATE_START_PROGRAMMED' => $dsp,
-				'EQUIPMENT.DATE_END_PROGRAMMED' => $dep
-				]);
+		else{
 
-				//return View::make('DataSend.report',array("docRepor" => $docRepor));
-			if (!$docRepor -> count()) {
-					//Session::flash('mensaje_error', 'No Existen Trabajos')
-				return Redirect::to('/dataform')
-                    ->with('mensaje_error', 'No Existen Trabajos');
+			$collwf = $this->connectMongo()->works_filter;
+
+			//Borro contenido de la colleccion
+			if ($collwf->count()>0) {
+				$collwf->drop();
+			}
+
+			//genero una key para la session
+			$requestId = md5(microtime().rand());
+
+			//Borro contenido local de fotos
+
+			$dir = '/var/www/senditlaravel42/public/photos/';
+			        $handle = opendir($dir);
+			        $ficherosEliminados = 0;
+			        while ($file = readdir($handle)) {
+			            if (is_file($dir.$file)) {
+			                if (unlink($dir.$file) ){
+			                    $ficherosEliminados++;
+			                }
+			            }
+			        }
+			//echo "Eliminados : <strong>". $ficherosEliminados ."</strong>";
+
+			//Guardo en collection works_filter
+
+			foreach ($docRepor as  $v) {
+
+				//Guardando photos de la request
+				/*$remoteImage = $v['EQUIPMENT']['WORK']['PHOTOS']['PHOTO1'];
+				$imginfo = getimagesize($remoteImage);
+				//var_dump($imginfo) ;
+				//header("Content-type: {$imginfo['mime']}");
+				$options = array(
+					   	  "http" => array(
+					   	  "header" => "Content-Type: {$imginfo['mime']}"));
+
+				$contexto = stream_context_create($options);
+				$photo = file_get_contents($v['EQUIPMENT']['WORK']['PHOTOS']['PHOTO1'],false,$contexto);
+
+				if (!file_exists('/var/www/senditlaravel42/public/photos/'.$name_photo)) {
+					file_put_contents('/var/www/senditlaravel42/public/photos/'.$name_photo,$photo);
+				}
+
+				//$photo = file_get_contents($v['EQUIPMENT']['WORK']['PHOTOS']['PHOTO1']);*/
+				$name_photo = substr($v['EQUIPMENT']['WORK']['PHOTOS']['PHOTO1'],-22);
+				 copy(
+				 	$v['EQUIPMENT']['WORK']['PHOTOS']['PHOTO1'],
+				 	'/var/www/senditlaravel42/public/photos/'.$name_photo);
+
+				$collwf->insert([
+					"RequestId" => $requestId,
+					"Equipo" => $v['EQUIPMENT']['EQUIPMENT_NAME'],
+					"IdenEquipo" => $v['EQUIPMENT']['IDENTIFICATION_EQUIPMENT']['IDENTIFICATION_NAME'],
+					"Loc" => $v['EQUIPMENT']['LOCALIZATION_EQUIPMENT']['LOCALIZATION_NAME'],
+					"Blk" => $v['EQUIPMENT']['BLOCK_SYSTEM'],
+					"Dsp" => $v['EQUIPMENT']['DATE_START_PROGRAMMED'],
+					"Dep" => $v['EQUIPMENT']['DATE_END_PROGRAMMED'],
+					"Hp" =>	$v['EQUIPMENT']['HOUR_PROG'],
+					"Std" => $v['EQUIPMENT']['WORK']['TURNS_PAGE']['S_TURN_DAY'],
+					"Stn" => $v['EQUIPMENT']['WORK']['TURNS_PAGE']['S_TURN_NIGHT'],
+					"Itd" => $v['EQUIPMENT']['WORK']['TURNS_PAGE']['I_P_TURN_DAY'],
+					"Itn" => $v['EQUIPMENT']['WORK']['TURNS_PAGE']['I_P_TURN_NIGHT'],
+					"Work" => $v['EQUIPMENT']['WORK']['WORK_NAME'],
+					"Subwork" => $v['EQUIPMENT']['WORK']['SUBWORK']['SUBWORK_NAME'],
+					"Dsr" => $v['EQUIPMENT']['WORK']['SUBWORK']['DATE_START_REAL'],
+					"Der" => $v['EQUIPMENT']['WORK']['SUBWORK']['DATE_END_REAL'],
+					"Poop" => $v['EQUIPMENT']['WORK']['SUBWORK']['POOP'],
+					"Obs" => $v['EQUIPMENT']['WORK']['SUBWORK']['OBSERVATIONS'],
+					"Photo" => $v['EQUIPMENT']['WORK']['PHOTOS']['PHOTO1'],
+					"Leyend" => $v['EQUIPMENT']['WORK']['PHOTOS']['DESCRIPTION_PHOTO1']
+
+
+					]);
+			}
+
+			return View::make('ReportSeguimiento.report_seguimiento', array(
+				"docRepor" => $docRepor,
+				"requestId" => $requestId));
+
+		}//else
+	}
+		/**
+		 * Store a newly created resource in storage.
+		 *
+		 * @return Response
+		 */
+	public function store()
+	{
+		//recibo los datos de APP movil
+		$aRequest = json_decode(file_get_contents('php://input'),true);
+		$m = new MongoClient();//obsoleta desde mongo 1.0.0
+		$db = $m->SenditForm;
+		//para tener el Json original como prueba
+		//$db->Json->insert($aRequest);//comentar esto cuando esté en production pero no para recoger el Json de una nueva screen en la app movil
+		//guardo JSON sin modificacion de la app
+		//para guardar en un archivo
+		/*try {
+			$fichero=fopen('/var/www/senditlaravel42/test.log','w');
+		} catch (Exception $e) {
+			echo "capturada";
+			//chmod('test.log', 0777);
+		}
+		//$fichero=fopen('test.log','w');
+	 		if($fichero == false) {
+   			die("No se ha podido crear el archivo.");
+		}
+		fwrite($fichero,json_encode($aRequest));
+		fclose($fichero);*/
+
+		//guardo nombre de Equipos
+		$equipments = array("equi" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['EQUIPMENT']);
+		$coll_equipments = $db->equipments;
+
+		if($coll_equipments->count() == 0){
+			$coll_equipments->insert($equipments);
 			}else{
-				$m = new MongoClient();
-				$db = $m->SenditForm;
-				$collwf = $db->works_filter;
+				$result = $coll_equipments->findOne(["equi" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['EQUIPMENT']]);
+				if (!$result) {
+				$coll_equipments->insert($equipments);
+				}
+		}
+		//guardo ubicaciones
+		$locs = array("loc" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['LOCALIZATION_EQUIPMENT']);
+		$coll_locs = $db->locs;
+		if($coll_locs->count() == 0){
+			$coll_locs->insert($locs);
+			}else{
+				$result = $coll_locs->findOne(["loc" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['LOCALIZATION_EQUIPMENT']]);
+				if (!$result) {
+				$coll_locs->insert($locs);
+				}
+			}
+		//guardo identificaciones
+		$idens = array("iden" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['IDENTIFICATION_EQUIPMENT']);
+		$coll_idens = $db->idens;
+		if($coll_idens->count() == 0){
+			$coll_idens->insert($idens);
+			}else{
+				$result = $coll_idens->findOne(["iden" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['IDENTIFICATION_EQUIPMENT']]);
+				if (!$result) {
+				$coll_idens->insert($idens);
+				}
+		}
 
-				if ($collwf->count()>0) {
-					$collwf->drop();
-				}
-				$seg = iterator_to_array($docRepor,false);
-				echo count($seg);
-				if(count($seg) == 3 ){
-					return $this->crearPDF($seg, 'DataSend.seguimiento');
-				}
-				//return View::make('DataSend.seguimiento', array("docRepor" => $docRepor));
-				//Creo un array con los datos para agrupar los trabajos que me interesan
+		//guardo datos que vienen del app movil
+		$collRepor = $db->Repor;
+		if ($collRepor->count() == 0 ){
+			//genero link para la foto
+			$id = $aRequest['Entry']['Id'];
+			$Id = substr($id, 0, 8).'-'.substr($id, 8, 4).'-'.substr($id, 12, 4).'-'.substr($id, 16, 4).'-'.substr($id, 20, 32);
+			$photo = 'https://app.sendit.cl/Files/FormEntry/'.$aRequest['ProviderId'].'-'.$Id.$aRequest['Entry']['AnswersJson']['PHOTOS']['PHOTO1'].'';
+				$array = array(
+					"ProviderId" => $aRequest['ProviderId'],
+					"IntegrationKey" => $aRequest['IntegrationKey'],
+					"Entry" => array(
+						 "Id" => $aRequest['Entry']['Id'],
+						 "FormCode" => $aRequest['Entry']['FormCode'],
+						 "FormVersion" => $aRequest['Entry']['FormVersion'],
+						 "UserFirstName" => $aRequest['Entry']['UserFirstName'],
+						 "UserLastName" => $aRequest['Entry']['UserLastName'],
+						 "UserEmail" => $aRequest['Entry']['UserEmail'],
+						 "Latitude" => $aRequest['Entry']['Latitude'],
+						 "Longitude" => $aRequest['Entry']['Longitude'],
+						 "StartTime" => $aRequest['Entry']['StartTime'],
+						 "ReceivedTime" => $aRequest['Entry']['ReceivedTime'],
+						 "CompleteTime" => $aRequest['Entry']['CompleteTime']
+						),
+					"EQUIPMENT" => array(
+						"EQUIPMENT_NAME" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['EQUIPMENT'],
+						"IDENTIFICATION_EQUIPMENT" => array(
+							"IDENTIFICATION_NAME" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['IDENTIFICATION_EQUIPMENT']
+							),
+						"LOCALIZATION_EQUIPMENT" => array(
+							"LOCALIZATION_NAME" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['LOCALIZATION_EQUIPMENT']
+							),
+						"BLOCK_SYSTEM" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['BLOCK_SYSTEM'],
+						"DATE_START_PROGRAMMED" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['DATE_START_PROGRAMMED'],
+						"DATE_END_PROGRAMMED" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['DATE_END_PROGRAMMED'],
+						"HOUR_PROG" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['HOUR_PROG'],
+						"WORK" =>  array(
+							"WORK_NUEVO" => "SI",
+							"WORK_NAME" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['WORK'],
+							"SUBWORK" => array(
+								"SUBWORK_NAME" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['SUBWORK'],
+								"DATE_START_REAL" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['DATE_START_REAL'],
+								"DATE_END_REAL" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['DATE_END_REAL'],
+								"POOP" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['POOP'],
+								"OBSERVATIONS" =>  $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['OBSERVATIONS']
+								),
+							"TURNS_PAGE" => array(
+								"S_TURN_DAY" => $aRequest['Entry']['AnswersJson']['TURNS_PAGE']['S_TURN_DAY'],
+						  		"S_TURN_NIGHT" => $aRequest['Entry']['AnswersJson']['TURNS_PAGE']['S_TURN_NIGHT'],
+						  		"I_P_TURN_DAY" => $aRequest['Entry']['AnswersJson']['TURNS_PAGE']['I_P_TURN_DAY'],
+						  		"I_P_TURN_NIGHT" => $aRequest['Entry']['AnswersJson']['TURNS_PAGE']['I_P_TURN_NIGHT']
+							),
+							"PHOTOS" => array(
+								"PHOTO1" => $photo,
+								"DESCRIPTION_PHOTO1" => $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_PHOTO1'],
+								"PHOTO2" => $aRequest['Entry']['AnswersJson']['PHOTOS']['PHOTO2'],
+								"DESCRIPTION_PHOTO2" => $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_PHOTO2'],
+								"PHOTO3" => $aRequest['Entry']['AnswersJson']['PHOTOS']['PHOTO3'],
+								"DESCRIPTION_PHOTO3" => $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_PHOTO3'],
+								"VIDEO" => $aRequest['Entry']['AnswersJson']['PHOTOS']['VIDEO'],
+								"DESCRIPTION_VIDEO"=> $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_VIDEO'],
+								"NEXT_PAGE_FORM_P" => $aRequest['Entry']['AnswersJson']['PHOTOS']['NEXT_PAGE_FORM_P']
+							)
+						)
+					)
+				);
+
+				$docRepor = $collRepor->insert($array);
+				echo "Insertado en Repor work nuevo : si";
+
+		}else{
+			echo "no vacio";
+			$id = $aRequest['Entry']['Id'];
+			$Id = substr($id, 0, 8).'-'.substr($id, 8, 4).'-'.substr($id, 12, 4).'-'.substr($id, 16, 4).'-'.substr($id, 20, 32);
+			$photo = 'https://app.sendit.cl/Files/FormEntry/'.$aRequest['ProviderId'].'-'.$Id.$aRequest['Entry']['AnswersJson']['PHOTOS']['PHOTO1'].'';
+			$array = array(
+					"ProviderId" => $aRequest['ProviderId'],
+					"IntegrationKey" => $aRequest['IntegrationKey'],
+					"Entry" => array(
+						 "Id" => $aRequest['Entry']['Id'],
+						 "FormCode" => $aRequest['Entry']['FormCode'],
+						 "FormVersion" => $aRequest['Entry']['FormVersion'],
+						 "UserFirstName" => $aRequest['Entry']['UserFirstName'],
+						 "UserLastName" => $aRequest['Entry']['UserLastName'],
+						 "UserEmail" => $aRequest['Entry']['UserEmail'],
+						 "Latitude" => $aRequest['Entry']['Latitude'],
+						 "Longitude" => $aRequest['Entry']['Longitude'],
+						 "StartTime" => $aRequest['Entry']['StartTime'],
+						 "ReceivedTime" => $aRequest['Entry']['ReceivedTime'],
+						 "CompleteTime" => $aRequest['Entry']['CompleteTime']
+						),
+					"EQUIPMENT" => array(
+						"EQUIPMENT_NAME" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['EQUIPMENT'],
+						"IDENTIFICATION_EQUIPMENT" => array(
+							"IDENTIFICATION_NAME" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['IDENTIFICATION_EQUIPMENT']
+							),
+						"LOCALIZATION_EQUIPMENT" => array(
+							"LOCALIZATION_NAME" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['LOCALIZATION_EQUIPMENT']
+							),
+						"BLOCK_SYSTEM" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['BLOCK_SYSTEM'],
+						"DATE_START_PROGRAMMED" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['DATE_START_PROGRAMMED'],
+						"DATE_END_PROGRAMMED" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['DATE_END_PROGRAMMED'],
+						"HOUR_PROG" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['HOUR_PROG'],
+						"WORK" =>  array(
+							"WORK_NUEVO" => "NO",
+							"WORK_NAME" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['WORK'],
+							"SUBWORK" => array(
+								"SUBWORK_NAME" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['SUBWORK'],
+								"DATE_START_REAL" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['DATE_START_REAL'],
+								"DATE_END_REAL" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['DATE_END_REAL'],
+								"POOP" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['POOP'],
+								"OBSERVATIONS" =>  $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['OBSERVATIONS']
+								),
+							"TURNS_PAGE" => array(
+								"S_TURN_DAY" => $aRequest['Entry']['AnswersJson']['TURNS_PAGE']['S_TURN_DAY'],
+						  		"S_TURN_NIGHT" => $aRequest['Entry']['AnswersJson']['TURNS_PAGE']['S_TURN_NIGHT'],
+						  		"I_P_TURN_DAY" => $aRequest['Entry']['AnswersJson']['TURNS_PAGE']['I_P_TURN_DAY'],
+						  		"I_P_TURN_NIGHT" => $aRequest['Entry']['AnswersJson']['TURNS_PAGE']['I_P_TURN_NIGHT']
+							),
+							"PHOTOS" => array(
+								"PHOTO1" => $photo,
+								"DESCRIPTION_PHOTO1" => $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_PHOTO1'],
+								"PHOTO2" => $aRequest['Entry']['AnswersJson']['PHOTOS']['PHOTO2'],
+								"DESCRIPTION_PHOTO2" => $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_PHOTO2'],
+								"PHOTO3" => $aRequest['Entry']['AnswersJson']['PHOTOS']['PHOTO3'],
+								"DESCRIPTION_PHOTO3" => $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_PHOTO3'],
+								"VIDEO" => $aRequest['Entry']['AnswersJson']['PHOTOS']['VIDEO'],
+								"DESCRIPTION_VIDEO"=> $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_VIDEO'],
+								"NEXT_PAGE_FORM_P" => $aRequest['Entry']['AnswersJson']['PHOTOS']['NEXT_PAGE_FORM_P']
+							)
+						)
+						)
+				);
+			//verifico que no se inserte una mismo subtrabajo con la misma fecha de programacion
+			$result = $collRepor->findOne([
+				'EQUIPMENT.WORK.WORK_NAME' => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['WORK'],
+				'EQUIPMENT.WORK.SUBWORK.SUBWORK_NAME' => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['SUBWORK'],
+				'EQUIPMENT.DATE_START_PROGRAMMED' => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['DATE_START_PROGRAMMED'],
+				'EQUIPMENT.DATE_END_PROGRAMMED' => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['DATE_END_PROGRAMMED'],
+				'EQUIPMENT.EQUIPMENT_NAME' => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['EQUIPMENT'],
+				/*'EQUIPMENT.LOCALIZATION_EQUIPMENT.LOCALIZATION_NAME' => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['LOCALIZATION_EQUIPMENT'],
+				'EQUIPMENT.IDENTIFICATION_EQUIPMENT.IDENTIFICATION_NAME' => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['IDENTIFICATION_EQUIPMENT']*/
+				]);
+			if (!$result) {
+
+				$docRepor = $collRepor->insert($array);
+				echo "Insertado en Repor work nuevo : no";
+
+			}else{
+				//si es el mismo w y subw con fip y ftp iguales inserto en la collection Same_subw
+				$id = $aRequest['Entry']['Id'];
+				$Id = substr($id, 0, 8).'-'.substr($id, 8, 4).'-'.substr($id, 12, 4).'-'.substr($id, 16, 4).'-'.substr($id, 20, 32);
+				$photo = 'https://app.sendit.cl/Files/FormEntry/'.$aRequest['ProviderId'].'-'.$Id.$aRequest['Entry']['AnswersJson']['PHOTOS']['PHOTO1'].'';
+				$array = array(
+					"ProviderId" => $aRequest['ProviderId'],
+					"IntegrationKey" => $aRequest['IntegrationKey'],
+					"Entry" => array(
+						 "Id" => $aRequest['Entry']['Id'],
+						 "FormCode" => $aRequest['Entry']['FormCode'],
+						 "FormVersion" => $aRequest['Entry']['FormVersion'],
+						 "UserFirstName" => $aRequest['Entry']['UserFirstName'],
+						 "UserLastName" => $aRequest['Entry']['UserLastName'],
+						 "UserEmail" => $aRequest['Entry']['UserEmail'],
+						 "Latitude" => $aRequest['Entry']['Latitude'],
+						 "Longitude" => $aRequest['Entry']['Longitude'],
+						 "StartTime" => $aRequest['Entry']['StartTime'],
+						 "ReceivedTime" => $aRequest['Entry']['ReceivedTime'],
+						 "CompleteTime" => $aRequest['Entry']['CompleteTime']
+						),
+					"EQUIPMENT" => array(
+						"EQUIPMENT_NAME" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['EQUIPMENT'],
+						"IDENTIFICATION_EQUIPMENT" => array(
+							"IDENTIFICATION_NAME" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['IDENTIFICATION_EQUIPMENT']
+							),
+						"LOCALIZATION_EQUIPMENT" => array(
+							"LOCALIZATION_NAME" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['LOCALIZATION_EQUIPMENT']
+							),
+						"BLOCK_SYSTEM" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['BLOCK_SYSTEM'],
+						"DATE_START_PROGRAMMED" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['DATE_START_PROGRAMMED'],
+						"DATE_END_PROGRAMMED" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['DATE_END_PROGRAMMED'],
+						"HOUR_PROG" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['HOUR_PROG'],
+						"WORK" =>  array(
+							"WORK_NUEVO" => "SI",
+							"WORK_NAME" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['WORK'],
+							"SUBWORK" => array(
+								"SUBWORK_NAME" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['SUBWORK'],
+								"DATE_START_REAL" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['DATE_START_REAL'],
+								"DATE_END_REAL" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['DATE_END_REAL'],
+								"POOP" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['POOP'],
+								"OBSERVATIONS" =>  $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['OBSERVATIONS']
+								),
+							"TURNS_PAGE" => array(
+								"S_TURN_DAY" => $aRequest['Entry']['AnswersJson']['TURNS_PAGE']['S_TURN_DAY'],
+						  		"S_TURN_NIGHT" => $aRequest['Entry']['AnswersJson']['TURNS_PAGE']['S_TURN_NIGHT'],
+						  		"I_P_TURN_DAY" => $aRequest['Entry']['AnswersJson']['TURNS_PAGE']['I_P_TURN_DAY'],
+						  		"I_P_TURN_NIGHT" => $aRequest['Entry']['AnswersJson']['TURNS_PAGE']['I_P_TURN_NIGHT']
+							),
+							"PHOTOS" => array(
+								"PHOTO1" => $photo,
+								"DESCRIPTION_PHOTO1" => $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_PHOTO1'],
+								"PHOTO2" => $aRequest['Entry']['AnswersJson']['PHOTOS']['PHOTO2'],
+								"DESCRIPTION_PHOTO2" => $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_PHOTO2'],
+								"PHOTO3" => $aRequest['Entry']['AnswersJson']['PHOTOS']['PHOTO3'],
+								"DESCRIPTION_PHOTO3" => $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_PHOTO3'],
+								"VIDEO" => $aRequest['Entry']['AnswersJson']['PHOTOS']['VIDEO'],
+								"DESCRIPTION_VIDEO"=> $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_VIDEO'],
+								"NEXT_PAGE_FORM_P" => $aRequest['Entry']['AnswersJson']['PHOTOS']['NEXT_PAGE_FORM_P']
+							)
+						)
+					)
+				);
+				$coll_same_sub = $db->Same_subw;
+				$docRepor = $coll_same_sub->insert($array);
+				echo "Insertado en collection Same_subw";
+			}
+
+			//var_dump($result);
+
+
+		}//else
+
+	}//class store
+
+
+	/*
 				foreach ($docRepor as  $v) {
 
 					//$photo = $v['EQUIPMENT']['WORK']['PHOTOS']['PHOTO1'];
@@ -150,15 +477,9 @@ class DataSendController extends \BaseController {
 //primera foto
 				$objPHPExcel = new PHPExcel();
 				$objReader = PHPExcel_IOFactory::createReader('Excel2007');
-				$objPHPExcel = $objReader->load("/var/www/senditlaravel42/public/reporteRudel.xlsx");
+				$objPHPExcel = $objReader->load("CreporteRudel.xlsx");
 				$objWorksheet= $objPHPExcel->setActiveSheetIndex(0);
-				//$sheet = $objPHPExcel->getSheet(0);
-				/*$pixels = 250;
-				$points = PHPExcel_Shared_Drawing::pixelsToPoints($pixels);
-				$wpixels = 500;
-				$wpoints = PHPExcel_Shared_Drawing::pixelsToPoints($wpixels);
-				$celdas = array('B','P');
-				//echo $celdas[0];*/
+
 				$i=0;
 				foreach ($docRepor as $v) {
 
@@ -177,17 +498,7 @@ class DataSendController extends \BaseController {
 					//copio la imagen que esta en la nube y la guardo en m icarpeta local
 					copy($v['EQUIPMENT']['WORK']['PHOTOS']['PHOTO1'], '/var/www/senditlaravel42/public/photos/'.$name_photo);
 
-					/*$objDrawing = new PHPExcel_Worksheet_Drawing();
-					$sheet = $objPHPExcel->getSheet(0);
-					$objDrawing->setName($name_photo);
-					$objDrawing->setDescription('PHOTO'.$name_photo);
-					$objDrawing->getPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					$objDrawing->setHeight(250);
-					//$objDrawing->setWidth(250);
-					//$objDrawing->setWidthAndHeight($wpoints,$points);
-					$objDrawing->setCoordinates('B50');//An individual drawing object can only have one coordinate
-					$i++;
-					echo $name_photo;*/
+
 
 				}//endforeach
 				//$objDrawing->setWorksheet($sheet);
@@ -356,12 +667,12 @@ class DataSendController extends \BaseController {
 				$collwf = $db->works_filter;
 				$docwork = $collwf->insert($g);
 
-				//**IMPRIMO TRABAJOS***//
+				//**IMPRIMO TRABAJOS***/
 				 //require_once 'Classes/PHPExcel.php';
 
-				$rendererName = PHPExcel_Settings::PDF_RENDERER_DOMPDF;
-				$rendererLibrary = 'dompdf.php';
-				$rendererLibraryPath = dirname(__FILE__). 'libs/classes/dompdf' . $rendererLibrary;
+				//$rendererName = PHPExcel_Settings::PDF_RENDERER_DOMPDF;
+				//$rendererLibrary = 'dompdf.php';
+				//$rendererLibraryPath = dirname(__FILE__). 'libs/classes/dompdf' . $rendererLibrary;
 				//$rendererLibraryPath = dirname(__FILE__). 'libs/classes/dompdf' . $rendererLibrary;
 				//$rendererLibraryPath = dirname(__FILE__). 'vendor/dompdf//dompdf/lib/class.pdf.php' . $rendererLibrary;
 
@@ -471,7 +782,6 @@ class DataSendController extends \BaseController {
 					  '<br />' .
 					  'at the top of this script as appropriate for your directory structure'
 					 );
-					}*/
 
 					/*header("Content-Type: application/pdf");
 					header("Content-Disposition: attachment;filename='1ReportOut.pdf'");
@@ -480,10 +790,10 @@ class DataSendController extends \BaseController {
 
 					$objWriter->save("php://output");*/
 
-					return View::make('DataSend.report', array("docRepor" => $docRepor));
+					//return View::make('DataSend.report', array("docRepor" => $docRepor));
 
 				//}//if
-				}}}/*
+				/*}}}
 			//**IMPRIMO TRABAJOS***
 				$objPHPExcel = new PHPExcel();
 				$objReader = PHPExcel_IOFactory::createReader('Excel2007');
@@ -4229,290 +4539,7 @@ class DataSendController extends \BaseController {
 	}
 
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
-	{
-		//recibo los datos de APP movil
-		$aRequest = json_decode(file_get_contents('php://input'),true);
-		$m = new MongoClient();//obsoleta desde mongo 1.0.0
-		$db = $m->SenditForm;
-		//para tener el Json original como prueba
-		//$db->Json->insert($aRequest);//comentar esto cuando esté en production pero no para recoger el Json de una nueva screen en la app movil
-		//guardo JSON sin modificacion de la app
-		//para guardar en un archivo
-		/*try {
-			$fichero=fopen('/var/www/senditlaravel42/test.log','w');
-		} catch (Exception $e) {
-			echo "capturada";
-			//chmod('test.log', 0777);
-		}
-		//$fichero=fopen('test.log','w');
-	 		if($fichero == false) {
-   			die("No se ha podido crear el archivo.");
-		}
-		fwrite($fichero,json_encode($aRequest));
-		fclose($fichero);*/
 
-		//guardo nombre de Equipos
-		$equipments = array("equi" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['EQUIPMENT']);
-		$coll_equipments = $db->equipments;
-
-		if($coll_equipments->count() == 0){
-			$coll_equipments->insert($equipments);
-			}else{
-				$result = $coll_equipments->findOne(["equi" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['EQUIPMENT']]);
-				if (!$result) {
-				$coll_equipments->insert($equipments);
-				}
-		}
-		//guardo ubicaciones
-		$locs = array("loc" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['LOCALIZATION_EQUIPMENT']);
-		$coll_locs = $db->locs;
-		if($coll_locs->count() == 0){
-			$coll_locs->insert($locs);
-			}else{
-				$result = $coll_locs->findOne(["loc" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['LOCALIZATION_EQUIPMENT']]);
-				if (!$result) {
-				$coll_locs->insert($locs);
-				}
-			}
-		//guardo identificaciones
-		$idens = array("iden" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['IDENTIFICATION_EQUIPMENT']);
-		$coll_idens = $db->idens;
-		if($coll_idens->count() == 0){
-			$coll_idens->insert($idens);
-			}else{
-				$result = $coll_idens->findOne(["iden" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['IDENTIFICATION_EQUIPMENT']]);
-				if (!$result) {
-				$coll_idens->insert($idens);
-				}
-		}
-
-		//guardo datos que vienen del app movil
-		$collRepor = $db->Repor;
-		if ($collRepor->count() == 0 ){
-			//genero link para la foto
-			$id = $aRequest['Entry']['Id'];
-			$Id = substr($id, 0, 8).'-'.substr($id, 8, 4).'-'.substr($id, 12, 4).'-'.substr($id, 16, 4).'-'.substr($id, 20, 32);
-			$photo = 'https://app.sendit.cl/Files/FormEntry/'.$aRequest['ProviderId'].'-'.$Id.$aRequest['Entry']['AnswersJson']['PHOTOS']['PHOTO1'].'';
-				$array = array(
-					"ProviderId" => $aRequest['ProviderId'],
-					"IntegrationKey" => $aRequest['IntegrationKey'],
-					"Entry" => array(
-						 "Id" => $aRequest['Entry']['Id'],
-						 "FormCode" => $aRequest['Entry']['FormCode'],
-						 "FormVersion" => $aRequest['Entry']['FormVersion'],
-						 "UserFirstName" => $aRequest['Entry']['UserFirstName'],
-						 "UserLastName" => $aRequest['Entry']['UserLastName'],
-						 "UserEmail" => $aRequest['Entry']['UserEmail'],
-						 "Latitude" => $aRequest['Entry']['Latitude'],
-						 "Longitude" => $aRequest['Entry']['Longitude'],
-						 "StartTime" => $aRequest['Entry']['StartTime'],
-						 "ReceivedTime" => $aRequest['Entry']['ReceivedTime'],
-						 "CompleteTime" => $aRequest['Entry']['CompleteTime']
-						),
-					"EQUIPMENT" => array(
-						"EQUIPMENT_NAME" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['EQUIPMENT'],
-						"IDENTIFICATION_EQUIPMENT" => array(
-							"IDENTIFICATION_NAME" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['IDENTIFICATION_EQUIPMENT']
-							),
-						"LOCALIZATION_EQUIPMENT" => array(
-							"LOCALIZATION_NAME" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['LOCALIZATION_EQUIPMENT']
-							),
-						"BLOCK_SYSTEM" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['BLOCK_SYSTEM'],
-						"DATE_START_PROGRAMMED" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['DATE_START_PROGRAMMED'],
-						"DATE_END_PROGRAMMED" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['DATE_END_PROGRAMMED'],
-						"HOUR_PROG" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['HOUR_PROG'],
-						"WORK" =>  array(
-							"WORK_NUEVO" => "SI",
-							"WORK_NAME" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['WORK'],
-							"SUBWORK" => array(
-								"SUBWORK_NAME" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['SUBWORK'],
-								"DATE_START_REAL" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['DATE_START_REAL'],
-								"DATE_END_REAL" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['DATE_END_REAL'],
-								"POOP" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['POOP'],
-								"OBSERVATIONS" =>  $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['OBSERVATIONS']
-								),
-							"TURNS_PAGE" => array(
-								"S_TURN_DAY" => $aRequest['Entry']['AnswersJson']['TURNS_PAGE']['S_TURN_DAY'],
-						  		"S_TURN_NIGHT" => $aRequest['Entry']['AnswersJson']['TURNS_PAGE']['S_TURN_NIGHT'],
-						  		"I_P_TURN_DAY" => $aRequest['Entry']['AnswersJson']['TURNS_PAGE']['I_P_TURN_DAY'],
-						  		"I_P_TURN_NIGHT" => $aRequest['Entry']['AnswersJson']['TURNS_PAGE']['I_P_TURN_NIGHT']
-							),
-							"PHOTOS" => array(
-								"PHOTO1" => $photo,
-								"DESCRIPTION_PHOTO1" => $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_PHOTO1'],
-								"PHOTO2" => $aRequest['Entry']['AnswersJson']['PHOTOS']['PHOTO2'],
-								"DESCRIPTION_PHOTO2" => $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_PHOTO2'],
-								"PHOTO3" => $aRequest['Entry']['AnswersJson']['PHOTOS']['PHOTO3'],
-								"DESCRIPTION_PHOTO3" => $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_PHOTO3'],
-								"VIDEO" => $aRequest['Entry']['AnswersJson']['PHOTOS']['VIDEO'],
-								"DESCRIPTION_VIDEO"=> $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_VIDEO'],
-								"NEXT_PAGE_FORM_P" => $aRequest['Entry']['AnswersJson']['PHOTOS']['NEXT_PAGE_FORM_P']
-							)
-						)
-					)
-				);
-
-				$docRepor = $collRepor->insert($array);
-				echo "Insertado en Repor work nuevo : si";
-
-		}else{
-			echo "no vacio";
-			$id = $aRequest['Entry']['Id'];
-			$Id = substr($id, 0, 8).'-'.substr($id, 8, 4).'-'.substr($id, 12, 4).'-'.substr($id, 16, 4).'-'.substr($id, 20, 32);
-			$photo = 'https://app.sendit.cl/Files/FormEntry/'.$aRequest['ProviderId'].'-'.$Id.$aRequest['Entry']['AnswersJson']['PHOTOS']['PHOTO1'].'';
-			$array = array(
-					"ProviderId" => $aRequest['ProviderId'],
-					"IntegrationKey" => $aRequest['IntegrationKey'],
-					"Entry" => array(
-						 "Id" => $aRequest['Entry']['Id'],
-						 "FormCode" => $aRequest['Entry']['FormCode'],
-						 "FormVersion" => $aRequest['Entry']['FormVersion'],
-						 "UserFirstName" => $aRequest['Entry']['UserFirstName'],
-						 "UserLastName" => $aRequest['Entry']['UserLastName'],
-						 "UserEmail" => $aRequest['Entry']['UserEmail'],
-						 "Latitude" => $aRequest['Entry']['Latitude'],
-						 "Longitude" => $aRequest['Entry']['Longitude'],
-						 "StartTime" => $aRequest['Entry']['StartTime'],
-						 "ReceivedTime" => $aRequest['Entry']['ReceivedTime'],
-						 "CompleteTime" => $aRequest['Entry']['CompleteTime']
-						),
-					"EQUIPMENT" => array(
-						"EQUIPMENT_NAME" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['EQUIPMENT'],
-						"IDENTIFICATION_EQUIPMENT" => array(
-							"IDENTIFICATION_NAME" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['IDENTIFICATION_EQUIPMENT']
-							),
-						"LOCALIZATION_EQUIPMENT" => array(
-							"LOCALIZATION_NAME" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['LOCALIZATION_EQUIPMENT']
-							),
-						"BLOCK_SYSTEM" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['BLOCK_SYSTEM'],
-						"DATE_START_PROGRAMMED" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['DATE_START_PROGRAMMED'],
-						"DATE_END_PROGRAMMED" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['DATE_END_PROGRAMMED'],
-						"HOUR_PROG" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['HOUR_PROG'],
-						"WORK" =>  array(
-							"WORK_NUEVO" => "NO",
-							"WORK_NAME" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['WORK'],
-							"SUBWORK" => array(
-								"SUBWORK_NAME" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['SUBWORK'],
-								"DATE_START_REAL" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['DATE_START_REAL'],
-								"DATE_END_REAL" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['DATE_END_REAL'],
-								"POOP" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['POOP'],
-								"OBSERVATIONS" =>  $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['OBSERVATIONS']
-								),
-							"TURNS_PAGE" => array(
-								"S_TURN_DAY" => $aRequest['Entry']['AnswersJson']['TURNS_PAGE']['S_TURN_DAY'],
-						  		"S_TURN_NIGHT" => $aRequest['Entry']['AnswersJson']['TURNS_PAGE']['S_TURN_NIGHT'],
-						  		"I_P_TURN_DAY" => $aRequest['Entry']['AnswersJson']['TURNS_PAGE']['I_P_TURN_DAY'],
-						  		"I_P_TURN_NIGHT" => $aRequest['Entry']['AnswersJson']['TURNS_PAGE']['I_P_TURN_NIGHT']
-							),
-							"PHOTOS" => array(
-								"PHOTO1" => $photo,
-								"DESCRIPTION_PHOTO1" => $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_PHOTO1'],
-								"PHOTO2" => $aRequest['Entry']['AnswersJson']['PHOTOS']['PHOTO2'],
-								"DESCRIPTION_PHOTO2" => $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_PHOTO2'],
-								"PHOTO3" => $aRequest['Entry']['AnswersJson']['PHOTOS']['PHOTO3'],
-								"DESCRIPTION_PHOTO3" => $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_PHOTO3'],
-								"VIDEO" => $aRequest['Entry']['AnswersJson']['PHOTOS']['VIDEO'],
-								"DESCRIPTION_VIDEO"=> $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_VIDEO'],
-								"NEXT_PAGE_FORM_P" => $aRequest['Entry']['AnswersJson']['PHOTOS']['NEXT_PAGE_FORM_P']
-							)
-						)
-						)
-				);
-			//verifico que no se inserte una mismo subtrabajo con la misma fecha de programacion
-			$result = $collRepor->findOne([
-				'EQUIPMENT.WORK.WORK_NAME' => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['WORK'],
-				'EQUIPMENT.WORK.SUBWORK.SUBWORK_NAME' => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['SUBWORK'],
-				'EQUIPMENT.DATE_START_PROGRAMMED' => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['DATE_START_PROGRAMMED'],
-				'EQUIPMENT.DATE_END_PROGRAMMED' => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['DATE_END_PROGRAMMED'],
-				'EQUIPMENT.EQUIPMENT_NAME' => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['EQUIPMENT'],
-				/*'EQUIPMENT.LOCALIZATION_EQUIPMENT.LOCALIZATION_NAME' => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['LOCALIZATION_EQUIPMENT'],
-				'EQUIPMENT.IDENTIFICATION_EQUIPMENT.IDENTIFICATION_NAME' => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['IDENTIFICATION_EQUIPMENT']*/
-				]);
-			if (!$result) {
-
-				$docRepor = $collRepor->insert($array);
-				echo "Insertado en Repor work nuevo : no";
-
-			}else{
-				//si es el mismo w y subw con fip y ftp iguales inserto en la collection Same_subw
-				$id = $aRequest['Entry']['Id'];
-				$Id = substr($id, 0, 8).'-'.substr($id, 8, 4).'-'.substr($id, 12, 4).'-'.substr($id, 16, 4).'-'.substr($id, 20, 32);
-				$photo = 'https://app.sendit.cl/Files/FormEntry/'.$aRequest['ProviderId'].'-'.$Id.$aRequest['Entry']['AnswersJson']['PHOTOS']['PHOTO1'].'';
-				$array = array(
-					"ProviderId" => $aRequest['ProviderId'],
-					"IntegrationKey" => $aRequest['IntegrationKey'],
-					"Entry" => array(
-						 "Id" => $aRequest['Entry']['Id'],
-						 "FormCode" => $aRequest['Entry']['FormCode'],
-						 "FormVersion" => $aRequest['Entry']['FormVersion'],
-						 "UserFirstName" => $aRequest['Entry']['UserFirstName'],
-						 "UserLastName" => $aRequest['Entry']['UserLastName'],
-						 "UserEmail" => $aRequest['Entry']['UserEmail'],
-						 "Latitude" => $aRequest['Entry']['Latitude'],
-						 "Longitude" => $aRequest['Entry']['Longitude'],
-						 "StartTime" => $aRequest['Entry']['StartTime'],
-						 "ReceivedTime" => $aRequest['Entry']['ReceivedTime'],
-						 "CompleteTime" => $aRequest['Entry']['CompleteTime']
-						),
-					"EQUIPMENT" => array(
-						"EQUIPMENT_NAME" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['EQUIPMENT'],
-						"IDENTIFICATION_EQUIPMENT" => array(
-							"IDENTIFICATION_NAME" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['IDENTIFICATION_EQUIPMENT']
-							),
-						"LOCALIZATION_EQUIPMENT" => array(
-							"LOCALIZATION_NAME" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['LOCALIZATION_EQUIPMENT']
-							),
-						"BLOCK_SYSTEM" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['BLOCK_SYSTEM'],
-						"DATE_START_PROGRAMMED" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['DATE_START_PROGRAMMED'],
-						"DATE_END_PROGRAMMED" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['DATE_END_PROGRAMMED'],
-						"HOUR_PROG" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['HOUR_PROG'],
-						"WORK" =>  array(
-							"WORK_NUEVO" => "SI",
-							"WORK_NAME" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['WORK'],
-							"SUBWORK" => array(
-								"SUBWORK_NAME" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['SUBWORK'],
-								"DATE_START_REAL" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['DATE_START_REAL'],
-								"DATE_END_REAL" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['DATE_END_REAL'],
-								"POOP" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['POOP'],
-								"OBSERVATIONS" =>  $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['OBSERVATIONS']
-								),
-							"TURNS_PAGE" => array(
-								"S_TURN_DAY" => $aRequest['Entry']['AnswersJson']['TURNS_PAGE']['S_TURN_DAY'],
-						  		"S_TURN_NIGHT" => $aRequest['Entry']['AnswersJson']['TURNS_PAGE']['S_TURN_NIGHT'],
-						  		"I_P_TURN_DAY" => $aRequest['Entry']['AnswersJson']['TURNS_PAGE']['I_P_TURN_DAY'],
-						  		"I_P_TURN_NIGHT" => $aRequest['Entry']['AnswersJson']['TURNS_PAGE']['I_P_TURN_NIGHT']
-							),
-							"PHOTOS" => array(
-								"PHOTO1" => $photo,
-								"DESCRIPTION_PHOTO1" => $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_PHOTO1'],
-								"PHOTO2" => $aRequest['Entry']['AnswersJson']['PHOTOS']['PHOTO2'],
-								"DESCRIPTION_PHOTO2" => $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_PHOTO2'],
-								"PHOTO3" => $aRequest['Entry']['AnswersJson']['PHOTOS']['PHOTO3'],
-								"DESCRIPTION_PHOTO3" => $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_PHOTO3'],
-								"VIDEO" => $aRequest['Entry']['AnswersJson']['PHOTOS']['VIDEO'],
-								"DESCRIPTION_VIDEO"=> $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_VIDEO'],
-								"NEXT_PAGE_FORM_P" => $aRequest['Entry']['AnswersJson']['PHOTOS']['NEXT_PAGE_FORM_P']
-							)
-						)
-					)
-				);
-				$coll_same_sub = $db->Same_subw;
-				$docRepor = $coll_same_sub->insert($array);
-				echo "Insertado en collection Same_subw";
-			}
-
-			//var_dump($result);
-
-
-		}//else
-
-	}//class store
 
 		/*
 		$Work = $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['WORK'];
