@@ -112,4 +112,11 @@ div.alert{
     margin-top: 3%;
     font-weight: bold;
     font-size: 20px;
+}}
+
+
+/*ESTILOS DE REPORT TECH*/
+/* Index */
+#Table_RTech {
+    width: 42%;
 }

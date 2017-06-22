@@ -11,6 +11,14 @@ class ReportSeguimientoController extends \BaseController {
 		$this->layout->content = View::make('ReportSeguimiento.index');
 		//return View::make('DataSend.report',array("docRepor" => $docRepor));
 	}
+	public function generateLinkPhotos($id,$pId,$photo)
+	{
+
+	 	$Id = substr($id, 0, 8).'-'.substr($id, 8, 4).'-'.substr($id, 12, 4).'-'.substr($id, 16, 4).'-'.substr($id, 20, 32);
+		$link = 'https://app.sendit.cl/Files/FormEntry/'.$pId.'-'.$Id.$photo.'';
+	 	return $link;
+
+ 	}
 	public function crearPDF($seg,$vistaurl){
 
 		/* // DomPDF
@@ -54,11 +62,9 @@ class ReportSeguimientoController extends \BaseController {
 		$dsp = htmlspecialchars(Input::get("dsp"));
 		$dep = htmlspecialchars(Input::get("dep"));
 		$dsp = new DateTime($dsp);
-		//$dsp->setTimezone(new DateTimeZone('America/Santiago'));
 		$dsp = $dsp->format('d/m/Y');
 		$dep = new DateTime($dep);
 		$dep = $dep->format('d/m/Y');
-		//echo $dsp." ". $dep;
 
 		$collRepor = $this->connectMongo()->Repor;
 
@@ -70,10 +76,8 @@ class ReportSeguimientoController extends \BaseController {
 			'EQUIPMENT.DATE_END_PROGRAMMED' => $dep
 			]);
 
-			//return View::make('DataSend.report',array("docRepor" => $docRepor));
 
 		if (!$docRepor -> count()) {
-			//Session::flash('mensaje_error', 'No Existen Trabajos')
 			return Redirect::to('/dataform')
                 ->with('mensaje_error', 'No Existen Trabajos');
 		}
@@ -107,26 +111,8 @@ class ReportSeguimientoController extends \BaseController {
 
 			foreach ($docRepor as  $v) {
 
-				//Guardando photos de la request
-				/*$remoteImage = $v['EQUIPMENT']['WORK']['PHOTOS']['PHOTO1'];
-				$imginfo = getimagesize($remoteImage);
-				//var_dump($imginfo) ;
-				//header("Content-type: {$imginfo['mime']}");
-				$options = array(
-					   	  "http" => array(
-					   	  "header" => "Content-Type: {$imginfo['mime']}"));
-
-				$contexto = stream_context_create($options);
-				$photo = file_get_contents($v['EQUIPMENT']['WORK']['PHOTOS']['PHOTO1'],false,$contexto);
-
-				if (!file_exists('/var/www/senditlaravel42/public/photos/'.$name_photo)) {
-					file_put_contents('/var/www/senditlaravel42/public/photos/'.$name_photo,$photo);
-				}
-
-				//$photo = file_get_contents($v['EQUIPMENT']['WORK']['PHOTOS']['PHOTO1']);*/
 				$name_photo = substr($v['EQUIPMENT']['WORK']['PHOTOS']['PHOTO1'],-22);
-				 copy(
-				 	$v['EQUIPMENT']['WORK']['PHOTOS']['PHOTO1'],
+				 copy($v['EQUIPMENT']['WORK']['PHOTOS']['PHOTO1'],
 				 	'/var/www/senditlaravel42/public/photos/'.$name_photo);
 
 				$collwf->insert([
@@ -168,13 +154,15 @@ class ReportSeguimientoController extends \BaseController {
 		 */
 	public function store()
 	{
-		//recibo los datos de APP movil
+		//Recibo los datos de APP movil
+
 		$aRequest = json_decode(file_get_contents('php://input'),true);
 		$m = new MongoClient();//obsoleta desde mongo 1.0.0
 		$db = $m->SenditForm;
 		//para tener el Json original como prueba
+
 		//$db->Json->insert($aRequest);//comentar esto cuando esté en production pero no para recoger el Json de una nueva screen en la app movil
-		//guardo JSON sin modificacion de la app
+
 		//para guardar en un archivo
 		/*try {
 			$fichero=fopen('/var/www/senditlaravel42/test.log','w');
@@ -189,48 +177,75 @@ class ReportSeguimientoController extends \BaseController {
 		fwrite($fichero,json_encode($aRequest));
 		fclose($fichero);*/
 
-		//guardo nombre de Equipos
-		$equipments = array("equi" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['EQUIPMENT']);
+		//Guardo nombre de Equipos
+
+		$equipments = array(
+			"equi" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['EQUIPMENT']);
+
 		$coll_equipments = $db->equipments;
 
 		if($coll_equipments->count() == 0){
 			$coll_equipments->insert($equipments);
 			}else{
-				$result = $coll_equipments->findOne(["equi" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['EQUIPMENT']]);
+				//Verifico que si esta no la inserte
+
+				$result = $coll_equipments->findOne([
+					"equi" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['EQUIPMENT']]);
+
 				if (!$result) {
 				$coll_equipments->insert($equipments);
 				}
 		}
 		//guardo ubicaciones
-		$locs = array("loc" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['LOCALIZATION_EQUIPMENT']);
+
+		$locs = array(
+			"loc" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['LOCALIZATION_EQUIPMENT']);
+
 		$coll_locs = $db->locs;
 		if($coll_locs->count() == 0){
 			$coll_locs->insert($locs);
 			}else{
+				//Verifico que si esta no la inserte
+
 				$result = $coll_locs->findOne(["loc" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['LOCALIZATION_EQUIPMENT']]);
 				if (!$result) {
 				$coll_locs->insert($locs);
 				}
 			}
+
 		//guardo identificaciones
-		$idens = array("iden" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['IDENTIFICATION_EQUIPMENT']);
+
+		$idens = array(
+			"iden" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['IDENTIFICATION_EQUIPMENT']);
+
 		$coll_idens = $db->idens;
+
 		if($coll_idens->count() == 0){
+
 			$coll_idens->insert($idens);
+
 			}else{
-				$result = $coll_idens->findOne(["iden" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['IDENTIFICATION_EQUIPMENT']]);
+				//Verifico que si esta no la inserte
+
+				$result = $coll_idens->findOne([
+					"iden" => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['IDENTIFICATION_EQUIPMENT']]);
+
 				if (!$result) {
 				$coll_idens->insert($idens);
 				}
 		}
 
-		//guardo datos que vienen del app movil
+		//Guardo datos que vienen del app movil
+
 		$collRepor = $db->Repor;
+
 		if ($collRepor->count() == 0 ){
 			//genero link para la foto
-			$id = $aRequest['Entry']['Id'];
-			$Id = substr($id, 0, 8).'-'.substr($id, 8, 4).'-'.substr($id, 12, 4).'-'.substr($id, 16, 4).'-'.substr($id, 20, 32);
-			$photo = 'https://app.sendit.cl/Files/FormEntry/'.$aRequest['ProviderId'].'-'.$Id.$aRequest['Entry']['AnswersJson']['PHOTOS']['PHOTO1'].'';
+			$photo = $this->generateLinkPhotos(
+				$aRequest['Entry']['Id'],
+				$aRequest['ProviderId'],
+				$aRequest['Entry']['AnswersJson']['PHOTOS']['PHOTO1']);
+
 				$array = array(
 					"ProviderId" => $aRequest['ProviderId'],
 					"IntegrationKey" => $aRequest['IntegrationKey'],
@@ -295,9 +310,11 @@ class ReportSeguimientoController extends \BaseController {
 
 		}else{
 			echo "no vacio";
-			$id = $aRequest['Entry']['Id'];
-			$Id = substr($id, 0, 8).'-'.substr($id, 8, 4).'-'.substr($id, 12, 4).'-'.substr($id, 16, 4).'-'.substr($id, 20, 32);
-			$photo = 'https://app.sendit.cl/Files/FormEntry/'.$aRequest['ProviderId'].'-'.$Id.$aRequest['Entry']['AnswersJson']['PHOTOS']['PHOTO1'].'';
+			$photo = $this->generateLinkPhotos(
+				$aRequest['Entry']['Id'],
+				$aRequest['ProviderId'],
+				$aRequest['Entry']['AnswersJson']['PHOTOS']['PHOTO1']);
+
 			$array = array(
 					"ProviderId" => $aRequest['ProviderId'],
 					"IntegrationKey" => $aRequest['IntegrationKey'],
@@ -356,26 +373,31 @@ class ReportSeguimientoController extends \BaseController {
 						)
 						)
 				);
-			//verifico que no se inserte una mismo subtrabajo con la misma fecha de programacion
+
+			//Verifico que no se inserte una mismo subtrabajo con la misma fecha de programacion
+
 			$result = $collRepor->findOne([
 				'EQUIPMENT.WORK.WORK_NAME' => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['WORK'],
 				'EQUIPMENT.WORK.SUBWORK.SUBWORK_NAME' => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['SUBWORK'],
 				'EQUIPMENT.DATE_START_PROGRAMMED' => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['DATE_START_PROGRAMMED'],
 				'EQUIPMENT.DATE_END_PROGRAMMED' => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['DATE_END_PROGRAMMED'],
 				'EQUIPMENT.EQUIPMENT_NAME' => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['EQUIPMENT'],
-				/*'EQUIPMENT.LOCALIZATION_EQUIPMENT.LOCALIZATION_NAME' => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['LOCALIZATION_EQUIPMENT'],
-				'EQUIPMENT.IDENTIFICATION_EQUIPMENT.IDENTIFICATION_NAME' => $aRequest['Entry']['AnswersJson']['ADD_WORK_PAGE']['IDENTIFICATION_EQUIPMENT']*/
 				]);
+
 			if (!$result) {
 
 				$docRepor = $collRepor->insert($array);
 				echo "Insertado en Repor work nuevo : no";
 
 			}else{
+
 				//si es el mismo w y subw con fip y ftp iguales inserto en la collection Same_subw
-				$id = $aRequest['Entry']['Id'];
-				$Id = substr($id, 0, 8).'-'.substr($id, 8, 4).'-'.substr($id, 12, 4).'-'.substr($id, 16, 4).'-'.substr($id, 20, 32);
-				$photo = 'https://app.sendit.cl/Files/FormEntry/'.$aRequest['ProviderId'].'-'.$Id.$aRequest['Entry']['AnswersJson']['PHOTOS']['PHOTO1'].'';
+
+				$photo = $this->generateLinkPhotos(
+					$aRequest['Entry']['Id'],
+					$aRequest['ProviderId'],
+					$aRequest['Entry']['AnswersJson']['PHOTOS']['PHOTO1']);
+
 				$array = array(
 					"ProviderId" => $aRequest['ProviderId'],
 					"IntegrationKey" => $aRequest['IntegrationKey'],

@@ -48,8 +48,8 @@ Route::get('/', array('as' => 'home', function(){
 Route::get('/download','HomeController@getDownload');
 
 
-//**RUTAS REPORT TECHNIQUE para agregar una nueva ruta a la Resource se debe declarar antes del Respurce**//
-Route::get('/report_tech/pdf/{tipo}/{id}', 'ReportTechController@toPDF');
+//**RUTAS REPORT TECHNIQUE para agregar una nueva ruta a la Resource se debe declarar antes del Resource**//
+Route::get('/report_tech/excel/{id}', 'ReportTechController@exportarToExcel');
 Route::resource('report_tech','ReportTechController');
 Route::controller('report_tech','ReportTechController');
 Route::get('/report_tech', 'ReportTechController@getIndex');

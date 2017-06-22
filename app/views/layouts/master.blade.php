@@ -13,6 +13,7 @@
 	<link rel="stylesheet" href="{{ URL::asset('assets/css/bootstrap.min.css') }}">
 	<link rel="stylesheet" href="{{ URL::asset('assets/css/bootstrap.css') }}">
 	<link rel="stylesheet" href="{{ URL::asset('assets/css/css-table.css') }}">
+	<!--<link rel="stylesheet" href="{{ URL::asset('assets/css/css-rtech.css') }}">-->
 
 	<link rel="stylesheet" href="{{ URL::asset('assets/css/reset.css') }}">
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
@@ -64,6 +65,7 @@
             @yield('trabajos')
           </ul>
           <ul class="nav nav-sidebar">
+          	<li><a href="/report_tech">Informe Técnico</a></li>
             <li><a href="/logout">Cerrar Sesión</a></li>
           </ul>
            <ul class="nav nav-sidebar">
