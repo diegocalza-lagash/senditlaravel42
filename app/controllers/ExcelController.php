@@ -174,7 +174,7 @@ class ExcelController extends \BaseController {
 			case 1:
 				$objPHPExcel = new PHPExcel();
 				$objReader = PHPExcel_IOFactory::createReader('Excel2007');
-				$objPHPExcel = $objReader->load("reporteRudel.xlsx");
+				$objPHPExcel = $objReader->load("/var/www/senditlaravel42/public/reporteRudel.xlsx");
 				$objWorksheet= $objPHPExcel->setActiveSheetIndex(0);
 
 				//Exporto Datos Fijos
@@ -247,7 +247,7 @@ class ExcelController extends \BaseController {
 			case 2:
 				$objPHPExcel = new PHPExcel();
 				$objReader = PHPExcel_IOFactory::createReader('Excel2007');
-				$objPHPExcel = $objReader->load("reporteRudel.xlsx");
+				$objPHPExcel = $objReader->load("/var/www/senditlaravel42/public/reporteRudel.xlsx");
 				$objWorksheet= $objPHPExcel->setActiveSheetIndex(0);
 
 				//Exporto Datos Fijos
@@ -349,7 +349,7 @@ class ExcelController extends \BaseController {
 			case 3:
 				$objPHPExcel = new PHPExcel();
 				$objReader = PHPExcel_IOFactory::createReader('Excel2007');
-				$objPHPExcel = $objReader->load("reporteRudel.xlsx");
+				$objPHPExcel = $objReader->load("/var/www/senditlaravel42/public/reporteRudel.xlsx");
 				$objWorksheet= $objPHPExcel->setActiveSheetIndex(0);
 
 				//Exporto Datos Fijos
@@ -478,7 +478,7 @@ class ExcelController extends \BaseController {
 			case 4:
 				$objPHPExcel = new PHPExcel();
 				$objReader = PHPExcel_IOFactory::createReader('Excel2007');
-				$objPHPExcel = $objReader->load("reporteRudel.xlsx");
+				$objPHPExcel = $objReader->load("/var/www/senditlaravel42/public/reporteRudel.xlsx");
 				$objWorksheet= $objPHPExcel->setActiveSheetIndex(0);
 
 				//Exporto Datos Fijos
@@ -636,7 +636,7 @@ class ExcelController extends \BaseController {
 
 				$objPHPExcel = new PHPExcel();
 				$objReader = PHPExcel_IOFactory::createReader('Excel2007');
-				$objPHPExcel = $objReader->load("reporteRudel.xlsx");
+				$objPHPExcel = $objReader->load("/var/www/senditlaravel42/public/reporteRudel.xlsx");
 				$objWorksheet= $objPHPExcel->setActiveSheetIndex(0);
 
 				// estilos
@@ -871,7 +871,7 @@ class ExcelController extends \BaseController {
 			case 6:
 				$objPHPExcel = new PHPExcel();
 				$objReader = PHPExcel_IOFactory::createReader('Excel2007');
-				$objPHPExcel = $objReader->load("reporteRudel.xlsx");
+				$objPHPExcel = $objReader->load("/var/www/senditlaravel42/public/reporteRudel.xlsx");
 				$objWorksheet= $objPHPExcel->setActiveSheetIndex(0);
 
 				//Exporto Datos Fijos
@@ -1079,7 +1079,7 @@ class ExcelController extends \BaseController {
 			default:
 				$objPHPExcel = new PHPExcel();
 				$objReader = PHPExcel_IOFactory::createReader('Excel2007');
-				$objPHPExcel = $objReader->load("reporteRudel.xlsx");
+				$objPHPExcel = $objReader->load("/var/www/senditlaravel42/public/reporteRudel.xlsx");
 				$objWorksheet= $objPHPExcel->setActiveSheetIndex(0);
 
 				//Exporto Datos Fijos

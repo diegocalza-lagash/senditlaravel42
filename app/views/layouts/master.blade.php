@@ -63,9 +63,11 @@
           </ul>
           <ul class="nav nav-sidebar">
             @yield('trabajos')
+            <li><a href="/report_tech">Informe Técnico</a></li>
           </ul>
           <ul class="nav nav-sidebar">
-          	<li><a href="/report_tech">Informe Técnico</a></li>
+
+
             <li><a href="/logout">Cerrar Sesión</a></li>
           </ul>
            <ul class="nav nav-sidebar">
