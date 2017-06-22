@@ -209,31 +209,35 @@ class ExcelController extends \BaseController {
 				//					Imagenes                    //
 
 				//Primera Foto
-				$objPHPExcel->getActiveSheet()->SetCellValue('D52', $seg[0]['Leyend']);
 
-				$name_photo = substr($seg[0]['Photo'],-22);
-				$foto1 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
 
-				$objDrawing = new PHPExcel_Worksheet_Drawing();
-				$objDrawing->setName('Foto Trabajo 1');
-				$objDrawing->setDescription('Trabajo 1');
+				if ($seg[0]['Photo']!=null) {
+					$objPHPExcel->getActiveSheet()->SetCellValue('D52', $seg[0]['Leyend']);
+					$name_photo = substr($seg[0]['Photo'],-22);
+					$foto1 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
 
-				list($width, $height) = getimagesize($foto1);
+					$objDrawing = new PHPExcel_Worksheet_Drawing();
+					$objDrawing->setName('Foto Trabajo 1');
+					$objDrawing->setDescription('Trabajo 1');
 
-				if ($height > $width) {
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					//$objDrawing->setRotation(90);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetX(80);
-					$objDrawing->setOffsetY(4);
-				}else{
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetY(4);
-					$objDrawing->setOffsetX(1);
+					list($width, $height) = getimagesize($foto1);
+
+					if ($height > $width) {
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						//$objDrawing->setRotation(90);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetX(80);
+						$objDrawing->setOffsetY(4);
+					}else{
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetY(4);
+						$objDrawing->setOffsetX(1);
+					}
+					$objDrawing->setCoordinates('B53');
+					$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 				}
-				$objDrawing->setCoordinates('B53');
-				$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+
 
 				$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 				header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -284,58 +288,63 @@ class ExcelController extends \BaseController {
 				//					Imagenes                    //
 
 				//Primera Foto
-				$objPHPExcel->getActiveSheet()->SetCellValue('D52', $seg[0]['Leyend']);
+				if ($seg[0]['Photo']!=null) {
+					$objPHPExcel->getActiveSheet()->SetCellValue('D52', $seg[0]['Leyend']);
 
-				$name_photo = substr($seg[0]['Photo'],-22);
-				$foto1 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
+					$name_photo = substr($seg[0]['Photo'],-22);
+					$foto1 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
 
-				$objDrawing = new PHPExcel_Worksheet_Drawing();
-				$objDrawing->setName('Foto Trabajo 1');
-				$objDrawing->setDescription('Trabajo 1');
+					$objDrawing = new PHPExcel_Worksheet_Drawing();
+					$objDrawing->setName('Foto Trabajo 1');
+					$objDrawing->setDescription('Trabajo 1');
 
-				list($width, $height) = getimagesize($foto1);
+					list($width, $height) = getimagesize($foto1);
 
-				if ($height > $width) {
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					//$objDrawing->setRotation(90);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetX(80);
-					$objDrawing->setOffsetY(4);
-				}else{
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetY(4);
-					$objDrawing->setOffsetX(1);
+					if ($height > $width) {
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						//$objDrawing->setRotation(90);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetX(80);
+						$objDrawing->setOffsetY(4);
+					}else{
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetY(4);
+						$objDrawing->setOffsetX(1);
+					}
+					$objDrawing->setCoordinates('B53');
+					$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 				}
-				$objDrawing->setCoordinates('B53');
-				$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+
 
 				//Segunda foto
+				if ($seg[1]['Photo']!=null) {
+					$objPHPExcel->getActiveSheet()->SetCellValue('R52', $seg[1]['Leyend']);
+					$name_photo = substr( $seg[1]['Photo'],-22);
+					$foto2 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
 
-				$objPHPExcel->getActiveSheet()->SetCellValue('R52', $seg[1]['Leyend']);
-				$name_photo = substr( $seg[1]['Photo'],-22);
-				$foto2 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
+					$objDrawing = new PHPExcel_Worksheet_Drawing();
+					$objDrawing->setName('Foto Trabajo 2');
+					$objDrawing->setDescription('Trabajo 2');
 
-				$objDrawing = new PHPExcel_Worksheet_Drawing();
-				$objDrawing->setName('Foto Trabajo 2');
-				$objDrawing->setDescription('Trabajo 2');
+					list($width, $height) = getimagesize($foto2);
 
-				list($width, $height) = getimagesize($foto2);
-
-				if ($height > $width) {
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					//$objDrawing->setRotation(90);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetX(80);
-					$objDrawing->setOffsetY(4);
-				}else{
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetY(4);
-					$objDrawing->setOffsetX(1);
+					if ($height > $width) {
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						//$objDrawing->setRotation(90);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetX(80);
+						$objDrawing->setOffsetY(4);
+					}else{
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetY(4);
+						$objDrawing->setOffsetX(1);
+					}
+					$objDrawing->setCoordinates('P53');
+					$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 				}
-				$objDrawing->setCoordinates('P53');
-				$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+
 
 				$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 				header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -386,85 +395,94 @@ class ExcelController extends \BaseController {
 				//					Imagenes                    //
 
 				//Primera Foto
-				$objPHPExcel->getActiveSheet()->SetCellValue('D52', $seg[0]['Leyend']);
+				if ($seg[0]['Photo']!=null) {
+					$objPHPExcel->getActiveSheet()->SetCellValue('D52', $seg[0]['Leyend']);
 
-				$name_photo = substr($seg[0]['Photo'],-22);
-				$foto1 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
+					$name_photo = substr($seg[0]['Photo'],-22);
+					$foto1 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
 
-				$objDrawing = new PHPExcel_Worksheet_Drawing();
-				$objDrawing->setName('Foto Trabajo 1');
-				$objDrawing->setDescription('Trabajo 1');
+					$objDrawing = new PHPExcel_Worksheet_Drawing();
+					$objDrawing->setName('Foto Trabajo 1');
+					$objDrawing->setDescription('Trabajo 1');
 
-				list($width, $height) = getimagesize($foto1);
+					list($width, $height) = getimagesize($foto1);
 
-				if ($height > $width) {
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					//$objDrawing->setRotation(90);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetX(80);
-					$objDrawing->setOffsetY(4);
-				}else{
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetY(4);
-					$objDrawing->setOffsetX(1);
+					if ($height > $width) {
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						//$objDrawing->setRotation(90);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetX(80);
+						$objDrawing->setOffsetY(4);
+					}else{
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetY(4);
+						$objDrawing->setOffsetX(1);
+					}
+					$objDrawing->setCoordinates('B53');
+					$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 				}
-				$objDrawing->setCoordinates('B53');
-				$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+
 
 				//Segunda foto
-				$objPHPExcel->getActiveSheet()->SetCellValue('R52', $seg[1]['Leyend']);
+				if ($seg[1]['Photo']!=null) {
+					$objPHPExcel->getActiveSheet()->SetCellValue('R52', $seg[1]['Leyend']);
 
-				$name_photo = substr( $seg[1]['Photo'],-22);
-				$foto2 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
+					$name_photo = substr( $seg[1]['Photo'],-22);
+					$foto2 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
 
-				$objDrawing = new PHPExcel_Worksheet_Drawing();
-				$objDrawing->setName('Foto Trabajo 2');
-				$objDrawing->setDescription('Trabajo 2');
+					$objDrawing = new PHPExcel_Worksheet_Drawing();
+					$objDrawing->setName('Foto Trabajo 2');
+					$objDrawing->setDescription('Trabajo 2');
 
-				list($width, $height) = getimagesize($foto2);
+					list($width, $height) = getimagesize($foto2);
 
-				if ($height > $width) {
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					//$objDrawing->setRotation(90);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetX(80);
-					$objDrawing->setOffsetY(4);
-				}else{
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetY(4);
-					$objDrawing->setOffsetX(1);
+					if ($height > $width) {
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						//$objDrawing->setRotation(90);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetX(80);
+						$objDrawing->setOffsetY(4);
+					}else{
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetY(4);
+						$objDrawing->setOffsetX(1);
+					}
+					$objDrawing->setCoordinates('P53');
+					$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 				}
-				$objDrawing->setCoordinates('P53');
-				$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+
 
 				//Tercera foto
-				$objPHPExcel->getActiveSheet()->SetCellValue('AF52', $seg[2]['Leyend']);
+				if ($seg[2]['Photo']!=null) {
+					$objPHPExcel->getActiveSheet()->SetCellValue('AF52', $seg[2]['Leyend']);
 
-				$name_photo = substr( $seg[2]['Photo'],-22);
-				$foto3 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
+					$name_photo = substr( $seg[2]['Photo'],-22);
+					$foto3 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
 
-				$objDrawing = new PHPExcel_Worksheet_Drawing();
-				$objDrawing->setName('Foto Trabajo 3');
-				$objDrawing->setDescription('Trabajo 3');
+					$objDrawing = new PHPExcel_Worksheet_Drawing();
+					$objDrawing->setName('Foto Trabajo 3');
+					$objDrawing->setDescription('Trabajo 3');
 
-				list($width, $height) = getimagesize($foto3);
+					list($width, $height) = getimagesize($foto3);
 
-				if ($height > $width) {
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					//$objDrawing->setRotation(90);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetX(80);
-					$objDrawing->setOffsetY(4);
-				}else{
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetY(4);
-					$objDrawing->setOffsetX(1);
+					if ($height > $width) {
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						//$objDrawing->setRotation(90);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetX(80);
+						$objDrawing->setOffsetY(4);
+					}else{
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetY(4);
+						$objDrawing->setOffsetX(1);
+					}
+					$objDrawing->setCoordinates('AD53');
+					$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 				}
-				$objDrawing->setCoordinates('AD53');
-				$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+
 
 				$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 				header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -516,112 +534,123 @@ class ExcelController extends \BaseController {
 				//					Imagenes                    //
 
 				//Primera Foto
-				$objPHPExcel->getActiveSheet()->SetCellValue('D52', $seg[0]['Leyend']);
+				if ($seg[0]['Photo']!=null) {
+					$objPHPExcel->getActiveSheet()->SetCellValue('D52', $seg[0]['Leyend']);
 
-				$name_photo = substr($seg[0]['Photo'],-22);
-				$foto1 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
+					$name_photo = substr($seg[0]['Photo'],-22);
+					$foto1 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
 
-				$objDrawing = new PHPExcel_Worksheet_Drawing();
-				$objDrawing->setName('Foto Trabajo 1');
-				$objDrawing->setDescription('Trabajo 1');
+					$objDrawing = new PHPExcel_Worksheet_Drawing();
+					$objDrawing->setName('Foto Trabajo 1');
+					$objDrawing->setDescription('Trabajo 1');
 
-				list($width, $height) = getimagesize($foto1);
+					list($width, $height) = getimagesize($foto1);
 
-				if ($height > $width) {
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					//$objDrawing->setRotation(90);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetX(80);
-					$objDrawing->setOffsetY(4);
-				}else{
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetY(4);
-					$objDrawing->setOffsetX(1);
+					if ($height > $width) {
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						//$objDrawing->setRotation(90);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetX(80);
+						$objDrawing->setOffsetY(4);
+					}else{
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetY(4);
+						$objDrawing->setOffsetX(1);
+					}
+					$objDrawing->setCoordinates('B53');
+					$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 				}
-				$objDrawing->setCoordinates('B53');
-				$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+
 
 				//Segunda foto
-				$objPHPExcel->getActiveSheet()->SetCellValue('R52', $seg[1]['Leyend']);
+				if ($seg[1]['Photo']!=null) {
+					$objPHPExcel->getActiveSheet()->SetCellValue('R52', $seg[1]['Leyend']);
 
-				$name_photo = substr( $seg[1]['Photo'],-22);
-				$foto2 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
+					$name_photo = substr( $seg[1]['Photo'],-22);
+					$foto2 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
 
-				$objDrawing = new PHPExcel_Worksheet_Drawing();
-				$objDrawing->setName('Foto Trabajo 2');
-				$objDrawing->setDescription('Trabajo 2');
+					$objDrawing = new PHPExcel_Worksheet_Drawing();
+					$objDrawing->setName('Foto Trabajo 2');
+					$objDrawing->setDescription('Trabajo 2');
 
-				list($width, $height) = getimagesize($foto2);
+					list($width, $height) = getimagesize($foto2);
 
-				if ($height > $width) {
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					//$objDrawing->setRotation(90);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetX(80);
-					$objDrawing->setOffsetY(4);
-				}else{
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetY(4);
-					$objDrawing->setOffsetX(1);
+					if ($height > $width) {
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						//$objDrawing->setRotation(90);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetX(80);
+						$objDrawing->setOffsetY(4);
+					}else{
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetY(4);
+						$objDrawing->setOffsetX(1);
+					}
+					$objDrawing->setCoordinates('P53');
+					$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 				}
-				$objDrawing->setCoordinates('P53');
-				$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+
 
 				//Tercera foto
-				$objPHPExcel->getActiveSheet()->SetCellValue('AF52', $seg[2]['Leyend']);
+				if ($seg[2]['Photo']!=null) {
+					$objPHPExcel->getActiveSheet()->SetCellValue('AF52', $seg[2]['Leyend']);
 
-				$name_photo = substr( $seg[2]['Photo'],-22);
-				$foto3 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
+					$name_photo = substr( $seg[2]['Photo'],-22);
+					$foto3 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
 
-				$objDrawing = new PHPExcel_Worksheet_Drawing();
-				$objDrawing->setName('Foto Trabajo 3');
-				$objDrawing->setDescription('Trabajo 3');
+					$objDrawing = new PHPExcel_Worksheet_Drawing();
+					$objDrawing->setName('Foto Trabajo 3');
+					$objDrawing->setDescription('Trabajo 3');
 
-				list($width, $height) = getimagesize($foto3);
+					list($width, $height) = getimagesize($foto3);
 
-				if ($height > $width) {
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					//$objDrawing->setRotation(90);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetX(80);
-					$objDrawing->setOffsetY(4);
-				}else{
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetY(4);
-					$objDrawing->setOffsetX(1);
+					if ($height > $width) {
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						//$objDrawing->setRotation(90);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetX(80);
+						$objDrawing->setOffsetY(4);
+					}else{
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetY(4);
+						$objDrawing->setOffsetX(1);
+					}
+					$objDrawing->setCoordinates('AD53');
+					$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 				}
-				$objDrawing->setCoordinates('AD53');
-				$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 
 				//Cuarta foto
-				$objPHPExcel->getActiveSheet()->SetCellValue('D67', $seg[3]['Leyend']);
+				if ($seg[3]['Photo']!=null) {
+					$objPHPExcel->getActiveSheet()->SetCellValue('D67', $seg[3]['Leyend']);
 
-				$name_photo = substr($seg[3]['Photo'],-22);
-				$foto4 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
+					$name_photo = substr($seg[3]['Photo'],-22);
+					$foto4 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
 
-				$objDrawing = new PHPExcel_Worksheet_Drawing();
-				$objDrawing->setName('Foto Trabajo 4');
-				$objDrawing->setDescription('Trabajo 4');
+					$objDrawing = new PHPExcel_Worksheet_Drawing();
+					$objDrawing->setName('Foto Trabajo 4');
+					$objDrawing->setDescription('Trabajo 4');
 
-				list($width, $height) = getimagesize($foto4);
+					list($width, $height) = getimagesize($foto4);
 
-				if ($height > $width) {
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					//$objDrawing->setRotation(90);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetX(80);
-					$objDrawing->setOffsetY(4);
-				}else{
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetY(4);
-					$objDrawing->setOffsetX(1);
+					if ($height > $width) {
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						//$objDrawing->setRotation(90);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetX(80);
+						$objDrawing->setOffsetY(4);
+					}else{
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetY(4);
+						$objDrawing->setOffsetX(1);
+					}
+					$objDrawing->setCoordinates('B68');
+					$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 				}
-				$objDrawing->setCoordinates('B68');
-				$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+
 
 				$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 				header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -709,152 +738,153 @@ class ExcelController extends \BaseController {
 			    //call the function (when passing pic as string)
 			    //smart_resize_image(null , file_get_contents($file), SET_YOUR_WIDTH , SET_YOUR_HIGHT , false , $resizedFile , false , false ,100 );
 
-				$objPHPExcel->getActiveSheet()->SetCellValue('D52', $seg[0]['Leyend']);
-				$name_photo = substr($seg[0]['Photo'],-22);
-				$foto1 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
+				//Primera Foto
+				if ($seg[0]['Photo']!=null) {
+					$objPHPExcel->getActiveSheet()->SetCellValue('D52', $seg[0]['Leyend']);
 
+					$name_photo = substr($seg[0]['Photo'],-22);
+					$foto1 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
 
-				$objDrawing = new PHPExcel_Worksheet_Drawing();
-				$objDrawing->setName('Foto Trabajo 1');
-				$objDrawing->setDescription('Trabajo 1');
+					$objDrawing = new PHPExcel_Worksheet_Drawing();
+					$objDrawing->setName('Foto Trabajo 1');
+					$objDrawing->setDescription('Trabajo 1');
 
-				list($width, $height) = getimagesize($foto1);
+					list($width, $height) = getimagesize($foto1);
 
-				if ($height > $width) {
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					$objDrawing->setRotation(25);
-				}else{
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetY(4);
-					$objDrawing->setOffsetX(1);
+					if ($height > $width) {
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						//$objDrawing->setRotation(90);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetX(80);
+						$objDrawing->setOffsetY(4);
+					}else{
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetY(4);
+						$objDrawing->setOffsetX(1);
+					}
+					$objDrawing->setCoordinates('B53');
+					$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 				}
-				$objDrawing->setCoordinates('B53');
-				$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 
-				/*$gdImage = imagecreatefromjpeg('/var/www/senditlaravel42/public/photos/'.$name_photo);
-
-				$objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
-				$objDrawing->setName('Sample image');
-				$objDrawing->setDescription('Sample image');
-				$objDrawing->setImageResource($gdImage);
-				$objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
-				$objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
-				$objDrawing->setOffsetX(100);
-				$objDrawing->setOffsetY(963.5);
-				//$objDrawing->setWidth(826);
-				//$objDrawing->setHeight(257);
-				$objDrawing->setWidthAndHeight(800,257);
-				$objDrawing->setResizeProportional(true);
-				$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());*/
 
 				//Segunda foto
-				$objPHPExcel->getActiveSheet()->SetCellValue('R52', $seg[1]['Leyend']);
+				if ($seg[1]['Photo']!=null) {
+					$objPHPExcel->getActiveSheet()->SetCellValue('R52', $seg[1]['Leyend']);
 
-				$name_photo = substr( $seg[1]['Photo'],-22);
-				$foto2 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
+					$name_photo = substr( $seg[1]['Photo'],-22);
+					$foto2 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
 
-				$objDrawing = new PHPExcel_Worksheet_Drawing();
-				$objDrawing->setName('Foto Trabajo 2');
-				$objDrawing->setDescription('Trabajo 2');
+					$objDrawing = new PHPExcel_Worksheet_Drawing();
+					$objDrawing->setName('Foto Trabajo 2');
+					$objDrawing->setDescription('Trabajo 2');
 
-				list($width, $height) = getimagesize($foto2);
+					list($width, $height) = getimagesize($foto2);
 
-				if ($height > $width) {
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					//$objDrawing->setRotation(90);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetX(80);
-					$objDrawing->setOffsetY(4);
-				}else{
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetY(4);
-					$objDrawing->setOffsetX(1);
+					if ($height > $width) {
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						//$objDrawing->setRotation(90);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetX(80);
+						$objDrawing->setOffsetY(4);
+					}else{
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetY(4);
+						$objDrawing->setOffsetX(1);
+					}
+					$objDrawing->setCoordinates('P53');
+					$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 				}
-				$objDrawing->setCoordinates('P53');
-				$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+
 
 				//Tercera foto
-				$objPHPExcel->getActiveSheet()->SetCellValue('AF52', $seg[2]['Leyend']);
+				if ($seg[2]['Photo']!=null) {
+					$objPHPExcel->getActiveSheet()->SetCellValue('AF52', $seg[2]['Leyend']);
 
-				$name_photo = substr( $seg[2]['Photo'],-22);
-				$foto3 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
+					$name_photo = substr( $seg[2]['Photo'],-22);
+					$foto3 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
 
-				$objDrawing = new PHPExcel_Worksheet_Drawing();
-				$objDrawing->setName('Foto Trabajo 3');
-				$objDrawing->setDescription('Trabajo 3');
+					$objDrawing = new PHPExcel_Worksheet_Drawing();
+					$objDrawing->setName('Foto Trabajo 3');
+					$objDrawing->setDescription('Trabajo 3');
 
-				list($width, $height) = getimagesize($foto3);
+					list($width, $height) = getimagesize($foto3);
 
-				if ($height > $width) {
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					//$objDrawing->setRotation(90);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetX(80);
-					$objDrawing->setOffsetY(4);
-				}else{
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetY(4);
-					$objDrawing->setOffsetX(1);
+					if ($height > $width) {
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						//$objDrawing->setRotation(90);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetX(80);
+						$objDrawing->setOffsetY(4);
+					}else{
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetY(4);
+						$objDrawing->setOffsetX(1);
+					}
+					$objDrawing->setCoordinates('AD53');
+					$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 				}
-				$objDrawing->setCoordinates('AD53');
-				$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 
 				//Cuarta foto
-				$objPHPExcel->getActiveSheet()->SetCellValue('D67', $seg[3]['Leyend']);
+				if ($seg[3]['Photo']!=null) {
+					$objPHPExcel->getActiveSheet()->SetCellValue('D67', $seg[3]['Leyend']);
 
-				$name_photo = substr($seg[3]['Photo'],-22);
-				$foto4 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
+					$name_photo = substr($seg[3]['Photo'],-22);
+					$foto4 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
 
-				$objDrawing = new PHPExcel_Worksheet_Drawing();
-				$objDrawing->setName('Foto Trabajo 4');
-				$objDrawing->setDescription('Trabajo 4');
+					$objDrawing = new PHPExcel_Worksheet_Drawing();
+					$objDrawing->setName('Foto Trabajo 4');
+					$objDrawing->setDescription('Trabajo 4');
 
-				list($width, $height) = getimagesize($foto4);
+					list($width, $height) = getimagesize($foto4);
 
-				if ($height > $width) {
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					//$objDrawing->setRotation(90);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetX(80);
-					$objDrawing->setOffsetY(4);
-				}else{
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetY(4);
-					$objDrawing->setOffsetX(1);
+					if ($height > $width) {
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						//$objDrawing->setRotation(90);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetX(80);
+						$objDrawing->setOffsetY(4);
+					}else{
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetY(4);
+						$objDrawing->setOffsetX(1);
+					}
+					$objDrawing->setCoordinates('B68');
+					$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 				}
-				$objDrawing->setCoordinates('B68');
-				$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 
 				//Quinta foto
-				$objPHPExcel->getActiveSheet()->SetCellValue('R67', $seg[4]['Leyend']);
+				if ($seg[4]['Photo']!=null) {
+					$objPHPExcel->getActiveSheet()->SetCellValue('R67', $seg[4]['Leyend']);
 
-				$name_photo = substr($seg[4]['Photo'],-22);
-				$foto5 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
+					$name_photo = substr($seg[4]['Photo'],-22);
+					$foto5 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
 
-				$objDrawing = new PHPExcel_Worksheet_Drawing();
-				$objDrawing->setName('Foto Trabajo 5');
-				$objDrawing->setDescription('Trabajo 5');
+					$objDrawing = new PHPExcel_Worksheet_Drawing();
+					$objDrawing->setName('Foto Trabajo 5');
+					$objDrawing->setDescription('Trabajo 5');
 
-				list($width, $height) = getimagesize($foto5);
+					list($width, $height) = getimagesize($foto5);
 
-				if ($height > $width) {
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					//$objDrawing->setRotation(90);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetX(80);
-					$objDrawing->setOffsetY(4);
-				}else{
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetY(4);
-					$objDrawing->setOffsetX(1);
+					if ($height > $width) {
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						//$objDrawing->setRotation(90);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetX(80);
+						$objDrawing->setOffsetY(4);
+					}else{
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetY(4);
+						$objDrawing->setOffsetX(1);
+					}
+					$objDrawing->setCoordinates('P68');
+					$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 				}
-				$objDrawing->setCoordinates('P68');
-				$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+
 
 
 				/* Guardo y Descargo*/
@@ -911,160 +941,180 @@ class ExcelController extends \BaseController {
 				//					Imagenes                    //
 
 				//Primera Foto
-				$objPHPExcel->getActiveSheet()->SetCellValue('D52', $seg[0]['Leyend']);
-				$name_photo = substr($seg[0]['Photo'],-22);
-				$foto1 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
+				if ($seg[0]['Photo']!=null) {
+					$objPHPExcel->getActiveSheet()->SetCellValue('D52', $seg[0]['Leyend']);
 
-				$objDrawing = new PHPExcel_Worksheet_Drawing();
-				$objDrawing->setName('Foto Trabajo 1');
-				$objDrawing->setDescription('Trabajo 1');
+					$name_photo = substr($seg[0]['Photo'],-22);
+					$foto1 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
 
-				list($width, $height) = getimagesize($foto1);
+					$objDrawing = new PHPExcel_Worksheet_Drawing();
+					$objDrawing->setName('Foto Trabajo 1');
+					$objDrawing->setDescription('Trabajo 1');
 
-				if ($height > $width) {
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					//$objDrawing->setRotation(90);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetX(80);
-					$objDrawing->setOffsetY(4);
-				}else{
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetY(4);
-					$objDrawing->setOffsetX(1);
+					list($width, $height) = getimagesize($foto1);
+
+					if ($height > $width) {
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						//$objDrawing->setRotation(90);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetX(80);
+						$objDrawing->setOffsetY(4);
+					}else{
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetY(4);
+						$objDrawing->setOffsetX(1);
+					}
+					$objDrawing->setCoordinates('B53');
+					$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 				}
-				$objDrawing->setCoordinates('B53');
-				$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+
 
 				//Segunda foto
-				$objPHPExcel->getActiveSheet()->SetCellValue('R52', $seg[1]['Leyend']);
-				$name_photo = substr( $seg[1]['Photo'],-22);
-				$foto2 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
+				if ($seg[1]['Photo']!=null) {
+					$objPHPExcel->getActiveSheet()->SetCellValue('R52', $seg[1]['Leyend']);
 
-				$objDrawing = new PHPExcel_Worksheet_Drawing();
-				$objDrawing->setName('Foto Trabajo 2');
-				$objDrawing->setDescription('Trabajo 2');
+					$name_photo = substr( $seg[1]['Photo'],-22);
+					$foto2 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
 
-				list($width, $height) = getimagesize($foto2);
+					$objDrawing = new PHPExcel_Worksheet_Drawing();
+					$objDrawing->setName('Foto Trabajo 2');
+					$objDrawing->setDescription('Trabajo 2');
 
-				if ($height > $width) {
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					//$objDrawing->setRotation(90);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetX(80);
-					$objDrawing->setOffsetY(4);
-				}else{
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetY(4);
-					$objDrawing->setOffsetX(1);
+					list($width, $height) = getimagesize($foto2);
+
+					if ($height > $width) {
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						//$objDrawing->setRotation(90);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetX(80);
+						$objDrawing->setOffsetY(4);
+					}else{
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetY(4);
+						$objDrawing->setOffsetX(1);
+					}
+					$objDrawing->setCoordinates('P53');
+					$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 				}
-				$objDrawing->setCoordinates('P53');
-				$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+
 
 				//Tercera foto
-				$objPHPExcel->getActiveSheet()->SetCellValue('AF52', $seg[2]['Leyend']);
-				$name_photo = substr( $seg[2]['Photo'],-22);
-				$foto3 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
+				if ($seg[2]['Photo']!=null) {
+					$objPHPExcel->getActiveSheet()->SetCellValue('AF52', $seg[2]['Leyend']);
 
-				$objDrawing = new PHPExcel_Worksheet_Drawing();
-				$objDrawing->setName('Foto Trabajo 3');
-				$objDrawing->setDescription('Trabajo 3');
+					$name_photo = substr( $seg[2]['Photo'],-22);
+					$foto3 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
 
-				list($width, $height) = getimagesize($foto3);
+					$objDrawing = new PHPExcel_Worksheet_Drawing();
+					$objDrawing->setName('Foto Trabajo 3');
+					$objDrawing->setDescription('Trabajo 3');
 
-				if ($height > $width) {
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					//$objDrawing->setRotation(90);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetX(80);
-					$objDrawing->setOffsetY(4);
-				}else{
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetY(4);
-					$objDrawing->setOffsetX(1);
+					list($width, $height) = getimagesize($foto3);
+
+					if ($height > $width) {
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						//$objDrawing->setRotation(90);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetX(80);
+						$objDrawing->setOffsetY(4);
+					}else{
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetY(4);
+						$objDrawing->setOffsetX(1);
+					}
+					$objDrawing->setCoordinates('AD53');
+					$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 				}
-				$objDrawing->setCoordinates('AD53');
-				$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 
 				//Cuarta foto
-				$objPHPExcel->getActiveSheet()->SetCellValue('D67', $seg[3]['Leyend']);
-				$name_photo = substr($seg[3]['Photo'],-22);
-				$foto4 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
+				if ($seg[3]['Photo']!=null) {
+					$objPHPExcel->getActiveSheet()->SetCellValue('D67', $seg[3]['Leyend']);
 
-				$objDrawing = new PHPExcel_Worksheet_Drawing();
-				$objDrawing->setName('Foto Trabajo 4');
-				$objDrawing->setDescription('Trabajo 4');
+					$name_photo = substr($seg[3]['Photo'],-22);
+					$foto4 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
 
-				list($width, $height) = getimagesize($foto4);
+					$objDrawing = new PHPExcel_Worksheet_Drawing();
+					$objDrawing->setName('Foto Trabajo 4');
+					$objDrawing->setDescription('Trabajo 4');
 
-				if ($height > $width) {
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					//$objDrawing->setRotation(90);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetX(80);
-					$objDrawing->setOffsetY(4);
-				}else{
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetY(4);
-					$objDrawing->setOffsetX(1);
+					list($width, $height) = getimagesize($foto4);
+
+					if ($height > $width) {
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						//$objDrawing->setRotation(90);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetX(80);
+						$objDrawing->setOffsetY(4);
+					}else{
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetY(4);
+						$objDrawing->setOffsetX(1);
+					}
+					$objDrawing->setCoordinates('B68');
+					$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 				}
-				$objDrawing->setCoordinates('B68');
-				$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 
 				//Quinta foto
-				$objPHPExcel->getActiveSheet()->SetCellValue('R67', $seg[4]['Leyend']);
-				$name_photo = substr($seg[4]['Photo'],-22);
-				$foto5 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
+				if ($seg[4]['Photo']!=null) {
+					$objPHPExcel->getActiveSheet()->SetCellValue('R67', $seg[4]['Leyend']);
 
-				$objDrawing = new PHPExcel_Worksheet_Drawing();
-				$objDrawing->setName('Foto Trabajo 5');
-				$objDrawing->setDescription('Trabajo 5');
+					$name_photo = substr($seg[4]['Photo'],-22);
+					$foto5 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
 
-				list($width, $height) = getimagesize($foto5);
+					$objDrawing = new PHPExcel_Worksheet_Drawing();
+					$objDrawing->setName('Foto Trabajo 5');
+					$objDrawing->setDescription('Trabajo 5');
 
-				if ($height > $width) {
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					//$objDrawing->setRotation(90);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetX(80);
-					$objDrawing->setOffsetY(4);
-				}else{
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetY(4);
-					$objDrawing->setOffsetX(1);
+					list($width, $height) = getimagesize($foto5);
+
+					if ($height > $width) {
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						//$objDrawing->setRotation(90);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetX(80);
+						$objDrawing->setOffsetY(4);
+					}else{
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetY(4);
+						$objDrawing->setOffsetX(1);
+					}
+					$objDrawing->setCoordinates('P68');
+					$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 				}
-				$objDrawing->setCoordinates('P68');
-				$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 
 				//Sexta foto
-				$objPHPExcel->getActiveSheet()->SetCellValue('AF67', $seg[5]['Leyend']);
-				$name_photo = substr($seg[5]['Photo'],-22);
-				$foto6 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
+				if ($seg[5]['Photo']!=null) {
+					$objPHPExcel->getActiveSheet()->SetCellValue('AF67', $seg[5]['Leyend']);
+					$name_photo = substr($seg[5]['Photo'],-22);
+					$foto6 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
 
-				$objDrawing = new PHPExcel_Worksheet_Drawing();
-				$objDrawing->setName('Foto Trabajo 6');
-				$objDrawing->setDescription('Trabajo 6');
+					$objDrawing = new PHPExcel_Worksheet_Drawing();
+					$objDrawing->setName('Foto Trabajo 6');
+					$objDrawing->setDescription('Trabajo 6');
 
-				list($width, $height) = getimagesize($foto6);
+					list($width, $height) = getimagesize($foto6);
 
-				if ($height > $width) {
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					//$objDrawing->setRotation(90);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetX(80);
-					$objDrawing->setOffsetY(4);
-				}else{
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetY(4);
-					$objDrawing->setOffsetX(1);
+					if ($height > $width) {
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						//$objDrawing->setRotation(90);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetX(80);
+						$objDrawing->setOffsetY(4);
+					}else{
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetY(4);
+						$objDrawing->setOffsetX(1);
+					}
+					$objDrawing->setCoordinates('AD68');
+					$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 				}
-				$objDrawing->setCoordinates('AD68');
-				$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+
 
 
 				$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
@@ -1119,160 +1169,179 @@ class ExcelController extends \BaseController {
 				//					Imagenes                    //
 
 				//Primera Foto
-				$objPHPExcel->getActiveSheet()->SetCellValue('D52', $seg[0]['Leyend']);
-				$name_photo = substr($seg[0]['Photo'],-22);
-				$foto1 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
+				if ($seg[0]['Photo']!=null) {
+					$objPHPExcel->getActiveSheet()->SetCellValue('D52', $seg[0]['Leyend']);
 
-				$objDrawing = new PHPExcel_Worksheet_Drawing();
-				$objDrawing->setName('Foto Trabajo 1');
-				$objDrawing->setDescription('Trabajo 1');
+					$name_photo = substr($seg[0]['Photo'],-22);
+					$foto1 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
 
-				list($width, $height) = getimagesize($foto1);
+					$objDrawing = new PHPExcel_Worksheet_Drawing();
+					$objDrawing->setName('Foto Trabajo 1');
+					$objDrawing->setDescription('Trabajo 1');
 
-				if ($height > $width) {
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					//$objDrawing->setRotation(90);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetX(80);
-					$objDrawing->setOffsetY(4);
-				}else{
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetY(4);
-					$objDrawing->setOffsetX(1);
+					list($width, $height) = getimagesize($foto1);
+
+					if ($height > $width) {
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						//$objDrawing->setRotation(90);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetX(80);
+						$objDrawing->setOffsetY(4);
+					}else{
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetY(4);
+						$objDrawing->setOffsetX(1);
+					}
+					$objDrawing->setCoordinates('B53');
+					$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 				}
-				$objDrawing->setCoordinates('B53');
-				$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+
 
 				//Segunda foto
-				$objPHPExcel->getActiveSheet()->SetCellValue('R52', $seg[1]['Leyend']);
-				$name_photo = substr( $seg[1]['Photo'],-22);
-				$foto2 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
+				if ($seg[1]['Photo']!=null) {
+					$objPHPExcel->getActiveSheet()->SetCellValue('R52', $seg[1]['Leyend']);
 
-				$objDrawing = new PHPExcel_Worksheet_Drawing();
-				$objDrawing->setName('Foto Trabajo 2');
-				$objDrawing->setDescription('Trabajo 2');
+					$name_photo = substr( $seg[1]['Photo'],-22);
+					$foto2 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
 
-				list($width, $height) = getimagesize($foto2);
+					$objDrawing = new PHPExcel_Worksheet_Drawing();
+					$objDrawing->setName('Foto Trabajo 2');
+					$objDrawing->setDescription('Trabajo 2');
 
-				if ($height > $width) {
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					//$objDrawing->setRotation(90);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetX(80);
-					$objDrawing->setOffsetY(4);
-				}else{
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetY(4);
-					$objDrawing->setOffsetX(1);
+					list($width, $height) = getimagesize($foto2);
+
+					if ($height > $width) {
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						//$objDrawing->setRotation(90);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetX(80);
+						$objDrawing->setOffsetY(4);
+					}else{
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetY(4);
+						$objDrawing->setOffsetX(1);
+					}
+					$objDrawing->setCoordinates('P53');
+					$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 				}
-				$objDrawing->setCoordinates('P53');
-				$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+
 
 				//Tercera foto
-				$objPHPExcel->getActiveSheet()->SetCellValue('AF52', $seg[2]['Leyend']);
-				$name_photo = substr( $seg[2]['Photo'],-22);
-				$foto3 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
+				if ($seg[2]['Photo']!=null) {
+					$objPHPExcel->getActiveSheet()->SetCellValue('AF52', $seg[2]['Leyend']);
 
-				$objDrawing = new PHPExcel_Worksheet_Drawing();
-				$objDrawing->setName('Foto Trabajo 3');
-				$objDrawing->setDescription('Trabajo 3');
+					$name_photo = substr( $seg[2]['Photo'],-22);
+					$foto3 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
 
-				list($width, $height) = getimagesize($foto3);
+					$objDrawing = new PHPExcel_Worksheet_Drawing();
+					$objDrawing->setName('Foto Trabajo 3');
+					$objDrawing->setDescription('Trabajo 3');
 
-				if ($height > $width) {
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					//$objDrawing->setRotation(90);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetX(80);
-					$objDrawing->setOffsetY(4);
-				}else{
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetY(4);
-					$objDrawing->setOffsetX(1);
+					list($width, $height) = getimagesize($foto3);
+
+					if ($height > $width) {
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						//$objDrawing->setRotation(90);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetX(80);
+						$objDrawing->setOffsetY(4);
+					}else{
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetY(4);
+						$objDrawing->setOffsetX(1);
+					}
+					$objDrawing->setCoordinates('AD53');
+					$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 				}
-				$objDrawing->setCoordinates('AD53');
-				$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 
 				//Cuarta foto
-				$objPHPExcel->getActiveSheet()->SetCellValue('D67', $seg[3]['Leyend']);
-				$name_photo = substr($seg[3]['Photo'],-22);
-				$foto4 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
+				if ($seg[3]['Photo']!=null) {
+					$objPHPExcel->getActiveSheet()->SetCellValue('D67', $seg[3]['Leyend']);
 
-				$objDrawing = new PHPExcel_Worksheet_Drawing();
-				$objDrawing->setName('Foto Trabajo 4');
-				$objDrawing->setDescription('Trabajo 4');
+					$name_photo = substr($seg[3]['Photo'],-22);
+					$foto4 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
 
-				list($width, $height) = getimagesize($foto4);
+					$objDrawing = new PHPExcel_Worksheet_Drawing();
+					$objDrawing->setName('Foto Trabajo 4');
+					$objDrawing->setDescription('Trabajo 4');
 
-				if ($height > $width) {
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					//$objDrawing->setRotation(90);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetX(80);
-					$objDrawing->setOffsetY(4);
-				}else{
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetY(4);
-					$objDrawing->setOffsetX(1);
+					list($width, $height) = getimagesize($foto4);
+
+					if ($height > $width) {
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						//$objDrawing->setRotation(90);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetX(80);
+						$objDrawing->setOffsetY(4);
+					}else{
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetY(4);
+						$objDrawing->setOffsetX(1);
+					}
+					$objDrawing->setCoordinates('B68');
+					$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 				}
-				$objDrawing->setCoordinates('B68');
-				$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 
 				//Quinta foto
-				$objPHPExcel->getActiveSheet()->SetCellValue('R67', $seg[4]['Leyend']);
-				$name_photo = substr($seg[4]['Photo'],-22);
-				$foto5 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
+				if ($seg[4]['Photo']!=null) {
+					$objPHPExcel->getActiveSheet()->SetCellValue('R67', $seg[4]['Leyend']);
 
-				$objDrawing = new PHPExcel_Worksheet_Drawing();
-				$objDrawing->setName('Foto Trabajo 5');
-				$objDrawing->setDescription('Trabajo 5');
+					$name_photo = substr($seg[4]['Photo'],-22);
+					$foto5 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
 
-				list($width, $height) = getimagesize($foto5);
+					$objDrawing = new PHPExcel_Worksheet_Drawing();
+					$objDrawing->setName('Foto Trabajo 5');
+					$objDrawing->setDescription('Trabajo 5');
 
-				if ($height > $width) {
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					//$objDrawing->setRotation(90);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetX(80);
-					$objDrawing->setOffsetY(4);
-				}else{
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetY(4);
-					$objDrawing->setOffsetX(1);
+					list($width, $height) = getimagesize($foto5);
+
+					if ($height > $width) {
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						//$objDrawing->setRotation(90);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetX(80);
+						$objDrawing->setOffsetY(4);
+					}else{
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetY(4);
+						$objDrawing->setOffsetX(1);
+					}
+					$objDrawing->setCoordinates('P68');
+					$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 				}
-				$objDrawing->setCoordinates('P68');
-				$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 
 				//Sexta foto
-				$objPHPExcel->getActiveSheet()->SetCellValue('AF67', $seg[5]['Leyend']);
-				$name_photo = substr($seg[5]['Photo'],-22);
-				$foto6 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
+				if ($seg[5]['Photo']!=null) {
+					$objPHPExcel->getActiveSheet()->SetCellValue('AF67', $seg[5]['Leyend']);
+					$name_photo = substr($seg[5]['Photo'],-22);
+					$foto6 = '/var/www/senditlaravel42/public/photos/'.$name_photo;
 
-				$objDrawing = new PHPExcel_Worksheet_Drawing();
-				$objDrawing->setName('Foto Trabajo 6');
-				$objDrawing->setDescription('Trabajo 6');
+					$objDrawing = new PHPExcel_Worksheet_Drawing();
+					$objDrawing->setName('Foto Trabajo 6');
+					$objDrawing->setDescription('Trabajo 6');
 
-				list($width, $height) = getimagesize($foto6);
+					list($width, $height) = getimagesize($foto6);
 
-				if ($height > $width) {
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					//$objDrawing->setRotation(90);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetX(80);
-					$objDrawing->setOffsetY(4);
-				}else{
-					$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
-					$objDrawing->setHeight(345);
-					$objDrawing->setOffsetY(4);
-					$objDrawing->setOffsetX(1);
+					if ($height > $width) {
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						//$objDrawing->setRotation(90);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetX(80);
+						$objDrawing->setOffsetY(4);
+					}else{
+						$objDrawing->setPath('/var/www/senditlaravel42/public/photos/'.$name_photo);
+						$objDrawing->setHeight(345);
+						$objDrawing->setOffsetY(4);
+						$objDrawing->setOffsetX(1);
+					}
+					$objDrawing->setCoordinates('AD68');
+					$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 				}
-				$objDrawing->setCoordinates('AD68');
-				$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 
 
 				$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');

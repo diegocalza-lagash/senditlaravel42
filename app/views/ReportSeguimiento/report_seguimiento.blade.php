@@ -11,7 +11,8 @@
 <li><a href="/download/excel/{{$requestId}}" target="_blank">Exportar a Excel</a></li>
 @stop
 @section('content')
-<h1 class="sub_header">Trabajos Realizados</h1>
+<?php $docRepor = iterator_to_array($docRepor);?>
+<h1 class="sub_header">Trabajos Realizados {{count($docRepor)}}</h1>
 	<div class="dataTable_wrapper">
 
 		<div class="dataTable_header">
@@ -81,7 +82,7 @@
 								<?php
 								if ($row['EQUIPMENT']['WORK']['PHOTOS']['PHOTO1']!= "") {
 
-										echo '<a href="'.$row['EQUIPMENT']['WORK']['PHOTOS']['PHOTO1'].'">Ver Foto</a>';
+										echo '<a target="_blank" href="'.$row['EQUIPMENT']['WORK']['PHOTOS']['PHOTO1'].'">Ver Foto</a>';
 								}else{echo "-";}
 								?>
 							</td>

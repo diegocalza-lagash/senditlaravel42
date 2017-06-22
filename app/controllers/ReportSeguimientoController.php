@@ -13,10 +13,13 @@ class ReportSeguimientoController extends \BaseController {
 	}
 	public function generateLinkPhotos($id,$pId,$photo)
 	{
-
+	 	if ($photo == null) {
+			return null;
+		}else{
 	 	$Id = substr($id, 0, 8).'-'.substr($id, 8, 4).'-'.substr($id, 12, 4).'-'.substr($id, 16, 4).'-'.substr($id, 20, 32);
 		$link = 'https://app.sendit.cl/Files/FormEntry/'.$pId.'-'.$Id.$photo.'';
 	 	return $link;
+	 }
 
  	}
 	public function crearPDF($seg,$vistaurl){
@@ -111,9 +114,12 @@ class ReportSeguimientoController extends \BaseController {
 
 			foreach ($docRepor as  $v) {
 
-				$name_photo = substr($v['EQUIPMENT']['WORK']['PHOTOS']['PHOTO1'],-22);
-				 copy($v['EQUIPMENT']['WORK']['PHOTOS']['PHOTO1'],
-				 	'/var/www/senditlaravel42/public/photos/'.$name_photo);
+				if ($v['EQUIPMENT']['WORK']['PHOTOS']['PHOTO1']!=null) {
+					$name_photo = substr($v['EQUIPMENT']['WORK']['PHOTOS']['PHOTO1'],-22);
+					 copy($v['EQUIPMENT']['WORK']['PHOTOS']['PHOTO1'],
+					 	'/var/www/senditlaravel42/public/photos/'.$name_photo);
+				}
+
 
 				$collwf->insert([
 					"RequestId" => $requestId,
@@ -292,14 +298,14 @@ class ReportSeguimientoController extends \BaseController {
 							),
 							"PHOTOS" => array(
 								"PHOTO1" => $photo,
-								"DESCRIPTION_PHOTO1" => $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_PHOTO1'],
-								"PHOTO2" => $aRequest['Entry']['AnswersJson']['PHOTOS']['PHOTO2'],
+								"DESCRIPTION_PHOTO1" => $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_PHOTO1']
+								/*"PHOTO2" => $aRequest['Entry']['AnswersJson']['PHOTOS']['PHOTO2'],
 								"DESCRIPTION_PHOTO2" => $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_PHOTO2'],
 								"PHOTO3" => $aRequest['Entry']['AnswersJson']['PHOTOS']['PHOTO3'],
 								"DESCRIPTION_PHOTO3" => $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_PHOTO3'],
 								"VIDEO" => $aRequest['Entry']['AnswersJson']['PHOTOS']['VIDEO'],
 								"DESCRIPTION_VIDEO"=> $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_VIDEO'],
-								"NEXT_PAGE_FORM_P" => $aRequest['Entry']['AnswersJson']['PHOTOS']['NEXT_PAGE_FORM_P']
+								"NEXT_PAGE_FORM_P" => $aRequest['Entry']['AnswersJson']['PHOTOS']['NEXT_PAGE_FORM_P']*/
 							)
 						)
 					)
@@ -361,14 +367,14 @@ class ReportSeguimientoController extends \BaseController {
 							),
 							"PHOTOS" => array(
 								"PHOTO1" => $photo,
-								"DESCRIPTION_PHOTO1" => $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_PHOTO1'],
-								"PHOTO2" => $aRequest['Entry']['AnswersJson']['PHOTOS']['PHOTO2'],
+								"DESCRIPTION_PHOTO1" => $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_PHOTO1']
+								/*"PHOTO2" => $aRequest['Entry']['AnswersJson']['PHOTOS']['PHOTO2'],
 								"DESCRIPTION_PHOTO2" => $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_PHOTO2'],
 								"PHOTO3" => $aRequest['Entry']['AnswersJson']['PHOTOS']['PHOTO3'],
 								"DESCRIPTION_PHOTO3" => $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_PHOTO3'],
 								"VIDEO" => $aRequest['Entry']['AnswersJson']['PHOTOS']['VIDEO'],
 								"DESCRIPTION_VIDEO"=> $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_VIDEO'],
-								"NEXT_PAGE_FORM_P" => $aRequest['Entry']['AnswersJson']['PHOTOS']['NEXT_PAGE_FORM_P']
+								"NEXT_PAGE_FORM_P" => $aRequest['Entry']['AnswersJson']['PHOTOS']['NEXT_PAGE_FORM_P']*/
 							)
 						)
 						)
@@ -444,14 +450,14 @@ class ReportSeguimientoController extends \BaseController {
 							),
 							"PHOTOS" => array(
 								"PHOTO1" => $photo,
-								"DESCRIPTION_PHOTO1" => $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_PHOTO1'],
-								"PHOTO2" => $aRequest['Entry']['AnswersJson']['PHOTOS']['PHOTO2'],
+								"DESCRIPTION_PHOTO1" => $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_PHOTO1']
+								/*"PHOTO2" => $aRequest['Entry']['AnswersJson']['PHOTOS']['PHOTO2'],
 								"DESCRIPTION_PHOTO2" => $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_PHOTO2'],
 								"PHOTO3" => $aRequest['Entry']['AnswersJson']['PHOTOS']['PHOTO3'],
 								"DESCRIPTION_PHOTO3" => $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_PHOTO3'],
 								"VIDEO" => $aRequest['Entry']['AnswersJson']['PHOTOS']['VIDEO'],
 								"DESCRIPTION_VIDEO"=> $aRequest['Entry']['AnswersJson']['PHOTOS']['DESCRIPTION_VIDEO'],
-								"NEXT_PAGE_FORM_P" => $aRequest['Entry']['AnswersJson']['PHOTOS']['NEXT_PAGE_FORM_P']
+								"NEXT_PAGE_FORM_P" => $aRequest['Entry']['AnswersJson']['PHOTOS']['NEXT_PAGE_FORM_P']*/
 							)
 						)
 					)

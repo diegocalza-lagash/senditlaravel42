@@ -31,6 +31,7 @@ Form::macro('myField', function()
 @if(Session::has('mensaje_error'))
 <div class="alert alert-danger">{{ Session::get('mensaje_error') }}</div>
 @endif
+<h1 class="sub_header">Informe de Seguimiento</h1>
 <div class="dataTable_form">
 
 
@@ -239,7 +240,7 @@ Form::macro('myField', function()
 
 							if ($row['EQUIPMENT']['WORK']['PHOTOS']['PHOTO1']!= "") {
 
-									echo '<a href="'.$row['EQUIPMENT']['WORK']['PHOTOS']['PHOTO1'].'">Ver Foto</a>';
+									echo '<a target="_blank" href="'.$row['EQUIPMENT']['WORK']['PHOTOS']['PHOTO1'].'">Ver Foto</a>';
 							}else{echo "-";}
 							?>
 
