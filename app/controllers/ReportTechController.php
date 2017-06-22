@@ -54,6 +54,7 @@ class ReportTechController extends \BaseController {
 		$m = new MongoClient();//obsoleta desde mongo 1.0.0
 		$db = $m->SenditForm;
 		$collRTech = $db->RTech;
+		$db->Json->insert($aRequest);//guardo json original
 
 		/*$Id = substr($id, 0, 8).'-'.substr($id, 8, 4).'-'.substr($id, 12, 4).'-'.substr($id, 16, 4).'-'.substr($id, 20, 32);
 		$photo = 'https://app.sendit.cl/Files/FormEntry/'.$aRequest['ProviderId'].'-'.$Id.$aRequest['Entry']['AnswersJson']['PHOTOS']['PHOTO1'].'';*/
@@ -195,7 +196,7 @@ class ReportTechController extends \BaseController {
 
 		$objPHPExcel = new PHPExcel();
 		$objReader = PHPExcel_IOFactory::createReader('Excel2007');
-		$objPHPExcel = $objReader->load("ReportTech.xlsx");
+		$objPHPExcel = $objReader->load("/var/www/senditlaravel42/public/ReportTech.xlsx");
 		$objWorksheet= $objPHPExcel->setActiveSheetIndex(0);
 		//echo $rt['AFAL']['Mode_fail'];
 

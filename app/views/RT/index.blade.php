@@ -1,6 +1,10 @@
 @extends("layouts.master")
 @section('title','Todos Los Trabajos')
 @section('content')
+@section('trabajos')
+@parent
+<li><a href="/dataform">Informe Seguimiento</a></li>
+@stop
 <h1 class="sub_header">Informes Técnicos</h1>
 <div class="dataTable_wrapper">
 	<div class="data_table" style="width: 100%;">
