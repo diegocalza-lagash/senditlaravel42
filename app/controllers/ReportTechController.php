@@ -16,10 +16,13 @@ class ReportTechController extends \BaseController {
 	}
 	public function generateLinkPhotos($id,$pId,$photo)
 	{
-
+		if ($photo == null) {
+			return null;
+		}else{
 	 	$Id = substr($id, 0, 8).'-'.substr($id, 8, 4).'-'.substr($id, 12, 4).'-'.substr($id, 16, 4).'-'.substr($id, 20, 32);
 		$link = 'https://app.sendit.cl/Files/FormEntry/'.$pId.'-'.$Id.$photo.'';
 	 	return $link;
+	 }
 
  	}
 	public function getIndex()
@@ -219,39 +222,65 @@ class ReportTechController extends \BaseController {
 		$objPHPExcel->getActiveSheet()->SetCellValue('S14', $rt['As_found']['Findings']);
 
 		//Photo 1
+		if ($rt['As_found']['Photo1']!=null) {
+			$objPHPExcel->getActiveSheet()->SetCellValue('D33', $rt['As_found']['Leyend1']);
 
-		$objPHPExcel->getActiveSheet()->SetCellValue('D33', $rt['As_found']['Leyend1']);
+			$name_photo = substr($rt['As_found']['Photo1'],-22);
+			copy($rt['As_found']['Photo1'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+			$foto1 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
 
-		$name_photo = substr($rt['As_found']['Photo1'],-22);
-		copy($rt['As_found']['Photo1'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
-		$foto1 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+			$objDrawing = new PHPExcel_Worksheet_Drawing();
+			$objDrawing->setName('Foto1 As Found');
+			$objDrawing->setDescription('Foto1 As Found 1');
 
-		$objDrawing = new PHPExcel_Worksheet_Drawing();
-		$objDrawing->setName('Foto1 As Found');
-		$objDrawing->setDescription('Foto1 As Found 1');
+			list($width, $height) = getimagesize($foto1);
 
-		list($width, $height) = getimagesize($foto1);
-
-		if ($height > $width) {
-			$objDrawing->setPath('/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
-			//$objDrawing->setRotation(90);
-			$objDrawing->setHeight(345);
-			$objDrawing->setOffsetX(80);
-			$objDrawing->setOffsetY(4);
-		}else{
-			$objDrawing->setPath('/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
-			$objDrawing->setHeight(345);
-			$objDrawing->setOffsetY(4);
-			$objDrawing->setOffsetX(1);
+			if ($height > $width) {
+				$objDrawing->setPath('/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				//$objDrawing->setRotation(90);
+				$objDrawing->setHeight(345);
+				$objDrawing->setOffsetX(80);
+				$objDrawing->setOffsetY(4);
+			}else{
+				$objDrawing->setPath('/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				$objDrawing->setHeight(345);
+				$objDrawing->setOffsetY(4);
+				$objDrawing->setOffsetX(1);
+			}
+			$objDrawing->setCoordinates('B18');
+			$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 		}
-		$objDrawing->setCoordinates('B18');
-		$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 
+		//Photo 2
 
+		if ($rt['As_found']['Photo2']!=null) {
 
+			$objPHPExcel->getActiveSheet()->SetCellValue('U33', $rt['As_found']['Leyend2']);
+			$name_photo = substr($rt['As_found']['Photo2'],-22);
+			copy($rt['As_found']['Photo2'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+			$foto2 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
 
-		$objPHPExcel->getActiveSheet()->SetCellValue('AC6', $rt['As_found']['Photo2']);
-		$objPHPExcel->getActiveSheet()->SetCellValue('U33', $rt['As_found']['Leyend2']);
+			$objDrawing = new PHPExcel_Worksheet_Drawing();
+			$objDrawing->setName('Foto1 As Found');
+			$objDrawing->setDescription('Foto1 As Found 1');
+
+			list($width, $height) = getimagesize($foto2);
+
+			if ($height > $width) {
+				$objDrawing->setPath('/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				//$objDrawing->setRotation(90);
+				$objDrawing->setHeight(345);
+				$objDrawing->setOffsetX(80);
+				$objDrawing->setOffsetY(4);
+			}else{
+				$objDrawing->setPath('/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				$objDrawing->setHeight(345);
+				$objDrawing->setOffsetY(4);
+				$objDrawing->setOffsetX(1);
+			}
+			$objDrawing->setCoordinates('S18');
+			$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+		}
 
 		$objPHPExcel->getActiveSheet()->SetCellValue('B37', $rt['As_found']['Pieza']);
 		$objPHPExcel->getActiveSheet()->SetCellValue('H37', $rt['As_found']['Param']);
@@ -259,6 +288,324 @@ class ReportTechController extends \BaseController {
 		$objPHPExcel->getActiveSheet()->SetCellValue('S37', $rt['As_found']['Value_ref']);
 		$objPHPExcel->getActiveSheet()->SetCellValue('Y37', $rt['As_found']['Obs']);
 
+		//As Left
+
+		$objPHPExcel->getActiveSheet()->SetCellValue('H44', $rt['As_left']['Parte']);
+		$objPHPExcel->getActiveSheet()->SetCellValue('S44', $rt['As_left']['Findings']);
+
+		//Photo 1
+		if ($rt['As_left']['Photo1']!=null) {
+			$objPHPExcel->getActiveSheet()->SetCellValue('D65', $rt['As_left']['Leyend1']);
+
+			$name_photo = substr($rt['As_left']['Photo1'],-22);
+			copy($rt['As_left']['Photo1'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+			$foto1 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+
+			$objDrawing = new PHPExcel_Worksheet_Drawing();
+			$objDrawing->setName('Foto1 As Left');
+			$objDrawing->setDescription('Foto1 As Left');
+
+			list($width, $height) = getimagesize($foto1);
+
+			if ($height > $width) {
+				$objDrawing->setPath('/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				//$objDrawing->setRotation(90);
+				$objDrawing->setHeight(345);
+				$objDrawing->setOffsetX(80);
+				$objDrawing->setOffsetY(4);
+			}else{
+				$objDrawing->setPath('/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				$objDrawing->setHeight(345);
+				$objDrawing->setOffsetY(4);
+				$objDrawing->setOffsetX(1);
+			}
+			$objDrawing->setCoordinates('B50');
+			$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+		}
+		//Photo2
+		if ($rt['As_left']['Photo2']!=null) {
+			$objPHPExcel->getActiveSheet()->SetCellValue('U65', $rt['As_left']['Leyend2']);
+
+			$name_photo = substr($rt['As_left']['Photo2'],-22);
+			copy($rt['As_left']['Photo2'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+			$foto1 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+
+			$objDrawing = new PHPExcel_Worksheet_Drawing();
+			$objDrawing->setName('Foto2 As Left');
+			$objDrawing->setDescription('Foto2 As Left');
+
+			list($width, $height) = getimagesize($foto1);
+
+			if ($height > $width) {
+				$objDrawing->setPath('/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				//$objDrawing->setRotation(90);
+				$objDrawing->setHeight(345);
+				$objDrawing->setOffsetX(80);
+				$objDrawing->setOffsetY(4);
+			}else{
+				$objDrawing->setPath('/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				$objDrawing->setHeight(345);
+				$objDrawing->setOffsetY(4);
+				$objDrawing->setOffsetX(1);
+			}
+			$objDrawing->setCoordinates('S50');
+			$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+		}
+		//mediciones AS left
+		$objWorksheet= $objPHPExcel->setActiveSheetIndex(1);
+		$objPHPExcel->getActiveSheet()->SetCellValue('B7', $rt['As_left']['Pieza']);
+		$objPHPExcel->getActiveSheet()->SetCellValue('H7', $rt['As_left']['Param']);
+		$objPHPExcel->getActiveSheet()->SetCellValue('O7', $rt['As_left']['Value']);
+		$objPHPExcel->getActiveSheet()->SetCellValue('V7', $rt['As_left']['Value_ref']);
+		$objPHPExcel->getActiveSheet()->SetCellValue('AA7', $rt['As_left']['Obs']);
+
+		//Comments
+		$objPHPExcel->getActiveSheet()->SetCellValue('H15', $rt['Comments']['Count']);
+		$objPHPExcel->getActiveSheet()->SetCellValue('M15', $rt['Comments']['Desc']);
+		$objPHPExcel->getActiveSheet()->SetCellValue('AK15', $rt['Comments']['Supplied']);
+		$objPHPExcel->getActiveSheet()->SetCellValue('H18', $rt['Comments']['Repairs']);
+		$objPHPExcel->getActiveSheet()->SetCellValue('H22', $rt['Comments']['Manage_insp']);
+		$objPHPExcel->getActiveSheet()->SetCellValue('H25', $rt['Comments']['Recommend']);
+
+		//Anexo
+		$objWorksheet= $objPHPExcel->setActiveSheetIndex(2);
+
+		//Photo 1
+		if ($rt['Anex']['Photo1']!=null) {
+			$objPHPExcel->getActiveSheet()->SetCellValue('E22', $rt['Anex']['Leyend1']);
+
+			$name_photo = substr($rt['Anex']['Photo1'],-22);
+			copy($rt['Anex']['Photo1'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+			$foto1 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+
+			$objDrawing = new PHPExcel_Worksheet_Drawing();
+			$objDrawing->setName('Foto1 Anexo');
+			$objDrawing->setDescription('Foto1 Anexo');
+
+			list($width, $height) = getimagesize($foto1);
+
+			if ($height > $width) {
+				$objDrawing->setPath('/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				//$objDrawing->setRotation(90);
+				$objDrawing->setHeight(345);
+				$objDrawing->setOffsetX(80);
+				$objDrawing->setOffsetY(4);
+			}else{
+				$objDrawing->setPath('/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				$objDrawing->setHeight(345);
+				$objDrawing->setOffsetY(4);
+				$objDrawing->setOffsetX(1);
+			}
+			$objDrawing->setCoordinates('B7');
+			$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+		}
+		//Photo2
+		if ($rt['Anex']['Photo2']!=null) {
+			$objPHPExcel->getActiveSheet()->SetCellValue('W22', $rt['Anex']['Leyend2']);
+
+			$name_photo = substr($rt['Anex']['Photo2'],-22);
+			copy($rt['Anex']['Photo2'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+			$foto1 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+
+			$objDrawing = new PHPExcel_Worksheet_Drawing();
+			$objDrawing->setName('Foto2 Anexo');
+			$objDrawing->setDescription('Foto2 Anexo');
+
+			list($width, $height) = getimagesize($foto1);
+
+			if ($height > $width) {
+				$objDrawing->setPath('/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				//$objDrawing->setRotation(90);
+				$objDrawing->setHeight(345);
+				$objDrawing->setOffsetX(80);
+				$objDrawing->setOffsetY(4);
+			}else{
+				$objDrawing->setPath('/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				$objDrawing->setHeight(345);
+				$objDrawing->setOffsetY(4);
+				$objDrawing->setOffsetX(1);
+			}
+			$objDrawing->setCoordinates('U7');
+			$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+		}
+		//Photo 3
+		if ($rt['Anex']['Photo3']!=null) {
+			$objPHPExcel->getActiveSheet()->SetCellValue('E39', $rt['Anex']['Leyend3']);
+
+			$name_photo = substr($rt['Anex']['Photo3'],-22);
+			copy($rt['Anex']['Photo3'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+			$foto1 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+
+			$objDrawing = new PHPExcel_Worksheet_Drawing();
+			$objDrawing->setName('Foto3 Anexo');
+			$objDrawing->setDescription('Foto3 Anexo');
+
+			list($width, $height) = getimagesize($foto1);
+
+			if ($height > $width) {
+				$objDrawing->setPath('/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				//$objDrawing->setRotation(90);
+				$objDrawing->setHeight(345);
+				$objDrawing->setOffsetX(80);
+				$objDrawing->setOffsetY(4);
+			}else{
+				$objDrawing->setPath('/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				$objDrawing->setHeight(345);
+				$objDrawing->setOffsetY(4);
+				$objDrawing->setOffsetX(1);
+			}
+			$objDrawing->setCoordinates('B24');
+			$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+		}
+		//Photo4
+		if ($rt['Anex']['Photo4']!=null) {
+			$objPHPExcel->getActiveSheet()->SetCellValue('W39', $rt['Anex']['Leyend4']);
+
+			$name_photo = substr($rt['Anex']['Photo4'],-22);
+			copy($rt['Anex']['Photo4'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+			$foto1 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+
+			$objDrawing = new PHPExcel_Worksheet_Drawing();
+			$objDrawing->setName('Foto4 Anexo');
+			$objDrawing->setDescription('Foto4 Anexo');
+
+			list($width, $height) = getimagesize($foto1);
+
+			if ($height > $width) {
+				$objDrawing->setPath('/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				//$objDrawing->setRotation(90);
+				$objDrawing->setHeight(345);
+				$objDrawing->setOffsetX(80);
+				$objDrawing->setOffsetY(4);
+			}else{
+				$objDrawing->setPath('/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				$objDrawing->setHeight(345);
+				$objDrawing->setOffsetY(4);
+				$objDrawing->setOffsetX(1);
+			}
+			$objDrawing->setCoordinates('U24');
+			$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+		}
+		//Photo 5
+		if ($rt['Anex']['Photo5']!=null) {
+			$objPHPExcel->getActiveSheet()->SetCellValue('E56', $rt['Anex']['Leyend5']);
+
+			$name_photo = substr($rt['Anex']['Photo5'],-22);
+			copy($rt['Anex']['Photo5'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+			$foto1 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+
+			$objDrawing = new PHPExcel_Worksheet_Drawing();
+			$objDrawing->setName('Foto5 Anexo');
+			$objDrawing->setDescription('Foto5 Anexo');
+
+			list($width, $height) = getimagesize($foto1);
+
+			if ($height > $width) {
+				$objDrawing->setPath('/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				//$objDrawing->setRotation(90);
+				$objDrawing->setHeight(345);
+				$objDrawing->setOffsetX(80);
+				$objDrawing->setOffsetY(4);
+			}else{
+				$objDrawing->setPath('/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				$objDrawing->setHeight(345);
+				$objDrawing->setOffsetY(4);
+				$objDrawing->setOffsetX(1);
+			}
+			$objDrawing->setCoordinates('B41');
+			$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+		}
+		//Photo6
+		if ($rt['Anex']['Photo6']!=null) {
+			$objPHPExcel->getActiveSheet()->SetCellValue('X56', $rt['Anex']['Leyend6']);
+
+			$name_photo = substr($rt['Anex']['Photo6'],-22);
+			copy($rt['Anex']['Photo6'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+			$foto1 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+
+			$objDrawing = new PHPExcel_Worksheet_Drawing();
+			$objDrawing->setName('Foto6 Anexo');
+			$objDrawing->setDescription('Foto6 Anexo');
+
+			list($width, $height) = getimagesize($foto1);
+
+			if ($height > $width) {
+				$objDrawing->setPath('/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				//$objDrawing->setRotation(90);
+				$objDrawing->setHeight(345);
+				$objDrawing->setOffsetX(80);
+				$objDrawing->setOffsetY(4);
+			}else{
+				$objDrawing->setPath('/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				$objDrawing->setHeight(345);
+				$objDrawing->setOffsetY(4);
+				$objDrawing->setOffsetX(1);
+			}
+			$objDrawing->setCoordinates('U41');
+			$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+		}
+		//Photo 7
+		if ($rt['Anex']['Photo7']!=null) {
+			$objPHPExcel->getActiveSheet()->SetCellValue('E73', $rt['Anex']['Leyend7']);
+
+			$name_photo = substr($rt['Anex']['Photo7'],-22);
+			copy($rt['Anex']['Photo7'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+			$foto1 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+
+			$objDrawing = new PHPExcel_Worksheet_Drawing();
+			$objDrawing->setName('Foto7 Anexo');
+			$objDrawing->setDescription('Foto7 Anexo');
+
+			list($width, $height) = getimagesize($foto1);
+
+			if ($height > $width) {
+				$objDrawing->setPath('/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				//$objDrawing->setRotation(90);
+				$objDrawing->setHeight(345);
+				$objDrawing->setOffsetX(80);
+				$objDrawing->setOffsetY(4);
+			}else{
+				$objDrawing->setPath('/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				$objDrawing->setHeight(345);
+				$objDrawing->setOffsetY(4);
+				$objDrawing->setOffsetX(1);
+			}
+			$objDrawing->setCoordinates('B58');
+			$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+		}
+		//Photo8
+		if ($rt['Anex']['Photo8']!=null) {
+			$objPHPExcel->getActiveSheet()->SetCellValue('X73', $rt['Anex']['Leyend8']);
+
+			$name_photo = substr($rt['Anex']['Photo8'],-22);
+			copy($rt['Anex']['Photo8'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+			$foto1 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+
+			$objDrawing = new PHPExcel_Worksheet_Drawing();
+			$objDrawing->setName('Foto8 Anexo');
+			$objDrawing->setDescription('Foto8 Anexo');
+
+			list($width, $height) = getimagesize($foto1);
+
+			if ($height > $width) {
+				$objDrawing->setPath('/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				//$objDrawing->setRotation(90);
+				$objDrawing->setHeight(345);
+				$objDrawing->setOffsetX(80);
+				$objDrawing->setOffsetY(4);
+			}else{
+				$objDrawing->setPath('/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				$objDrawing->setHeight(345);
+				$objDrawing->setOffsetY(4);
+				$objDrawing->setOffsetX(1);
+			}
+			$objDrawing->setCoordinates('U58');
+			$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+		}
+
+
+
+		$objWorksheet= $objPHPExcel->setActiveSheetIndex(0);
 		//					Imagenes                    //
 
 		//Primera Foto

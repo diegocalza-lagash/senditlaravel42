@@ -282,7 +282,8 @@ class PdfController extends BaseController {
 				//Leyendas
 
 				$pdf::SetX(7);
-				$l1 = $seg[0]['Leyend'];
+				$l1 = ($seg[0]['Photo']!=null) ? $seg[0]['Leyend'] : "" ;
+				//$l1 = $seg[0]['Leyend'];
 				$desc = ['Foto 1:',$l1,'Foto 2:','','Foto 3:',''];
 				$w =[15,80,15,80,15,80];
 				for ($i=0; $i <count($desc) ; $i++) {
@@ -299,9 +300,12 @@ class PdfController extends BaseController {
 					$pdf::Cell($w[$i],56,$bFoto[$i],1,0,'C',false);
 				}
 				//Foto 1
-				$foto1 = "/var/www/senditlaravel42/public/photos/".substr($seg[0]['Photo'], -22);
+				if ($seg[0]['Photo']!=null) {
+					$foto1 = "/var/www/senditlaravel42/public/photos/".substr($seg[0]['Photo'], -22);
 
-				$pdf::Image($foto1,7.5,198.5,94,55);
+					$pdf::Image($foto1,7.5,198.5,94,55);
+				}
+
 
 				$pdf::Ln();
 				//Espacio entre filas
@@ -594,8 +598,9 @@ class PdfController extends BaseController {
 				//Leyendas
 
 				$pdf::SetX(7);
-				$l1 = $seg[0]['Leyend'];
-				$l2 = $seg[1]['Leyend'];
+				$l1 = ($seg[0]['Photo']!=null) ? $seg[0]['Leyend'] : "" ;
+				$l2 = ($seg[1]['Photo']!=null) ? $seg[1]['Leyend'] : "" ;
+
 				$desc = ['Foto 1:',$l1,'Foto 2:',$l2,'Foto 3:',''];
 				$w =[15,80,15,80,15,80];
 				for ($i=0; $i <count($desc) ; $i++) {
@@ -612,12 +617,20 @@ class PdfController extends BaseController {
 					$pdf::Cell($w[$i],56,$bFoto[$i],1,0,'C',false);
 				}
 				//Foto 1
-				$foto1 = "/var/www/senditlaravel42/public/photos/".substr($seg[0]['Photo'], -22);
+				if ($seg[0]['Photo']!=null) {
+					$foto1 = "/var/www/senditlaravel42/public/photos/".substr($seg[0]['Photo'], -22);
 
-				$pdf::Image($foto1,7.5,205.5,94,55);
+					$pdf::Image($foto1,7.5,205.5,94,55);
+				}
+
 				//Foto2
-				$foto2 = "/var/www/senditlaravel42/public/photos/".substr($seg[1]['Photo'], -22);
-				$pdf::Image($foto2,102.5,205.5,94,55);
+				if ($seg[1]['Photo']!=null) {
+					$foto2 = "/var/www/senditlaravel42/public/photos/".substr($seg[1]['Photo'], -22);
+
+					$pdf::Image($foto2,102.5,205.5,94,55);
+				}
+				//$foto2 = "/var/www/senditlaravel42/public/photos/".substr($seg[1]['Photo'], -22);
+
 
 				$pdf::Ln();
 				//Espacio entre filas
@@ -910,9 +923,10 @@ class PdfController extends BaseController {
 				//Leyendas
 
 				$pdf::SetX(7);
-				$l1 = $seg[0]['Leyend'];
-				$l2 = $seg[1]['Leyend'];
-				$l3 = $seg[2]['Leyend'];
+				$l1 = ($seg[0]['Photo']!=null) ? $seg[0]['Leyend'] : "" ;
+				$l2 = ($seg[1]['Photo']!=null) ? $seg[1]['Leyend'] : "" ;
+				$l3 = ($seg[2]['Photo']!=null) ? $seg[2]['Leyend'] : "" ;
+
 				$desc = ['Foto 1:',$l1,'Foto 2:',$l2,'Foto 3:',$l3];
 				$w =[15,80,15,80,15,80];
 				for ($i=0; $i <count($desc) ; $i++) {
@@ -929,15 +943,23 @@ class PdfController extends BaseController {
 					$pdf::Cell($w[$i],56,$bFoto[$i],1,0,'C',false);
 				}
 				//Foto 1
-				$foto1 = "/var/www/senditlaravel42/public/photos/".substr($seg[0]['Photo'], -22);
+				if ($seg[0]['Photo']!=null) {
+					$foto1 = "/var/www/senditlaravel42/public/photos/".substr($seg[0]['Photo'], -22);
+					$pdf::Image($foto1,7.5,212.5,94,55);
+				}
 
-				$pdf::Image($foto1,7.5,212.5,94,55);
 				//Foto2
-				$foto2 = "/var/www/senditlaravel42/public/photos/".substr($seg[1]['Photo'], -22);
-				$pdf::Image($foto2,102.5,212.5,94,55);
+				if ($seg[1]['Photo']!=null) {
+					$foto2 = "/var/www/senditlaravel42/public/photos/".substr($seg[1]['Photo'], -22);
+					$pdf::Image($foto2,102.5,212.5,94,55);
+				}
+
 				//Foto3
-				$foto3 = "/var/www/senditlaravel42/public/photos/".substr($seg[2]['Photo'], -22);
-				$pdf::Image($foto3,197.5,212.5,94,55);
+				if ($seg[2]['Photo']!=null) {
+					$foto3 = "/var/www/senditlaravel42/public/photos/".substr($seg[2]['Photo'], -22);
+					$pdf::Image($foto3,197.5,212.5,94,55);
+				}
+
 				$pdf::Ln();
 				//Espacio entre filas
 
@@ -1229,9 +1251,10 @@ class PdfController extends BaseController {
 				//Leyendas
 
 				$pdf::SetX(7);
-				$l1 = $seg[0]['Leyend'];
-				$l2 = $seg[1]['Leyend'];
-				$l3 = $seg[2]['Leyend'];
+				$l1 = ($seg[0]['Photo']!=null) ? $seg[0]['Leyend'] : "" ;
+				$l2 = ($seg[1]['Photo']!=null) ? $seg[1]['Leyend'] : "" ;
+				$l3 = ($seg[2]['Photo']!=null) ? $seg[2]['Leyend'] : "" ;
+
 				$desc = ['Foto 1:',$l1,'Foto 2:',$l2,'Foto 3:',$l3];
 				$w =[15,80,15,80,15,80];
 				for ($i=0; $i <count($desc) ; $i++) {
@@ -1248,15 +1271,23 @@ class PdfController extends BaseController {
 					$pdf::Cell($w[$i],56,$bFoto[$i],1,0,'C',false);
 				}
 				//Foto 1
-				$foto1 = "/var/www/senditlaravel42/public/photos/".substr($seg[0]['Photo'], -22);
+				if ($seg[0]['Photo']!=null) {
+					$foto1 = "/var/www/senditlaravel42/public/photos/".substr($seg[0]['Photo'], -22);
+					$pdf::Image($foto1,7.5,219.5,94,55);
+				}
 
-				$pdf::Image($foto1,7.5,219.5,94,55);
 				//Foto2
-				$foto2 = "/var/www/senditlaravel42/public/photos/".substr($seg[1]['Photo'], -22);
-				$pdf::Image($foto2,102.5,219.5,94,55);
+				if ($seg[1]['Photo']!=null) {
+					$foto2 = "/var/www/senditlaravel42/public/photos/".substr($seg[1]['Photo'], -22);
+					$pdf::Image($foto2,102.5,219.5,94,55);
+				}
+
 				//Foto3
-				$foto3 = "/var/www/senditlaravel42/public/photos/".substr($seg[2]['Photo'], -22);
-				$pdf::Image($foto3,197.5,219.5,94,55);
+				if ($seg[2]['Photo']!=null) {
+					$foto3 = "/var/www/senditlaravel42/public/photos/".substr($seg[2]['Photo'], -22);
+					$pdf::Image($foto3,197.5,219.5,94,55);
+				}
+
 				$pdf::Ln();
 				//Espacio entre filas
 
@@ -1268,7 +1299,8 @@ class PdfController extends BaseController {
 				//Leyendas
 
 				$pdf::SetX(7);
-				$l4 = $seg[3]['Leyend'];
+				$l4 = ($seg[3]['Photo']!=null) ? $seg[3]['Leyend'] : "" ;
+				//$l4 = $seg[3]['Leyend'];
 				$desc = ['Foto 4:',$l4,'Foto 5:' , '','Foto 6: ', ''];
 				$w =[15,80,15,80,15,80];
 				for ($i=0; $i <count($desc) ; $i++) {
@@ -1285,8 +1317,11 @@ class PdfController extends BaseController {
 					$pdf::Cell($w[$i],56,$bFoto[$i],1,0,'C',false);
 				}
 				//Foto 4
-				$foto4 = "/var/www/senditlaravel42/public/photos/".substr($seg[3]['Photo'], -22);
-				$pdf::Image($foto4,7.5,285.5,94,55);
+				if ($seg[3]['Photo']!=null) {
+					$foto4 = "/var/www/senditlaravel42/public/photos/".substr($seg[3]['Photo'], -22);
+					$pdf::Image($foto4,7.5,285.5,94,55);
+				}
+
 
 				$pdf::Output();
 				exit;
@@ -1551,9 +1586,10 @@ class PdfController extends BaseController {
 				//Leyendas
 
 				$pdf::SetX(7);
-				$l1 = $seg[0]['Leyend'];
-				$l2 = $seg[1]['Leyend'];
-				$l3 = $seg[2]['Leyend'];
+				$l1 = ($seg[0]['Photo']!=null) ? $seg[0]['Leyend'] : "" ;
+				$l2 = ($seg[1]['Photo']!=null) ? $seg[1]['Leyend'] : "" ;
+				$l3 = ($seg[2]['Photo']!=null) ? $seg[2]['Leyend'] : "" ;
+
 				$desc = ['Foto 1:',$l1,'Foto 2:',$l2,'Foto 3:',$l3];
 				$w =[15,80,15,80,15,80];
 				for ($i=0; $i <count($desc) ; $i++) {
@@ -1570,15 +1606,23 @@ class PdfController extends BaseController {
 					$pdf::Cell($w[$i],56,$bFoto[$i],1,0,'C',false);
 				}
 				//Foto 1
-				$foto1 = "/var/www/senditlaravel42/public/photos/".substr($seg[0]['Photo'], -22);
+				if ($seg[0]['Photo']!=null) {
+					$foto1 = "/var/www/senditlaravel42/public/photos/".substr($seg[0]['Photo'], -22);
+					$pdf::Image($foto1,7.5,226.5,94,55);
+				}
 
-				$pdf::Image($foto1,7.5,226.5,94,55);
 				//Foto2
-				$foto2 = "/var/www/senditlaravel42/public/photos/".substr($seg[1]['Photo'], -22);
-				$pdf::Image($foto2,102.5,226.5,94,55);
+				if ($seg[1]['Photo']) {
+					$foto2 = "/var/www/senditlaravel42/public/photos/".substr($seg[1]['Photo'], -22);
+					$pdf::Image($foto2,102.5,226.5,94,55);
+				}
+
 				//Foto3
-				$foto3 = "/var/www/senditlaravel42/public/photos/".substr($seg[2]['Photo'], -22);
-				$pdf::Image($foto3,197.5,226.5,94,55);
+				if ($seg[2]['Photo']) {
+					$foto3 = "/var/www/senditlaravel42/public/photos/".substr($seg[2]['Photo'], -22);
+					$pdf::Image($foto3,197.5,226.5,94,55);
+				}
+
 				$pdf::Ln();
 				//Espacio entre filas
 
@@ -1590,8 +1634,9 @@ class PdfController extends BaseController {
 				//Leyendas
 
 				$pdf::SetX(7);
-				$l4 = $seg[3]['Leyend'];
-				$l5 = $seg[4]['Leyend'];
+				$l4 = ($seg[3]['Photo']!=null) ? $seg[3]['Leyend'] : "" ;
+				$l5 = ($seg[4]['Photo']!=null) ? $seg[4]['Leyend'] : "" ;
+
 				$desc = ['Foto 4:',$l4,'Foto 5:',$l5,'Foto 6: ', ''];
 				$w =[15,80,15,80,15,80];
 				for ($i=0; $i <count($desc) ; $i++) {
@@ -1608,11 +1653,17 @@ class PdfController extends BaseController {
 					$pdf::Cell($w[$i],56,$bFoto[$i],1,0,'C',false);
 				}
 				//Foto 4
-				$foto4 = "/var/www/senditlaravel42/public/photos/".substr($seg[3]['Photo'], -22);
-				$pdf::Image($foto4,7.5,292.5,94,55);
+				if ($seg[3]['Photo']!=null) {
+					$foto4 = "/var/www/senditlaravel42/public/photos/".substr($seg[3]['Photo'], -22);
+					$pdf::Image($foto4,7.5,292.5,94,55);
+				}
+
 				//Foto5
-				$foto5 = "/var/www/senditlaravel42/public/photos/".substr($seg[4]['Photo'], -22);
-				$pdf::Image($foto5,102.5,292.5,94,55);
+				if ($seg[4]['Photo']!=null) {
+					$foto5 = "/var/www/senditlaravel42/public/photos/".substr($seg[4]['Photo'], -22);
+					$pdf::Image($foto5,102.5,292.5,94,55);
+				}
+
 
 				$pdf::Output();
 				exit;
@@ -1877,9 +1928,10 @@ class PdfController extends BaseController {
 				//Leyendas
 
 				$pdf::SetX(7);
-				$l1 = $seg[0]['Leyend'];
-				$l2 = $seg[1]['Leyend'];
-				$l3 = $seg[2]['Leyend'];
+				$l1 = ($seg[0]['Photo']!=null) ? $seg[0]['Leyend'] : "" ;
+				$l2 = ($seg[1]['Photo']!=null) ? $seg[1]['Leyend'] : "" ;
+				$l3 = ($seg[2]['Photo']!=null) ? $seg[2]['Leyend'] : "" ;
+
 				$desc = ['Foto 1:',$l1,'Foto 2:',$l2,'Foto 3:',$l3];
 				$w =[15,80,15,80,15,80];
 				for ($i=0; $i <count($desc) ; $i++) {
@@ -1896,15 +1948,23 @@ class PdfController extends BaseController {
 					$pdf::Cell($w[$i],56,$bFoto[$i],1,0,'C',false);
 				}
 				//Foto 1
-				$foto1 = "/var/www/senditlaravel42/public/photos/".substr($seg[0]['Photo'], -22);
+				if ($seg[0]['Photo']!=null) {
+					$foto1 = "/var/www/senditlaravel42/public/photos/".substr($seg[0]['Photo'], -22);
+					$pdf::Image($foto1,7.5,233.5,94,55);
+				}
 
-				$pdf::Image($foto1,7.5,233.5,94,55);
 				//Foto2
-				$foto2 = "/var/www/senditlaravel42/public/photos/".substr($seg[1]['Photo'], -22);
-				$pdf::Image($foto2,102.5,233.5,94,55);
+				if ($seg[1]['Photo']!=null) {
+					$foto2 = "/var/www/senditlaravel42/public/photos/".substr($seg[1]['Photo'], -22);
+					$pdf::Image($foto2,102.5,233.5,94,55);
+				}
+
 				//Foto3
-				$foto3 = "/var/www/senditlaravel42/public/photos/".substr($seg[2]['Photo'], -22);
-				$pdf::Image($foto3,197.5,233.5,94,55);
+				if ($seg[2]['Photo']!=null) {
+					$foto3 = "/var/www/senditlaravel42/public/photos/".substr($seg[2]['Photo'], -22);
+					$pdf::Image($foto3,197.5,233.5,94,55);
+				}
+
 				$pdf::Ln();
 				//Espacio entre filas
 
@@ -1916,9 +1976,10 @@ class PdfController extends BaseController {
 				//Leyendas
 
 				$pdf::SetX(7);
-				$l4 = $seg[3]['Leyend'];
-				$l5 = $seg[4]['Leyend'];
-				$l6 = $seg[5]['Leyend'];
+				$l4 = ($seg[3]['Photo']!=null) ? $seg[3]['Leyend'] : "" ;
+				$l5 = ($seg[4]['Photo']!=null) ? $seg[4]['Leyend'] : "" ;
+				$l6 = ($seg[5]['Photo']!=null) ? $seg[5]['Leyend'] : "" ;
+
 				$desc = ['Foto 4:',$l4,'Foto 5:',$l5,'Foto 6:',$l6];
 				$w =[15,80,15,80,15,80];
 				for ($i=0; $i <count($desc) ; $i++) {
@@ -1935,14 +1996,23 @@ class PdfController extends BaseController {
 					$pdf::Cell($w[$i],56,$bFoto[$i],1,0,'C',false);
 				}
 				//Foto 4
-				$foto4 = "/var/www/senditlaravel42/public/photos/".substr($seg[3]['Photo'], -22);
-				$pdf::Image($foto4,7.5,299.5,94,55);
+				if ($seg[3]['Photo']!=null) {
+					$foto4 = "/var/www/senditlaravel42/public/photos/".substr($seg[3]['Photo'], -22);
+					$pdf::Image($foto4,7.5,299.5,94,55);
+				}
+
 				//Foto5
-				$foto5 = "/var/www/senditlaravel42/public/photos/".substr($seg[4]['Photo'], -22);
-				$pdf::Image($foto5,102.5,299.5,94,55);
+				if ($seg[4]['Photo']!=null) {
+					$foto5 = "/var/www/senditlaravel42/public/photos/".substr($seg[4]['Photo'], -22);
+					$pdf::Image($foto5,102.5,299.5,94,55);
+				}
+
 				//Foto6
-				$foto6 = "/var/www/senditlaravel42/public/photos/".substr($seg[5]['Photo'], -22);
-				$pdf::Image($foto6,197.5,299.5,94,55);
+				if ($seg[5]['Photo']!=null) {
+					$foto6 = "/var/www/senditlaravel42/public/photos/".substr($seg[5]['Photo'], -22);
+					$pdf::Image($foto6,197.5,299.5,94,55);
+				}
+
 				$pdf::Output();
 				exit;
 
@@ -2206,9 +2276,10 @@ class PdfController extends BaseController {
 				//Leyendas
 
 				$pdf::SetX(7);
-				$l1 = $seg[0]['Leyend'];
-				$l2 = $seg[1]['Leyend'];
-				$l3 = $seg[2]['Leyend'];
+				$l1 = ($seg[0]['Photo']!=null) ? $seg[0]['Leyend'] : "" ;
+				$l2 = ($seg[1]['Photo']!=null) ? $seg[1]['Leyend'] : "" ;
+				$l3 = ($seg[2]['Photo']!=null) ? $seg[2]['Leyend'] : "" ;
+
 				$desc = ['Foto 1:',$l1,'Foto 2:',$l2,'Foto 3:',$l3];
 				$w =[15,80,15,80,15,80];
 				for ($i=0; $i <count($desc) ; $i++) {
@@ -2224,16 +2295,24 @@ class PdfController extends BaseController {
 				for ($i=0; $i <count($bFoto) ; $i++) {
 					$pdf::Cell($w[$i],56,$bFoto[$i],1,0,'C',false);
 				}
+
 				//Foto 1
-				$foto1 = "/var/www/senditlaravel42/public/photos/".substr($seg[0]['Photo'], -22);
-				//$dir = "/var/www/senditlaravel42/public/photos/".$foto1;
-				$pdf::Image($foto1,7.5,233.5,94,55);
+				if ($seg[0]['Photo']!=null) {
+					$foto1 = "/var/www/senditlaravel42/public/photos/".substr($seg[0]['Photo'], -22);
+					$pdf::Image($foto1,7.5,233.5,94,55);
+				}
+
 				//Foto2
-				$foto2 = "/var/www/senditlaravel42/public/photos/".substr($seg[1]['Photo'], -22);
-				$pdf::Image($foto2,102.5,233.5,94,55);
+				if ($seg[1]['Photo']!=null) {
+					$foto2 = "/var/www/senditlaravel42/public/photos/".substr($seg[1]['Photo'], -22);
+					$pdf::Image($foto2,102.5,233.5,94,55);
+				}
+
 				//Foto3
-				$foto3 = "/var/www/senditlaravel42/public/photos/".substr($seg[2]['Photo'], -22);
-				$pdf::Image($foto3,197.5,233.5,94,55);
+				if ($seg[2]['Photo']!=null) {
+					$foto3 = "/var/www/senditlaravel42/public/photos/".substr($seg[2]['Photo'], -22);
+					$pdf::Image($foto3,197.5,233.5,94,55);
+				}
 				$pdf::Ln();
 				//Espacio entre filas
 
@@ -2245,9 +2324,9 @@ class PdfController extends BaseController {
 				//Leyendas
 
 				$pdf::SetX(7);
-				$l4 = $seg[3]['Leyend'];
-				$l5 = $seg[4]['Leyend'];
-				$l6 = $seg[5]['Leyend'];
+				$l4 = ($seg[3]['Photo']!=null) ? $seg[3]['Leyend'] : "" ;
+				$l5 = ($seg[4]['Photo']!=null) ? $seg[4]['Leyend'] : "" ;
+				$l6 = ($seg[5]['Photo']!=null) ? $seg[5]['Leyend'] : "" ;
 				$desc = ['Foto 4:',$l4,'Foto 5:',$l5,'Foto 6:',$l6];
 				$w =[15,80,15,80,15,80];
 				for ($i=0; $i <count($desc) ; $i++) {
@@ -2264,14 +2343,22 @@ class PdfController extends BaseController {
 					$pdf::Cell($w[$i],56,$bFoto[$i],1,0,'C',false);
 				}
 				//Foto 4
-				$foto4 = "/var/www/senditlaravel42/public/photos/".substr($seg[3]['Photo'], -22);
-				$pdf::Image($foto4,7.5,299.5,94,55);
+				if ($seg[3]['Photo']!=null) {
+					$foto4 = "/var/www/senditlaravel42/public/photos/".substr($seg[3]['Photo'], -22);
+					$pdf::Image($foto4,7.5,299.5,94,55);
+				}
+
 				//Foto5
-				$foto5 = "/var/www/senditlaravel42/public/photos/".substr($seg[4]['Photo'], -22);
-				$pdf::Image($foto5,102.5,299.5,94,55);
+				if ($seg[4]['Photo']!=null) {
+					$foto5 = "/var/www/senditlaravel42/public/photos/".substr($seg[4]['Photo'], -22);
+					$pdf::Image($foto5,102.5,299.5,94,55);
+				}
+
 				//Foto6
-				$foto6 = "/var/www/senditlaravel42/public/photos/".substr($seg[5]['Photo'], -22);
-				$pdf::Image($foto6,197.5,299.5,94,55);
+				if ($seg[5]['Photo']!=null) {
+					$foto6 = "/var/www/senditlaravel42/public/photos/".substr($seg[5]['Photo'], -22);
+					$pdf::Image($foto6,197.5,299.5,94,55);
+				}
 				$pdf::Output();
 				exit;
 			break;
