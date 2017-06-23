@@ -116,8 +116,14 @@ class ReportSeguimientoController extends \BaseController {
 
 				if ($v['EQUIPMENT']['WORK']['PHOTOS']['PHOTO1']!=null) {
 					$name_photo = substr($v['EQUIPMENT']['WORK']['PHOTOS']['PHOTO1'],-22);
-					 copy($v['EQUIPMENT']['WORK']['PHOTOS']['PHOTO1'],
-					 	'/var/www/senditlaravel42/public/photos/'.$name_photo);
+					try {
+						copy($v['EQUIPMENT']['WORK']['PHOTOS']['PHOTO1'],
+							'/var/www/senditlaravel42/public/photos/'.$name_photo);
+					} catch (Exception $e) {
+						return Redirect::to('/dataform')
+                        ->with('mensaje_error', 'Intente nuevamente en unos minutos');
+					}
+
 				}
 
 

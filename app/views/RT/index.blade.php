@@ -5,6 +5,9 @@
 @parent
 <li><a href="/dataform">Informe Seguimiento</a></li>
 @stop
+@if(Session::has('mensaje_error'))
+<div style="margin-left: 11%;" class="alert alert-danger">{{ Session::get('mensaje_error') }}</div>
+@endif
 <h1 class="sub_header">Informes Técnicos</h1>
 <div class="dataTable_wrapper">
 	<div class="data_table" style="width: 100%;">

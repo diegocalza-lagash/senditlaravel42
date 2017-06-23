@@ -226,8 +226,14 @@ class ReportTechController extends \BaseController {
 			$objPHPExcel->getActiveSheet()->SetCellValue('D33', $rt['As_found']['Leyend1']);
 
 			$name_photo = substr($rt['As_found']['Photo1'],-22);
-			copy($rt['As_found']['Photo1'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
-			$foto1 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+			try {
+				copy($rt['As_found']['Photo1'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				$foto1 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+			} catch (Exception $e) {
+				return Redirect::to('/report_tech')
+                ->with('mensaje_error', 'Intente nuevamente en unos minutos');
+			}
+
 
 			$objDrawing = new PHPExcel_Worksheet_Drawing();
 			$objDrawing->setName('Foto1 As Found');
@@ -257,8 +263,15 @@ class ReportTechController extends \BaseController {
 
 			$objPHPExcel->getActiveSheet()->SetCellValue('U33', $rt['As_found']['Leyend2']);
 			$name_photo = substr($rt['As_found']['Photo2'],-22);
-			copy($rt['As_found']['Photo2'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
-			$foto2 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+
+			try {
+				copy($rt['As_found']['Photo2'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				$foto2 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+			} catch (Exception $e) {
+				return Redirect::to('/report_tech')
+                ->with('mensaje_error', 'Intente nuevamente en unos minutos');
+			}
+
 
 			$objDrawing = new PHPExcel_Worksheet_Drawing();
 			$objDrawing->setName('Foto1 As Found');
@@ -298,8 +311,14 @@ class ReportTechController extends \BaseController {
 			$objPHPExcel->getActiveSheet()->SetCellValue('D65', $rt['As_left']['Leyend1']);
 
 			$name_photo = substr($rt['As_left']['Photo1'],-22);
-			copy($rt['As_left']['Photo1'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
-			$foto1 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+			try {
+				copy($rt['As_left']['Photo1'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				$foto1 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+			} catch (Exception $e) {
+				return Redirect::to('/report_tech')
+                ->with('mensaje_error', 'Intente nuevamente en unos minutos');
+			}
+
 
 			$objDrawing = new PHPExcel_Worksheet_Drawing();
 			$objDrawing->setName('Foto1 As Left');
@@ -327,8 +346,14 @@ class ReportTechController extends \BaseController {
 			$objPHPExcel->getActiveSheet()->SetCellValue('U65', $rt['As_left']['Leyend2']);
 
 			$name_photo = substr($rt['As_left']['Photo2'],-22);
-			copy($rt['As_left']['Photo2'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
-			$foto1 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+			try {
+				copy($rt['As_left']['Photo2'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				$foto1 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+			} catch (Exception $e) {
+				return Redirect::to('/report_tech')
+                ->with('mensaje_error', 'Intente nuevamente en unos minutos');
+			}
+
 
 			$objDrawing = new PHPExcel_Worksheet_Drawing();
 			$objDrawing->setName('Foto2 As Left');
@@ -375,8 +400,14 @@ class ReportTechController extends \BaseController {
 			$objPHPExcel->getActiveSheet()->SetCellValue('E22', $rt['Anex']['Leyend1']);
 
 			$name_photo = substr($rt['Anex']['Photo1'],-22);
-			copy($rt['Anex']['Photo1'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
-			$foto1 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+			try {
+				copy($rt['Anex']['Photo1'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				$foto1 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+			} catch (Exception $e) {
+				return Redirect::to('/report_tech')
+                ->with('mensaje_error', 'Intente nuevamente en unos minutos');
+			}
+
 
 			$objDrawing = new PHPExcel_Worksheet_Drawing();
 			$objDrawing->setName('Foto1 Anexo');
@@ -404,8 +435,13 @@ class ReportTechController extends \BaseController {
 			$objPHPExcel->getActiveSheet()->SetCellValue('W22', $rt['Anex']['Leyend2']);
 
 			$name_photo = substr($rt['Anex']['Photo2'],-22);
-			copy($rt['Anex']['Photo2'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
-			$foto1 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+			try {
+				copy($rt['Anex']['Photo2'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				$foto1 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+			} catch (Exception $e) {
+				return Redirect::to('/report_tech')
+                ->with('mensaje_error', 'Intente nuevamente en unos minutos');
+			}
 
 			$objDrawing = new PHPExcel_Worksheet_Drawing();
 			$objDrawing->setName('Foto2 Anexo');
@@ -433,8 +469,13 @@ class ReportTechController extends \BaseController {
 			$objPHPExcel->getActiveSheet()->SetCellValue('E39', $rt['Anex']['Leyend3']);
 
 			$name_photo = substr($rt['Anex']['Photo3'],-22);
-			copy($rt['Anex']['Photo3'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
-			$foto1 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+			try {
+				copy($rt['Anex']['Photo3'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				$foto1 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+			} catch (Exception $e) {
+				return Redirect::to('/report_tech')
+                ->with('mensaje_error', 'Intente nuevamente en unos minutos');
+			}
 
 			$objDrawing = new PHPExcel_Worksheet_Drawing();
 			$objDrawing->setName('Foto3 Anexo');
@@ -462,8 +503,13 @@ class ReportTechController extends \BaseController {
 			$objPHPExcel->getActiveSheet()->SetCellValue('W39', $rt['Anex']['Leyend4']);
 
 			$name_photo = substr($rt['Anex']['Photo4'],-22);
-			copy($rt['Anex']['Photo4'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
-			$foto1 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+			try {
+				copy($rt['Anex']['Photo4'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				$foto1 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+			} catch (Exception $e) {
+				return Redirect::to('/report_tech')
+                ->with('mensaje_error', 'Intente nuevamente en unos minutos');
+			}
 
 			$objDrawing = new PHPExcel_Worksheet_Drawing();
 			$objDrawing->setName('Foto4 Anexo');
@@ -491,8 +537,13 @@ class ReportTechController extends \BaseController {
 			$objPHPExcel->getActiveSheet()->SetCellValue('E56', $rt['Anex']['Leyend5']);
 
 			$name_photo = substr($rt['Anex']['Photo5'],-22);
-			copy($rt['Anex']['Photo5'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
-			$foto1 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+			try {
+				copy($rt['Anex']['Photo5'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				$foto1 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+			} catch (Exception $e) {
+				return Redirect::to('/report_tech')
+                ->with('mensaje_error', 'Intente nuevamente en unos minutos');
+			}
 
 			$objDrawing = new PHPExcel_Worksheet_Drawing();
 			$objDrawing->setName('Foto5 Anexo');
@@ -520,8 +571,13 @@ class ReportTechController extends \BaseController {
 			$objPHPExcel->getActiveSheet()->SetCellValue('X56', $rt['Anex']['Leyend6']);
 
 			$name_photo = substr($rt['Anex']['Photo6'],-22);
-			copy($rt['Anex']['Photo6'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
-			$foto1 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+			try {
+				copy($rt['Anex']['Photo6'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				$foto1 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+			} catch (Exception $e) {
+				return Redirect::to('/report_tech')
+                ->with('mensaje_error', 'Intente nuevamente en unos minutos');
+			}
 
 			$objDrawing = new PHPExcel_Worksheet_Drawing();
 			$objDrawing->setName('Foto6 Anexo');
@@ -549,8 +605,13 @@ class ReportTechController extends \BaseController {
 			$objPHPExcel->getActiveSheet()->SetCellValue('E73', $rt['Anex']['Leyend7']);
 
 			$name_photo = substr($rt['Anex']['Photo7'],-22);
-			copy($rt['Anex']['Photo7'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
-			$foto1 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+			try {
+				copy($rt['Anex']['Photo7'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				$foto1 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+			} catch (Exception $e) {
+				return Redirect::to('/report_tech')
+                ->with('mensaje_error', 'Intente nuevamente en unos minutos');
+			}
 
 			$objDrawing = new PHPExcel_Worksheet_Drawing();
 			$objDrawing->setName('Foto7 Anexo');
@@ -578,8 +639,13 @@ class ReportTechController extends \BaseController {
 			$objPHPExcel->getActiveSheet()->SetCellValue('X73', $rt['Anex']['Leyend8']);
 
 			$name_photo = substr($rt['Anex']['Photo8'],-22);
-			copy($rt['Anex']['Photo8'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
-			$foto1 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+			try {
+				copy($rt['Anex']['Photo8'],'/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo);
+				$foto1 = '/var/www/senditlaravel42/public/photos/ReportTech/'.$name_photo;
+			} catch (Exception $e) {
+				return Redirect::to('/report_tech')
+                ->with('mensaje_error', 'Intente nuevamente en unos minutos');
+			}
 
 			$objDrawing = new PHPExcel_Worksheet_Drawing();
 			$objDrawing->setName('Foto8 Anexo');
