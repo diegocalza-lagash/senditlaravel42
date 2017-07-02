@@ -8,7 +8,7 @@
 @parent
 <li><a href="/dataform">Inicio</a></li>
 <li><a href="/download/pdf/{{$requestId}}" target="_blank">Exportar a PDF</a></li>
-<li><a href="/download/excel/{{$requestId}}" target="_blank">Exportar a Excel</a></li>
+<li><a href="/download/excel" target="_blank">Exportar a Excel</a></li>
 @stop
 @section('content')
 <?php $docRepor = iterator_to_array($docRepor);?>
@@ -27,12 +27,12 @@
 					<tr>
 						<th>Fecha de Envío</th>
 						<th>Enviado por</th>
-						<th>Trabajo</th>
-						<th>SubTrabajo</th>
-						<th>Ubicación</th>
 						<th>Equipo</th>
 						<th>Identificación Equipo</th>
+						<th>Ubicación</th>
 						<th>Sistema de bloqueo</th>
+						<th>Trabajo</th>
+						<th>SubTrabajo</th>
 						<th>Fecha de Inicio Programada</th>
 						<th>Fecha de Término Programada</th>
 						<th>Fecha de Inicio Real</th>
@@ -58,12 +58,12 @@
 								</div>-->
 							</td>
 							<td><?php echo $row['Entry']['UserFirstName']." ".$row['Entry']['UserLastName'];?></td>
-							<td><?php echo $row['EQUIPMENT']['WORK']['WORK_NAME'];?></td>
-							<td><?php echo $row['EQUIPMENT']['WORK']['SUBWORK']['SUBWORK_NAME'];?></td>
-							<td><?php echo $row['EQUIPMENT']['LOCALIZATION_EQUIPMENT']['LOCALIZATION_NAME'];?></td>
 							<td><?php echo $row['EQUIPMENT']['EQUIPMENT_NAME'];?></td>
 							<td><?php echo $row['EQUIPMENT']['IDENTIFICATION_EQUIPMENT']['IDENTIFICATION_NAME'];?></td>
+							<td><?php echo $row['EQUIPMENT']['LOCALIZATION_EQUIPMENT']['LOCALIZATION_NAME'];?></td>
 							<td><?php echo $row['EQUIPMENT']['BLOCK_SYSTEM'];?></td>
+							<td><?php echo $row['EQUIPMENT']['WORK']['WORK_NAME'];?></td>
+							<td><?php echo $row['EQUIPMENT']['WORK']['SUBWORK']['SUBWORK_NAME'];?></td>
 							<td><?php echo $row['EQUIPMENT']['DATE_START_PROGRAMMED'];?></td>
 							<td><?php echo $row['EQUIPMENT']['DATE_END_PROGRAMMED'];?></td>
 							<td><?php

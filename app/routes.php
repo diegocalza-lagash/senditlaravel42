@@ -58,3 +58,4 @@ Route::get('/report_tech', 'ReportTechController@getIndex');
 Route::get('/download/pdf/{id_request}','PdfController@exportarToPdf');
 //Download a Excel
 Route::get('/download/excel/{id_request}','ExcelController@exportarToExcel');
+Route::get('/download/excel','ExcelController@exportToExcel');

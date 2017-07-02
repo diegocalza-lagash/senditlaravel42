@@ -63,7 +63,12 @@ Form::macro('myField', function()
 			    {{ Form::label('dsp','FIP') }}
 			    {{ Form::input('date','dsp', null, ['class' => '', 'placeholder' => 'yyyy-mm-dd','id' => 'date_fip','required' => 'true']) }}
 			    {{ Form::label('dep','FTP') }}
-			    {{Form::input('date', 'dep', null, ['class' => '', 'placeholder' => 'yyyy-mm-dd','id' => 'date_ftp','required' => 'true']) }}
+			    {{ Form::input('date', 'dep', null, ['class' => '', 'placeholder' => 'yyyy-mm-dd','id' => 'date_ftp','required' => 'true']) }}
+			    {{ Form::label('startSend','Subidos Hasta') }}
+
+			    {{ Form::datetimelocal('startDate','',[ 'class' => '', 'placeholder' => 'yyyy-mm-dd','id' => 'startDate','required' => 'true' ]) }}
+
+
 
 			    {{ Form::submit('Buscar'); }}
 		{{ Form::close() }}
@@ -206,8 +211,8 @@ Form::macro('myField', function()
 					<tr>
 						<td><?php
 						$startTime = new DateTime($row['Entry']['StartTime']);
-						$startTime->setTimezone(new DateTimeZone('America/Santiago'));
-						echo $startTime->format('j F, Y, g:i a');
+						//$startTime->setTimezone(new DateTimeZone('America/Santiago'));
+						echo $startTime->format('j F, Y, g:i a');//$row['Entry']['StartTime']; //$startTime/->format('j F, Y, g:i a');
 							?>
 							<!--<div>
 							<?php $uploaded= new DateTime($row['Entry']['CompleteTime']) ?>
