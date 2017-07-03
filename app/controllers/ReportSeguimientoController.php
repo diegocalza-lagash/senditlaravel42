@@ -91,24 +91,42 @@ class ReportSeguimientoController extends \BaseController {
 		$dsr = htmlspecialchars(Input::get("dsr"));
 		$der = htmlspecialchars(Input::get("der"));
 		$startDate = htmlspecialchars(Input::get("startDate"));
+		$sinceDate = htmlspecialchars(Input::get("sinceDate"));
+		$poop = htmlspecialchars(Input::get("poop"));
+		//echo $poop;
 
 		//Covierto formatos
 
 		$startDate = $this->formatEur($startDate);
+		$sinceDate = $this->formatEur($sinceDate);
 		//echo $startDate,$dsp;//}/*
 		$ameDsp = $this->formatAme($dsp);
 		$ameDep = $this->formatAme($dep);
 
 		$collRepor = $this->connectMongo()->Repor;
 
-		$docRepor = $collRepor->find([
+		if ($poop != "") {
+			$docRepor = $collRepor->find([
 			'EQUIPMENT.EQUIPMENT_NAME' => $equi,
 			'EQUIPMENT.LOCALIZATION_EQUIPMENT.LOCALIZATION_NAME' => $loc,
 			'EQUIPMENT.IDENTIFICATION_EQUIPMENT.IDENTIFICATION_NAME' => $iden,
 			'EQUIPMENT.DATE_START_PROGRAMMED' => $ameDsp,
 			'EQUIPMENT.DATE_END_PROGRAMMED' => $ameDep,
-			'Entry.StartTime' => ['$gte' => $dsp, '$lte' => $startDate],
+			'Entry.StartTime' => ['$gte' => $sinceDate, '$lte' => $startDate],
+			'EQUIPMENT.WORK.SUBWORK.POOP' => $poop
 			]);
+		}else{
+			$docRepor = $collRepor->find([
+			'EQUIPMENT.EQUIPMENT_NAME' => $equi,
+			'EQUIPMENT.LOCALIZATION_EQUIPMENT.LOCALIZATION_NAME' => $loc,
+			'EQUIPMENT.IDENTIFICATION_EQUIPMENT.IDENTIFICATION_NAME' => $iden,
+			'EQUIPMENT.DATE_START_PROGRAMMED' => $ameDsp,
+			'EQUIPMENT.DATE_END_PROGRAMMED' => $ameDep,
+			'Entry.StartTime' => ['$gte' => $sinceDate, '$lte' => $startDate]
+			]);
+		}
+
+
 
 
 
@@ -226,139 +244,12 @@ class ReportSeguimientoController extends \BaseController {
 							'/var/www/senditlaravel42/public/photos/'.$name_photo);
 					} catch (Exception $e) {
 						return Redirect::to('/dataform')
-                        ->with('mensaje_error', 'Intente nuevamente en unos minutos');
+                        ->with('mensaje_error', 'Intente nuevamente en unos minutos o disminuya rango de búsqueda');
 					}
 				}
 			}
 
-			/*$keys = ["Work" => 1];
-			$initial = ["items" => []];
-			//Subworks
-			$collW = $this->connectMongo()->Works;
-			$collW->drop();
-			$reduce = "function (obj, prev) { prev.items.push(obj.Work,obj.Subwork,obj.Dsr,obj.Der,obj.Poop); }";
-			$works = $collwf->group($keys, $initial, $reduce);
-			//print_r($works['retval']);
-			for ($i=0; $i <count($works['retval']) ; $i++) {
-			 	$item = count($works['retval'][$i]['items']);
-			 	$j=1; $w =0;
-			 	while ( $j <= $item ) {
-			 		$collW->insert([
-			 		"Work" => $works['retval'][$i]['Work'],
-					"Subwork" => $works['retval'][$i]['items'][$j]
-					//"Dsr" => $works['retval'][$i]['items'][2  ],
-					//"Der" => $works['retval'][$i]['items'][$item-2],
-					//"Poop" => $works['retval'][$i]['items'][$item-1]
-					]);
-					$w = $w+5;
-					$j = $j+5;
-			 	}
 
-			}
-			//Elimino repetidos y ordeno Works and Subworks
-
-			$collT = $this->connectMongo()->Trabajos;
-			$collT->drop();
-			$reduce = "function (obj, prev) { prev.items.push(obj.Work, obj.Subwork); }";
-			$works = $collW->group($keys, $initial, $reduce);
-			//print_r($works['retval']);
-			for ($i=0; $i < count($works['retval']) ; $i++) {
-				//print_r(array_unique($works['retval'][$i]['items']));
-				$item = array_unique($works['retval'][$i]['items']);
-				//var_dump($item);
-				//echo $item[0];
-				foreach ($item as $key => $value) {
-					 //var_dump($value);
-					 $collT->insert([$value]);
-				}
-
-			}
-			//Todas las DSRS por trabajo
-			$collDs = $this->connectMongo()->Dsr;
-			$collDs->drop();
-			$reduce = "function (obj, prev) { prev.items.push(obj.Work,obj.Subwork,obj.Dsr); }";
-			$dsr = $collwf->group($keys, $initial, $reduce);
-			print_r($dsr['retval']);
-			for ($i=0; $i <count($dsr['retval']) ; $i++) {
-			 	$item = count($dsr['retval'][$i]['items']);
-			 	$j=1; $d =2;
-			 	//$item = array_unique($dsr['retval'][$i]['items']);
-				//var_dump($item);
-				//echo $item[0];
-			 	while ( $j < $item - 1 ) {
-			 		$collDs->insert([
-			 		"Work" => $dsr['retval'][$i]['Work'],
-					"Subwork" => $dsr['retval'][$i]['items'][$j],
-					"Dsr" => $dsr['retval'][$i]['items'][$d]
-					//"Dsr" => $works['retval'][$i]['items'][2  ],
-					//"Der" => $works['retval'][$i]['items'][$item-2],
-					//"Poop" => $works['retval'][$i]['items'][$item-1]
-					]);
-					$j = $j+3;
-					$d = $d+3;
-			 	}
-
-			}
-			//DSRs No repetidas (por trabajo y subtrabajo)
-			$keys = ["Work" =>1, "Subwork" => 1];
-			$collFir = $this->connectMongo()->FIRs;
-			$collFir->drop();
-			$reduce = "function (obj, prev) { prev.items.push(obj.Dsr); }";
-			$firs = $collDs->group($keys, $initial, $reduce);
-			print_r($firs['retval']);
-			echo count($firs['retval']);
-			for ($i=0; $i < count($firs['retval']) ; $i++) {
-				$collFir->insert([
-					"Work" => $firs['retval'][$i]["Work"],
-					"Subwork" => $firs['retval'][$i]["Subwork"],
-					"Dsr" => $firs['retval'][$i]['items'][0]
-					]);
-			}
-
-
-
-
-			$keys = ["Subwork" => 1];
-			$initial = ["items" => []];
-			//Subworks
-			$collSw = $this->connectMongo()->Subworks;
-			$collSw->drop();
-			$reduce = "function (obj, prev) { prev.items.push(obj.Work,obj.Subwork,obj.Dsr,obj.Der,obj.Poop); }";
-			$subworks = $collwf->group($keys, $initial, $reduce);
-			//print_r($subworks['retval']);
-			for ($i=0; $i <count($subworks['retval']) ; $i++) {
-			 	$item = count($subworks['retval'][$i]['items']);
-			 	$collSw->insert([
-			 		"Work" => $subworks['retval'][$i]['items'][0],
-					"Subwork" => $subworks['retval'][$i]['items'][1],
-					"Dsr" => $subworks['retval'][$i]['items'][2  ],
-					"Der" => $subworks['retval'][$i]['items'][$item-2],
-					"Poop" => $subworks['retval'][$i]['items'][$item-1]
-
-					]);
-			}
-			//DSPS
-			/*$collDsp = $this->connectMongo()->Dsps;
-			$collDsp->drop();
-			$reduce = "function (obj, prev) { prev.items.push(obj.Dsr); }";
-			$dsps = $collwf->group($keys, $initial, $reduce);
-			//print_r($dsps['retval']);
-			for ($i=0; $i <count($dsps['retval']) ; $i++) {
-			 	//$item = count($g['retval'][$i]['items']);
-				for ($j=0; $j < count($dsps['retval'][$i]['items']); $j++) {
-					$collDsp->insert([
-					"Subwork" => $dsps['retval'][$i]['items'][$j],
-					"Dsr" => $dsps['retval'][$i]['items'][1]
-
-					]);
-				}
-
-			}*/
-
-			//echo $collss->count();
-
-			//$docRepor = $collwf->find();
-			//
 
 
 
