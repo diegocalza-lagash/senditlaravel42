@@ -7,6 +7,7 @@
 	//obtengo todos los trabajos
 	$collRepor = $db->Repor;
 	$docRepor = $collRepor->find();
+	$docRepor = $docRepor->sort(["Entry.StartTime" => -1]);
 	//obtengo equipos
 	$equipments = $db->equipments->find();
 	//obtengos locs

@@ -72,6 +72,7 @@ float: left;
     margin-right: 3%;
     margin-top: 1.5%;
     padding: 1%;
+    width: 78%;
     /*position: fixed;*/
 
 }
@@ -83,6 +84,7 @@ float: left;
     overflow: scroll;
     padding: 4px;
     height: 40%;
+
 
 }
 
@@ -121,7 +123,7 @@ div.alert{
     width: 42%;
 }
 .dataTable_form form{
-    width: 91%;
+    width: 84%;
 }
 .dataTable_form input{
     margin-left:5px;

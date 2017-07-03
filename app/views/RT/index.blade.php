@@ -8,10 +8,11 @@
 @if(Session::has('mensaje_error'))
 <div style="margin-left: 11%;" class="alert alert-danger">{{ Session::get('mensaje_error') }}</div>
 @endif
-<h1 class="sub_header">Informes Técnicos</h1>
-<div class="dataTable_wrapper">
+<div class="headers"><h1 class="sub_header">Informes Técnicos</h1></div>
+
+<div class="dataTable_wrapper" style="height: 376px;">
 	<div class="data_table" style="width: 100%;">
-		<table style="width: 60%;" id= "Table_RTech" class="table table-striped table-hover table-bordered table-condensed listar-act">
+		<table style="width: 83%;" id= "Table_RTech" class="table table-striped table-hover table-bordered table-condensed listar-act">
 			<thead>
 				<tr>
 					<th>Exportar Excel</th>
@@ -20,6 +21,8 @@
 					<th>Fecha de Envío</th>
 					<th>Enviado por</th>
 					<th>Orden de Mantención</th>
+					<th>Equipo</th>
+					<th>Informe Realizado por</th>
 					<!--<th>Descripción de la OM</th>
 					<th>Tipo de Equipo</th>
 					<th>Descripción del Equipo</th>
@@ -54,6 +57,8 @@
 						</td>
 						<td><?php echo $row['Entry']['UserFirstName']." ".$row['Entry']['UserLastName'];?></td>
 						<td><?php echo $row['AFAL']['Order_manag'];?></td>
+						<td><?php echo $row['AFAL']['Equipment'];?></td>
+						<td><?php echo $row['AFAL']['Report_by'];?></td>
 
 
 
