@@ -11,10 +11,12 @@
 <h1 class="sub_header">Informes Técnicos</h1>
 <div class="dataTable_wrapper">
 	<div class="data_table" style="width: 100%;">
-		<table style="width: 57%;" id= "Table_RTech" class="table table-striped table-hover table-bordered table-condensed listar-act">
+		<table style="width: 60%;" id= "Table_RTech" class="table table-striped table-hover table-bordered table-condensed listar-act">
 			<thead>
 				<tr>
 					<th>Exportar Excel</th>
+					<th>Trabajo</th>
+					<th>Sub-Trabajo</th>
 					<th>Fecha de Envío</th>
 					<th>Enviado por</th>
 					<th>Orden de Mantención</th>
@@ -38,14 +40,16 @@
 
 					<tr>
 						<td  class="button_excel"><a href="report_tech/excel/{{$row['Entry']['Id']}}" target="_blank" ><button class="btn btn-block btn-success btn-xs">Excel</button></a></td>
+						<td><?php echo $row['Entry']['Trabajo'];?></td>
+						<td><?php echo $row['Entry']['SubTrabajo'];?></td>
 						<td><?php
 						$startTime = new DateTime($row['Entry']['StartTime']);
 						$startTime->setTimezone(new DateTimeZone('America/Santiago'));
-						echo $startTime->format('j F, Y, g:i a');
+						echo $startTime->format('j F, Y, H:i a');
 							?>
 							<!--<div>
 							<?php $uploaded= new DateTime($row['Entry']['CompleteTime']) ?>
-								<span><b>Subido: </b>{{ $uploaded->format('d-F-Y g:i a') }}</span>
+								<span><b>Subido: </b>{{ $uploaded->format('d-F-Y H:i a') }}</span>
 							</div>-->
 						</td>
 						<td><?php echo $row['Entry']['UserFirstName']." ".$row['Entry']['UserLastName'];?></td>

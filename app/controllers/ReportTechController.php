@@ -75,7 +75,9 @@ class ReportTechController extends \BaseController {
 				 "Longitude" => $aRequest['Entry']['Longitude'],
 				 "StartTime" => $aRequest['Entry']['StartTime'],
 				 "ReceivedTime" => $aRequest['Entry']['ReceivedTime'],
-				 "CompleteTime" => $aRequest['Entry']['CompleteTime']
+				 "CompleteTime" => $aRequest['Entry']['CompleteTime'],
+				 "Trabajo" => $aRequest['Entry']['AnswersJson']['report_technical']['Trabajo'],
+				 "SubTrabajo" => $aRequest['Entry']['AnswersJson']['report_technical']['SubTrabajo']
 				),
 			"AFAL" => array(
 				"Order_manag" => $aRequest['Entry']['AnswersJson']['report_technical']['order_manag'],
