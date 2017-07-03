@@ -30,6 +30,7 @@ class ReportTechController extends \BaseController {
 
 		$collRTech = $this->connectMongo()->RTech;
 		$docRTech = $collRTech->find();
+		$docRTech = $docRTech->sort(['Entry.StartTime' => -1]);
 		return View::make('RT.index', array("docRTech" => $docRTech));
 		//$this->layout->content = View::make('ReportTech.index');
 	}
