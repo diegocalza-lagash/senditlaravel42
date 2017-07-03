@@ -120,3 +120,17 @@ div.alert{
 #Table_RTech {
     width: 42%;
 }
+.dataTable_form form{
+    width: 91%;
+}
+.dataTable_form input{
+    margin-left:5px;
+    margin-top: 5px;
+ }
+ input#poop{
+    width: 4%;
+    margin-left:7px;
+ }
+ input#startDate{
+    margin-top: 10px;
+ }

@@ -8,6 +8,7 @@ class PdfController extends BaseController {
 		$date->setTimezone(new DateTimeZone('America/Santiago'));
 		return $date->format('j F, Y, g:i a');
 	}
+
 	public function exportarToPdf($requestId)
 	{
 		$m = new MongoClient();//obsoleta desde mongo 1.0.0

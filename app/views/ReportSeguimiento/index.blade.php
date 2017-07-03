@@ -64,9 +64,14 @@ Form::macro('myField', function()
 			    {{ Form::input('date','dsp', null, ['class' => '', 'placeholder' => 'yyyy-mm-dd','id' => 'date_fip','required' => 'true']) }}
 			    {{ Form::label('dep','FTP') }}
 			    {{ Form::input('date', 'dep', null, ['class' => '', 'placeholder' => 'yyyy-mm-dd','id' => 'date_ftp','required' => 'true']) }}
-			    {{ Form::label('startSend','Subidos Hasta') }}
+			    {{ Form::label('startSend','Desde') }}
+			    {{ Form::datetimelocal('sinceDate','',[ 'class' => '', 'placeholder' => 'yyyy-mm-dd','id' => 'sinceDate','required' => 'true' ]) }}
+			    {{ Form::label('startSend','Hasta') }}
 
 			    {{ Form::datetimelocal('startDate','',[ 'class' => '', 'placeholder' => 'yyyy-mm-dd','id' => 'startDate','required' => 'true' ]) }}
+			    {{ Form::label('poop','Avance') }}
+			    {{ Form::number('poop','',[ 'class' => '', 'placeholder' => '','id' => 'poop' ]) }}
+
 
 
 

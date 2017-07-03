@@ -163,6 +163,7 @@ class ExcelController extends \BaseController {
 		$db = $m->SenditForm;
 		$collW = $db->Works;
 		$docRepor = $collW->find();
+		$docRepor = $docRepor->sort(['Dsr' => 1]);
 
 	  $objPHPExcel = new PHPExcel();
 	 	$objReader = PHPExcel_IOFactory::createReader('Excel2007');

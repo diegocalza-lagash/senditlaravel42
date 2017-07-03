@@ -7,12 +7,12 @@
 @section('trabajos')
 @parent
 <li><a href="/dataform">Inicio</a></li>
-<li><a href="/download/pdf/{{$requestId}}" target="_blank">Exportar a PDF</a></li>
+<li><a href="/download/pdf/" target="_blank">Exportar a PDF</a></li>
 <li><a href="/download/excel" target="_blank">Exportar a Excel</a></li>
 @stop
 @section('content')
 <?php $docRepor = iterator_to_array($docRepor);?>
-<h1 class="sub_header">Trabajos Realizados {{count($docRepor)}}</h1>
+<h1 class="sub_header">Trabajos Subidos {{count($docRepor)}}</h1>
 	<div class="dataTable_wrapper">
 
 		<div class="dataTable_header">

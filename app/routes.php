@@ -55,7 +55,8 @@ Route::controller('report_tech','ReportTechController');
 Route::get('/report_tech', 'ReportTechController@getIndex');
 
 //Download a PDF
-Route::get('/download/pdf/{id_request}','PdfController@exportarToPdf');
+//Route::get('/download/pdf/{id_request}','PdfController@exportarToPdf');
+Route::get('/download/pdf/','PDFController@exportToPdf');
 //Download a Excel
-Route::get('/download/excel/{id_request}','ExcelController@exportarToExcel');
+//Route::get('/download/excel/{id_request}','ExcelController@exportarToExcel');
 Route::get('/download/excel','ExcelController@exportToExcel');
