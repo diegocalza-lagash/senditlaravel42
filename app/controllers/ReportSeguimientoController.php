@@ -275,7 +275,7 @@ class ReportSeguimientoController extends \BaseController {
 		$db = $m->SenditForm;
 		//para tener el Json original como prueba
 
-		//$db->Json->insert($aRequest);//comentar esto cuando esté en production pero no para recoger el Json de una nueva screen en la app movil
+		$db->Json->insert($aRequest);//comentar esto cuando esté en production pero no para recoger el Json de una nueva screen en la app movil
 
 		//para guardar en un archivo
 		/*try {
