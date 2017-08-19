@@ -32,7 +32,7 @@
                             <li><a href="#two">Como Hacemos</a></li>
                             <li><a href="#four">Video Perfomance</a></li>
                             <li><a href="#three">Contactar</a></li>
-                            <li><a class="item_app" href="login">App</a></li>
+                            <li><a class="item_app" href="login" target="_blank">App</a></li>
                             <div class="sub_item_app">
 
                             </div>
@@ -149,11 +149,21 @@
                         <div class="content">
                             <div class="inner">
                                 <h2>VIDEO PERFOMANCE</h2>
-                                <p>Usar es muy simple</p>
-                                <div class="video features">
-                                    <section>
 
-                                    </section>
+                                <div class="video features">
+
+                                        <!--<video width="320" height="240" controls>
+                                          <!--<source src="{{ URL::asset('videos/Final.mp4') }}" type="video/mp4">
+                                          <source src="../public/videos/Final.mp4" type="video/mp4">
+
+                                        </video>-->
+                                        <div style="padding: 3px;">
+                                            <iframe width="720" height="415"
+                                        src="http://www.youtube.com/embed/DY_9BXRxMVI">
+                                        </iframe>
+                                        </div>
+
+
 
                                 </div>
                             </div>
