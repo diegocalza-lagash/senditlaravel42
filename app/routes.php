@@ -42,8 +42,8 @@ Route::get('/dataform', array('before' => 'auth', function(){
     return View::make('ReportSeguimiento.index');
 }));
 Route::get('/', array('as' => 'home', function(){
-    return View::make('ReportSeguimiento.index');
-}))->before('auth');
+    return View::make('welcome');
+}));//->before('auth');
 //for download excel
 Route::get('/download','HomeController@getDownload');
 
