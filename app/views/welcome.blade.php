@@ -60,7 +60,7 @@
                 <!-- One -->
                     <section id="one" class="wrapper style2 spotlights">
                         <section>
-                            <a href="#" class="image"><img src="images/pic01.jpg" alt="" data-position="center center" /></a>
+                            <a href="#" class="image"><img style="height: 493px; width: 499px;" src="images/deliverytablet-1024x682.jpg" alt="" data-position="center center" /></a>
                             <div class="content">
                                 <div class="inner">
                                     <h2>CONTROL DE ACTIVIDADES EN TERRENO</h2>
@@ -72,7 +72,7 @@
                             </div>
                         </section>
                         <section>
-                            <a href="#" class="image"><img src="images/pic02.jpg" alt="" data-position="top center" /></a>
+                            <a href="#" class="image"><img style="height: 493px; width: 521px;" src="images/screens.png" alt="" data-position="top center" /></a>
                             <div class="content">
                                 <div class="inner">
                                     <h2>INFORMACIÓN EN LÍNEA</h2>
@@ -86,7 +86,7 @@
                             </div>
                         </section>
                         <section>
-                            <a href="#" class="image"><img src="images/pic03.jpg" alt="" data-position="25% 25%" /></a>
+                            <a href="#" class="image"><img style="height: 493px; width: 521px;" src="images/p.jpg" alt="" data-position="25% 25%" /></a>
                             <div class="content">
                                 <div class="inner">
                                     <h2>SOPORTE</h2>
