@@ -47,9 +47,8 @@
                 <!-- Intro -->
                     <section id="intro" class="wrapper style1 fullscreen fade-up">
                         <div class="inner">
-                            <h1>FORMULARIOS A LA MEDIDA</h1>
-                            <p>¿No quiere crear sus propios formularios? Nuestros expertos diseñarán <br>
-                                 y crearán formularios que se ven y funcionan excelente para usted.
+                            <h1>Sistematizamos soluciones integrales para necesidades de información</h1>
+                            <p>
                             </p>
                             <ul class="actions">
                                 <li><a href="#one" class="button scrolly">Learn more</a></li>
@@ -60,11 +59,11 @@
                 <!-- One -->
                     <section id="one" class="wrapper style2 spotlights">
                         <section>
-                            <a href="#" class="image"><img style="height: 493px; width: 499px;" src="images/deliverytablet-1024x682.jpg" alt="" data-position="center center" /></a>
+                            <a href="#" class="image fit"><img style="" src="http://sendit.cl/wp-content/uploads/2014/09/paperless_slider.jpg" alt="" data-position="center center" /></a>
                             <div class="content">
                                 <div class="inner">
-                                    <h2>CONTROL DE ACTIVIDADES EN TERRENO</h2>
-                                    <p>Somos una plataforma que permite verificar las actividades de los empleados en terreno. donde el supervisor puede ver en línea la información importante.</p>
+                                    <h2>Desarrollo soluciones en ambiente Mobile para el control de sus operaciones</h2>
+                                    <p></p>
                                     <ul class="actions">
                                         <li><a href="#" class="button">Learn more</a></li>
                                     </ul>
@@ -72,12 +71,11 @@
                             </div>
                         </section>
                         <section>
-                            <a href="#" class="image"><img style="height: 493px; width: 521px;" src="images/screens.png" alt="" data-position="top center" /></a>
+                            <a href="#" class="image fit"><img style="" src="images/deliverytablet-1024x682.jpg" alt="" data-position="top center" /></a>
                             <div class="content">
                                 <div class="inner">
-                                    <h2>INFORMACIÓN EN LÍNEA</h2>
-                                    <p>El empleado en terreno, usando su Smartphone, envía el formulario y las fotos.<br>
-                                        La ubicación y la hora se obtienen automáticamente.
+                                    <h2>Reportabilidad / Trazabilidad de las actividades en terreno online</h2>
+                                    <p>
                                     </p>
                                     <ul class="actions">
                                         <li><a href="#" class="button">Learn more</a></li>
@@ -86,15 +84,28 @@
                             </div>
                         </section>
                         <section>
-                            <a href="#" class="image"><img style="height: 493px; width: 521px;" src="images/p.jpg" alt="" data-position="25% 25%" /></a>
+                            <a href="#" class="image fit"><img style="" src="images/screens.png" alt="" data-position="25% 25%" /></a>
                             <div class="content">
                                 <div class="inner">
-                                    <h2>SOPORTE</h2>
-                                    <p>Nuestro equipo ofrece soporte para todos los usuarios de nuestra aplicación.<br>
-                                        Asegurando que si usted tiene alguna pregunta o necesita ayuda, usted recibirá el apoyo que necesita.
+                                    <h2>Tablero de Control (scorecard) para gestionar recursos y procesos</h2>
+                                    <p>
                                     </p>
                                     <ul class="actions">
 
+                                    </ul>
+                                </div>
+                            </div>
+                        </section>
+<section>
+                            <a href="#" class="image fit"><img style="/*height: 493px; width: 521px;" src="https://www.webtrekk.com/fileadmin/_processed_/csm_201512_understand_each_user_eb4dda4949.png" alt="" data-position="25% 25%" /></a>
+                            <div class="content">
+                                <div class="inner">
+                                    <h2>Integración de múltiples usuarios para optimzar  múltiples trabajos</h2>
+                                    <p><br>
+
+                                    </p>
+                                    <ul class="actions">
+                                        <li><a href="#" class="button">Learn more</a></li>
                                     </ul>
                                 </div>
                             </div>
